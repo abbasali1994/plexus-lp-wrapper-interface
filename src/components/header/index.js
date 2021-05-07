@@ -23,15 +23,18 @@ const Header = () => {
         <img src={ logo } alt="logo" width="170" height="32"/>
       </Col>
       <Col>
-        <img src={ msg } alt="notification" width="20" height="20"/>
-        <button className='header-btn'> { formatAddress(walletAddress) } </button >
-        <button 
-          className='header-btn' 
-          onMouseEnter={() => setToggleIcon(true)}
-          onMouseLeave={() => setToggleIcon(false)}>
-            <img src={ toggleIcon ? profileWhite : profileBlue } alt="profile-icon" width="13" height="13"/>
-            dashboard
-        </button>
+        <div className="user-info">
+          <img src={ msg } alt="notification" width="28" height="28"/>
+          <button className='header-btn'> { formatAddress(walletAddress) } </button >
+          <button 
+            className='header-btn' 
+            onMouseEnter={() => setToggleIcon(true)}
+            onMouseLeave={() => setToggleIcon(false)}>
+              <img src={ toggleIcon ? profileWhite : profileBlue } alt="profile-icon" width="13" height="13"/>
+              dashboard
+          </button>
+        </div>
+       
       </Col>
     </Row>
   );

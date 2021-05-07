@@ -1,6 +1,6 @@
 .header {
-    margin-top: 10px;
-    margin-right: 30px;
+    margin-top: 80px;
+    width: 1480px;
 }
 
 .header-btn {    
@@ -32,4 +32,8 @@
 button.header-btn {
     border-style: none;
     border-color: transparent;
+}
+
+.user-info {
+    float: right;
 }

@@ -133,3 +133,32 @@ code {
 *:focus {
   outline: none;
 }
+
+.modal-header {
+  background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+  border-bottom: none;
+}
+
+.modal-title {
+  font-family: "Azo Sans Regular";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-align: left;
+  color: #E0E0E0;
+  text-transform: uppercase;
+
+}
+
+.modal-header button.close {
+  background:url(./assets/images/close.svg) 0 0 no-repeat;
+  display:block;
+  height:10px; /* your image height */
+  text-indent:-99999em;
+  width:10px; /* your image width */
+  overflow:hidden;
+  margin-top: 5px;
+  margin-right: 5px;
+}

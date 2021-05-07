@@ -88,7 +88,9 @@ const MainComponent = () => {
                     </div>
                 </Col>
                 <Col lg="9" className="main-wrapper">
+                    {/*Render the search tokens modal */}
                     <SearchTokensModal/>
+                    
                     <div className="main-wrapper-header main-header-text">
                         Generate {selectedDex} LP Tokens     
                     </div>

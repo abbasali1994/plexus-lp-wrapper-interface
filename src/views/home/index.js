@@ -7,9 +7,11 @@ import Main from '../../components/main';
 
 function Home() {
   return (
-    <Container fluid>
+    <Container fluid className="home">
       <Header/>
-      <Main/>
+      <div className="plexus-ui">
+        <Main/>
+      </div>
     </Container>
   );
 }

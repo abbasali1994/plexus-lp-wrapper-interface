@@ -1,8 +1,6 @@
 .select-token {
     display: flex;
-    flex-direction: row;
     cursor: pointer;
-
 }
 
 .token-selector-border {
@@ -41,6 +39,52 @@
     margin-left: 20px;
 }
 
-.select-token-text img {
+.select-token-text img, 
+.selected-token-symbol img{
     padding-left: 5px;
+}
+
+.selected-token{
+    display: block;
+    margin-top: 10px;
+}
+
+.selected-token-name {
+
+    font-family: 'Nova Mono Regular';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0em;
+    color: #828282;
+    margin-left: 10px;
+}
+
+.selected-token-symbol {
+    font-family: "Azo Sans Regular";
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0em;
+    color: #E0E0E0;
+    text-transform: uppercase;
+    margin-left: 10px;
+}
+
+.pair-icon {
+    margin-left: 35px;
+    margin-top: -10px;
+    z-index: 99;
+    position: absolute;
+}
+
+.lp-token1 {
+    z-index: 10;
+}
+
+.lp-token2 {
+    margin-top: 18px;
+    z-index: 10;
 }
