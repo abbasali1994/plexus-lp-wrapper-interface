@@ -1,0 +1,193 @@
+.main-section{
+    width: 1430px;
+}
+
+.left-sidebar {
+    background: #191E3A;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.main-wrapper {
+    background: #0E1726;
+    border-radius: 10px;
+}
+
+.main-header-text {
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    color: #E0E0E0;
+}
+
+.left-sidebar-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.left-action {
+    margin-top: 45px;
+    margin-bottom: 20px;
+}
+
+.left-action img {
+    margin-top: 10px;
+}
+
+.action-btns {
+    width: 300px;
+    border: 3px solid #0E1726;
+    border-radius: 5px;
+    
+}
+.action-btns .btn {
+
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 36px;
+    text-align: center;
+    letter-spacing: -0.02em;
+    color: #828282;
+    background: #050818;
+    border: none;
+    border-radius: 5px;
+}
+
+.action-btns .btn:hover {
+    color: #F2F2F2;
+    background-color:#050818;
+}
+
+.action-btns .btn#active-btn {
+    color: #F2F2F2;
+    background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+    border-radius: 5px;
+    box-shadow: none;
+}
+
+.dex-stats {
+    margin-top: 20px;
+}
+
+.dex-stats-header {
+    font-family: "Azo Sans Regular";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #E0E0E0;
+    text-transform: uppercase;
+}
+
+.dex-stats-key {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #828282;
+}
+
+.dex-stats-value {
+    margin-top: -15px;
+    font-family: 'Nova Mono Regular';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #62B0E5;
+}
+
+.faq {
+    margin-top: 50px;
+    margin-bottom: 24px;
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    color: #E0E0E0;
+}
+
+.faq img {
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+.copyright {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #62B0E5;
+}
+
+.main-wrapper {
+    border-radius: 0px 10px 0px 0px;
+}
+.main-wrapper.col-lg-9 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.main-wrapper-header, .main-wrapper-interface{
+    padding-left: 90px;
+}
+
+.main-wrapper-header, .token-label {
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+}
+
+.main-wrapper-header {
+    font-size: 22px;
+    line-height: 36px;
+    text-align: left;
+    color: #E5E5E5;
+    padding-top:20px;
+    padding-bottom: 20px;
+    background-color: #050818;
+    border: 2px solid #0E1726;
+    box-sizing: border-box;
+    border-radius: 0px 10px 0px 0px;
+}
+
+.token-label {
+    font-family: "Azo Sans Regular";
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    text-transform: uppercase;
+    color:  #E0E0E0;
+    margin-bottom: 30px;
+}
+
+.input-token-section {
+    margin-top: 30px;
+    
+}
+
+.select-token-pair-section {
+    margin-top: 90px;
+}

@@ -1,0 +1,46 @@
+.select-token {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+
+}
+
+.token-selector-border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85px;
+    height: 85px;
+    border: 3px solid #050818;
+    border-radius: 10%;
+    background-color: #191E3A;
+
+}
+.token-border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 57px;
+    height: 57px;
+    border: 2px solid #236EDC;
+    border-radius: 50%;
+}
+
+.select-token-text {
+    font-family: "Azo Sans Regular";
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #828282;
+    width: 100px;
+    word-wrap: break-word;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.select-token-text img {
+    padding-left: 5px;
+}

@@ -98,6 +98,18 @@
   src: url('assets/fonts/Montserrat-ThinItalic.ttf')  format('truetype');
 }
 
+@font-face {
+  font-family: 'Nova Mono Regular';
+  src: url('assets/fonts/NovaMono-Regular.ttf')  format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Azo Sans Regular';
+  src: url('assets/fonts/AzoSans-Regular.ttf')  format('truetype');
+}
+
+
 body {
   margin: 0;
   font-family: 'Codeink Regular', 'Codeink italic', 
@@ -105,7 +117,7 @@ body {
   'Montserrat Extra Bold', 'Montserrat Extra Bold Italic', 'Montserrat Extra Light', 'Montserrat Extra Light Italic', 
   'Montserrat Italic', 'Montserrat Light', 'Montserrat Light Italic', 'Montserrat Medium',
   'Montserrat Medium Italic', 'Montserrat Regular', 'Montserrat Semi Bold', 'Montserrat Semi Bold Italic',
-  'Montserrat Thin', 'Montserrat Thin Italic', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+  'Montserrat Thin', 'Montserrat Thin Italic', 'Nova Mono Regular', 'Azo Sans Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
   'Roboto', 'Oxygen','Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
    sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -116,4 +128,8 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+*:focus {
+  outline: none;
 }
