@@ -1,6 +1,5 @@
 import './index.css';
 
-import { InputGroup, FormControl  } from 'react-bootstrap';
 
 // import the images
 import placeHolderX from '../../assets/images/token-selector.svg';
