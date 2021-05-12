@@ -10,8 +10,10 @@ export const searchTokensSlice = createSlice({
     inputToken: null,
     lpToken1: null,
     lpToken2: null,
-    lpToken1Weight: 0,
-    lpToken2Weight: 0
+    showMax: false,
+    inputTokenValue: '',
+    lpToken1Value: '',
+    lpToken2Value: '',
   },
   reducers: {
     showSearchModal: (state, action) => {
@@ -19,14 +21,12 @@ export const searchTokensSlice = createSlice({
       state.showSearch = showSearch;
       state.searchCaller = searchCaller;
 
-      // reset the selected tokens
-      if (state.searchCaller === constants.inputToken) {
-        state.inputToken = null;
-      }
     },
-    hideSearchModal: (state, action) => {
-      const { showSearch } = action.payload;
+    hideSearchModal: (state, { payload }) => {
+      const { showSearch } = payload;
       state.showSearch = showSearch;
+
+   
     },
     setSelectedToken: (state, { payload }) => {
       const  token = payload;
@@ -41,22 +41,39 @@ export const searchTokensSlice = createSlice({
         state.lpToken2 = token;
       }
 
+      if(state.inputToken !== null && state.lpToken1 !== null && state.lpToken2 !== null) {
+        state.showMax = true;
+      }
+
       // hide the modal
       state.showSearch = false;
     },
-    clearTokens(state){
+    resetState(state){
+      state.showSearch = false;
       state.searchCaller = "";
       state.inputToken = null;
       state.lpToken1 = null;
       state.lpToken2 = null;
+      state.showMax = false;
+      state.inputTokenValue = "";
+      state.lpToken1Value = "";
+      state.lpToken2Value = "";
     },
-    setLPTokensWeight(state) {
+    // for now we spoof it
+    setTokensValue(state, { payload}) {
+      const { input, lp1, lp2 } = payload;
 
+      state.inputTokenValue  = input;
+      state.lpToken1Value = lp1;
+      state.lpToken2Value = lp2;
+
+      // hide the show max button
+      state.showMax = false;
     }
   }
 });
 
 // Action creators are generated for each case reducer function
-export const {  showSearchModal, hideSearchModal, setSelectedToken, clearTokens } = searchTokensSlice.actions;
+export const {  showSearchModal, hideSearchModal, setSelectedToken, clearTokens,  setTokensValue } = searchTokensSlice.actions;
 
 export default searchTokensSlice.reducer;

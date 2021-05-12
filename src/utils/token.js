@@ -3,31 +3,31 @@ const tokens=[
         tokenName: "Ethereum", 
         tokenDisplayName: "Ethereum", 
         tokenSymbol: "eth", 
-        tokenBal: "3.45612"
+        tokenBal: 3.45612
     },
     {
         tokenName:"USDC", 
         tokenDisplayName: "USDCoin", 
         tokenSymbol: "usdc", 
-        tokenBal: "0.00"
+        tokenBal: 0
     }, 
     {
         tokenName:"Wrapped-Bitcoin", 
         tokenDisplayName: "Wrapped BTC", 
         tokenSymbol: "wbtc", 
-        tokenBal:  "0.00"
+        tokenBal:  0
     }, 
     {
         tokenName:"Badger-Dao",
         tokenDisplayName: "Badger", 
         tokenSymbol: "badger", 
-        tokenBal:  "0.00"
+        tokenBal:  0
     }, 
     {
         tokenName:"Aave", 
         tokenDisplayName: "Aave", 
         tokenSymbol: "aave", 
-        tokenBal:  "0.00"
+        tokenBal:  0
     }, 
     {
         tokenName:"Pickle-Finance", 

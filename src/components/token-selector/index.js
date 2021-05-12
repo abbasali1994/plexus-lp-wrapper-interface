@@ -1,7 +1,4 @@
 import './index.css';
-
-import { useState } from 'react';
-
 // bootstrap
 import {  InputGroup, FormControl } from 'react-bootstrap';
 
@@ -13,7 +10,7 @@ import arrowUp from '../../assets/images/arrow-up.svg';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showSearchModal } from "../../redux/searchTokens";
+import { showSearchModal, setTokensValue } from "../../redux/searchTokens";
 
 // constants
 import { constants } from '../../utils';
@@ -77,18 +74,28 @@ const SetLPToken2 = () => {
     return <SelectedTokenView token={lpToken2}/>
 }
 
+const setInputPlaceholder = (inputToken) => {
+
+    let placeholder = '0.00';
+
+    if (inputToken !== null) {
+        if (inputToken.tokenBal > 0 ){
+            placeholder = inputToken.tokenBal +  " "  + inputToken.tokenSymbol.toUpperCase() ;
+        }
+    }
+
+    return placeholder;
+}
+
 const InputTokenView = () => {
 
-    const { inputToken } = useSelector((state) => state.searchTokens);
+    const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } = useSelector((state) => state.searchTokens);
     const dispatch = useDispatch();
-    const [inputTokenValue, setInputTokenValue] = useState('0.00');
+  
 
     return (
         <div className="select-input-token">
-            <div onClick={() => {
-                setInputTokenValue('0.00');
-                dispatch(showSearchModal({showSearch:true, searchCaller: constants.inputToken}));
-            }}>
+            <div onClick={() => dispatch(showSearchModal({showSearch:true, searchCaller: constants.inputToken}))}>
                 { inputToken === null ?  <SelectTokenView/> : <SetInputToken/>}
             </div>
             <InputGroup className="mb-3">
@@ -96,15 +103,25 @@ const InputTokenView = () => {
                   className="input-token-text"
                   aria-label="Default"
                   aria-describedby="inputGroup-sizing-default"
-                  placeholder={'0.00'}
+                  placeholder={setInputPlaceholder(inputToken)}
                   disabled={inputToken === null}
                   value={inputTokenValue}
                 />
                 {
-                    inputToken !== null 
+                    showMax
                     ?
                     (inputToken.tokenBal > 0 ?  
-                        <InputGroup.Append onClick={() => setInputTokenValue(inputToken.tokenBal + " " + inputToken.tokenSymbol.toUpperCase())}> 
+                        <InputGroup.Append onClick={() =>{
+
+                            const tokens = {
+                                input : inputToken.tokenBal + " " + inputToken.tokenSymbol.toUpperCase(),
+                                lp1: "103.5678 " + lpToken1.tokenSymbol.toUpperCase(),
+                                lp2: "206.0873 " + lpToken2.tokenSymbol.toUpperCase(),
+                            };
+
+                            dispatch(setTokensValue(tokens))
+
+                        } }> 
                             <InputGroup.Text id="max-token">
                                 max
                                 <img src={arrowUp} alt="up-arrow" width="13" height="13"/>
@@ -121,7 +138,7 @@ const InputTokenView = () => {
 
 const LPTokenView = () => {
    
-    const { inputToken, lpToken1, lpToken2 } = useSelector((state) => state.searchTokens);
+    const { inputToken, lpToken1, lpToken2, lpToken1Value, lpToken2Value } = useSelector((state) => state.searchTokens);
     const dispatch = useDispatch();
 
     return (
@@ -138,6 +155,7 @@ const LPTokenView = () => {
                         aria-describedby="inputGroup-sizing-default"
                         placeholder="0.00"
                         disabled={true}
+                        value={lpToken1Value}
                     />
                 </InputGroup>
             </div>
@@ -153,6 +171,7 @@ const LPTokenView = () => {
                         aria-describedby="inputGroup-sizing-default"
                         placeholder="0.00"
                         disabled={true}
+                        value={lpToken2Value}
                     />
                 </InputGroup>
             </div>

@@ -98,7 +98,7 @@ const MainComponent = () => {
                         <div className="select-token-pair-section">
                             <TokenSelector viewType={2}/>
                         </div>
-                        <div className="confirm-txn">
+                        <div className="txn">
                             <Transaction/>
                         </div>
                     </div>
