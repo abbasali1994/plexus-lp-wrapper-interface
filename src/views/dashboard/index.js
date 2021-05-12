@@ -1,10 +1,10 @@
 import './index.css';
 
-function Home() {
+function Dashboard() {
   return (
-    <div className="home">
+    <div className="dashboard">
     </div>
   );
 }
 
-export default Home;
+export default Dashboard;

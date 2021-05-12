@@ -1,5 +1,5 @@
 .main-section{
-    width: 1430px;
+    width: 1266px;
 }
 
 .left-sidebar {
@@ -37,7 +37,7 @@
 }
 
 .action-btns {
-    width: 300px;
+    width: 255px;
     border: 3px solid #0E1726;
     border-radius: 5px;
     
@@ -190,4 +190,8 @@
 
 .select-token-pair-section {
     margin-top:50px;
+}
+
+.confirm-txn {
+    margin-top: 30px;
 }

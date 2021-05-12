@@ -1,0 +1,16 @@
+.input-amount {
+    font-family: "Azo Sans Regular";
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em;
+    height: 61px !important;
+    width: 792px !important;
+    border-radius: 10px !important;
+    text-transform: uppercase;
+}
+
+.input-amount.btn-primary:disabled {
+    background: #191E3A;
+    color: #4F4F4F;
+}

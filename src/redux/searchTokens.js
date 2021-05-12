@@ -9,20 +9,27 @@ export const searchTokensSlice = createSlice({
     searchCaller: "",
     inputToken: null,
     lpToken1: null,
-    lpToken2: null
+    lpToken2: null,
+    lpToken1Weight: 0,
+    lpToken2Weight: 0
   },
   reducers: {
     showSearchModal: (state, action) => {
       const { showSearch, searchCaller } = action.payload;
       state.showSearch = showSearch;
       state.searchCaller = searchCaller;
+
+      // reset the selected tokens
+      if (state.searchCaller === constants.inputToken) {
+        state.inputToken = null;
+      }
     },
     hideSearchModal: (state, action) => {
       const { showSearch } = action.payload;
       state.showSearch = showSearch;
     },
-    setSelectedToken: (state, action) => {
-      const  token = action.payload;
+    setSelectedToken: (state, { payload }) => {
+      const  token = payload;
 
       if (state.searchCaller === constants.inputToken) {
         state.inputToken = token;
@@ -42,6 +49,9 @@ export const searchTokensSlice = createSlice({
       state.inputToken = null;
       state.lpToken1 = null;
       state.lpToken2 = null;
+    },
+    setLPTokensWeight(state) {
+
     }
   }
 });

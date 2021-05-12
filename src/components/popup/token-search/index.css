@@ -10,7 +10,7 @@ input.token-search-text{
     border-radius: 10px;
 }
 
-input.token-search-text::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+input.token-search-text::placeholder { 
     font-family: "Azo Sans Regular";
     font-size: 16px;
     font-style: normal;
@@ -23,19 +23,7 @@ input.token-search-text::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ *
 
 }
 
-input.token-search-text:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    font-family: "Azo Sans Regular";
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 36px;
-    letter-spacing: 0.05em;
-    text-align: left;
-    color: #828282;
-    text-transform: uppercase;
-}
-
-input.token-search-text::-ms-input-placeholder { /* Microsoft Edge */
+input.token-search-text::-ms-input-placeholder { 
     font-family: "Azo Sans Regular";
     font-size: 16px;
     font-style: normal;

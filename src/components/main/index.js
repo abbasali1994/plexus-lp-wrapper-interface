@@ -9,8 +9,7 @@ import faq from '../../assets/images/faq.svg';
 
 // the other components
 import TokenSelector from '../token-selector';
-import SearchTokensModal from '../popup/token-search';
-
+import Transaction from '../transaction';
 
 const dexStats = [{
     dexStatKey: "Protocol Liquidity",
@@ -88,9 +87,6 @@ const MainComponent = () => {
                     </div>
                 </Col>
                 <Col lg="9" className="main-wrapper">
-                    {/*Render the search tokens modal */}
-                    <SearchTokensModal/>
-                    
                     <div className="main-wrapper-header main-header-text">
                         Generate {selectedDex} LP Tokens     
                     </div>
@@ -100,8 +96,10 @@ const MainComponent = () => {
                             <TokenSelector viewType={1}/>
                         </div>
                         <div className="select-token-pair-section">
-                            <div className="token-label">Select Token Pair</div>
                             <TokenSelector viewType={2}/>
+                        </div>
+                        <div className="confirm-txn">
+                            <Transaction/>
                         </div>
                     </div>
                     

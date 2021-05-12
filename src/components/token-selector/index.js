@@ -1,15 +1,21 @@
 import './index.css';
 
+import { useState } from 'react';
+
+// bootstrap
+import {  InputGroup, FormControl } from 'react-bootstrap';
 
 // import the images
 import placeHolderX from '../../assets/images/token-selector.svg';
 import selectorIcon from '../../assets/images/selector.svg';
 import pair from '../../assets/images/pair.svg';
+import arrowUp from '../../assets/images/arrow-up.svg';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { showSearchModal } from "../../redux/searchTokens";
 
+// constants
 import { constants } from '../../utils';
 
 const SelectTokenView = () => {
@@ -31,26 +37,18 @@ const SelectTokenView = () => {
 
 const SelectedTokenView = (props) => {
 
-    const { tokenName, tokenSymbol } = props.token;
-    let icon = null;
-
-    try {
-        icon= require(`cryptocurrency-icons/svg/color/${tokenSymbol}.svg`).default;
-    }
-    catch (e) {
-        icon= require(`cryptocurrency-icons/svg/color/generic.svg`).default;
-    }
+    const { tokenDisplayName, tokenSymbol, tokenIcon } = props.token;
 
     return (
         <div className="select-token">
             <div className="token-selector-border">
                 <div className="token-border">
-                    <img src={icon} alt="selected token" width="32" height="32"/>
+                    <img src={tokenIcon} alt="selected token" width="55" height="55"/>
                 </div>
             </div>
             <div className="selected-token">
                 <span className="selected-token-name">
-                    {tokenName}
+                    {tokenDisplayName}
                 </span>
                 <br/>
                 <span className="selected-token-symbol">
@@ -83,35 +81,82 @@ const InputTokenView = () => {
 
     const { inputToken } = useSelector((state) => state.searchTokens);
     const dispatch = useDispatch();
+    const [inputTokenValue, setInputTokenValue] = useState('0.00');
 
     return (
-        <>
-            <div onClick={() => dispatch(showSearchModal({showSearch:true, searchCaller: constants.inputToken}))}>
+        <div className="select-input-token">
+            <div onClick={() => {
+                setInputTokenValue('0.00');
+                dispatch(showSearchModal({showSearch:true, searchCaller: constants.inputToken}));
+            }}>
                 { inputToken === null ?  <SelectTokenView/> : <SetInputToken/>}
             </div>
-
-          
-        </>
-      
+            <InputGroup className="mb-3">
+                <FormControl
+                  className="input-token-text"
+                  aria-label="Default"
+                  aria-describedby="inputGroup-sizing-default"
+                  placeholder={'0.00'}
+                  disabled={inputToken === null}
+                  value={inputTokenValue}
+                />
+                {
+                    inputToken !== null 
+                    ?
+                    (inputToken.tokenBal > 0 ?  
+                        <InputGroup.Append onClick={() => setInputTokenValue(inputToken.tokenBal + " " + inputToken.tokenSymbol.toUpperCase())}> 
+                            <InputGroup.Text id="max-token">
+                                max
+                                <img src={arrowUp} alt="up-arrow" width="13" height="13"/>
+                            </InputGroup.Text>
+                        </InputGroup.Append> : null)
+                    :
+                    null
+                }
+            </InputGroup>
+        </div>
     );
 
 }
 
 const LPTokenView = () => {
    
-    const { lpToken1, lpToken2 } = useSelector((state) => state.searchTokens);
+    const { inputToken, lpToken1, lpToken2 } = useSelector((state) => state.searchTokens);
     const dispatch = useDispatch();
 
     return (
-        <>
-            <div className="lp-token1" onClick={() => dispatch(showSearchModal({showSearch:true, searchCaller: constants.lpToken1}))}>
-                { lpToken1 === null  ?  <SelectTokenView/> : <SetLPToken1/>}
+        <div className={inputToken === null ? 'input-disabled' :''}>
+            <div className="token-label">Select Token Pair</div>
+            <div className="select-lp1-token">
+                <div className="lp-token1" onClick={ inputToken === null ? null : () => dispatch(showSearchModal({showSearch:true, searchCaller: constants.lpToken1}))}>
+                    { lpToken1 === null  ?  <SelectTokenView/> : <SetLPToken1/>}
+                </div>
+                <InputGroup className="mb-3">
+                    <FormControl
+                        className="input-token-text"
+                        aria-label="Default"
+                        aria-describedby="inputGroup-sizing-default"
+                        placeholder="0.00"
+                        disabled={true}
+                    />
+                </InputGroup>
             </div>
             <img className="pair-icon" src={pair} width="13" height="37" alt="pair"/>
-            <div className="lp-token2"  onClick={() => dispatch(showSearchModal({showSearch:true, searchCaller: constants.lpToken2}))}>
-                { lpToken2 === null  ?  <SelectTokenView/> : <SetLPToken2/>}
+            <div className="select-lp2-token">
+                <div className="lp-token2"  onClick={ inputToken === null ? null : () => dispatch(showSearchModal({showSearch:true, searchCaller: constants.lpToken2}))}>
+                    { lpToken2 === null  ?  <SelectTokenView/> : <SetLPToken2/>}
+                </div>
+                <InputGroup className="mb-3">
+                    <FormControl
+                        className="input-token-text"
+                        aria-label="Default"
+                        aria-describedby="inputGroup-sizing-default"
+                        placeholder="0.00"
+                        disabled={true}
+                    />
+                </InputGroup>
             </div>
-        </>
+        </div>
        
     );
 
@@ -119,7 +164,6 @@ const LPTokenView = () => {
 
 const TokenSelector = (props) => {
     const { viewType } = props;
-
     let element = null;
 
     if (viewType === 1) {

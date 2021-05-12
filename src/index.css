@@ -134,9 +134,21 @@ code {
   outline: none;
 }
 
+.modal-dialog {
+  width: 445px;
+  height: 696px;
+  border-radius: 10px !important;
+}
+
+.modal-content {
+  border-radius: 10px !important;
+}
+
 .modal-header {
   background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
-  border-bottom: none;
+  border-bottom: none !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
 }
 
 .modal-title {
