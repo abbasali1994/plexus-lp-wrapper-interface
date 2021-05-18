@@ -1,3 +1,18 @@
+.App:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: -230px;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  background-repeat: no-repeat;
+  background-image: url('./assets/images/big-x.svg');
+  background-position: left;
+  background-size:80%;
+}
+
 .App {
   background-color: #060818;
   min-height: 100vh;
@@ -5,6 +20,26 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.app-wrapper:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  right: 190px;
+  top: 30px;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  background-repeat: no-repeat;
+  background-image: url('./assets/images/bg-grid.svg');
+  background-position: right;
+  background-size: 45%;
+
+}
+
+.app-wrapper {
+ 
 }
 
 .app-views {

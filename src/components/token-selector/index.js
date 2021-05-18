@@ -14,16 +14,88 @@ import { showSearchModal, setTokensValue } from "../../redux/searchTokens";
 
 // constants
 import { constants } from '../../utils';
+import { tokenViewTypes } from '../../utils/token';
+
+// The single token icon view
+const TokenIconView = ({ tokenIcon, tokenIconSize }) => {
+    const tokenIconSelected = tokenIconSize === 32 ? "" : "token-selected-icon";
+    return (
+        <div className="token-selector">
+            <div className="token-background">
+                <img className={tokenIconSelected} src={tokenIcon} alt="token icon" width={tokenIconSize} height={tokenIconSize}/>
+            </div>
+        </div>
+    )
+}
+
+// The lp token view
+const LpTokenIconView = ({ tokenIcon, tokenIconSize }) => {
+    const tokenIconSelected = tokenIconSize === 32 ? "" : "lp-token-selected-icon";
+    return (
+        <div className="lp-token-selector">
+            <div className="lp-token-background">
+                <img className={tokenIconSelected} src={tokenIcon} alt="token icon" width={tokenIconSize} height={tokenIconSize}/>
+            </div>
+        </div>
+    )
+}
+
+// Input token view shown in the confirm popup
+const SupplyingLPTokenView = ({ token }) => {
+    const { tokenAmount, tokenAmountUSD, tokenIcon } = token;
+
+    return (
+        <div className="select-token">
+            <TokenIconView tokenIcon={tokenIcon} tokenIconSize={54}/>
+            <div className="selected-token supply-token">
+                <span className="supply-token-amount">
+                {tokenAmount}
+                </span>
+                <br/>
+                <span className="supply-token-amount-usd">
+                {tokenAmountUSD}
+                </span>
+            </div>
+        </div>
+    );
+};
+
+
+// Pair token view shown in the confirm popup
+const GeneratingLPTokenView = ({ lpTokens }) => {
+
+    const { token1, token2, dexName } = lpTokens;
+    const lpPair = token1.tokenSymbol + "/" + token2.tokenSymbol;
+   
+    return (
+        <div className="horizontal-lp-view">
+            <div className="select-token">
+                <LpTokenIconView tokenIcon={token1.tokenIcon} tokenIconSize={51}/> 
+            </div>
+            <img className="lp-pair-icon" src={pair} width="16" height="46" alt="pair"/>
+            <div className="select-token">
+                <LpTokenIconView tokenIcon={token2.tokenIcon} tokenIconSize={51}/> 
+            </div>
+            <div className="lp-pair-info">
+                <div className="lp-pair-text">
+                    {lpPair}
+                </div>
+                <div className="lp-pair-desc">
+                    <span className="lp-pair-dex">
+                     {dexName} &nbsp;
+                    </span>
+                    LP Tokens
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const SelectTokenView = () => {
 
     return (
         <div className="select-token">
-            <div className="token-selector-border">
-                <div className="token-border">
-                    <img src={placeHolderX} alt="selected token" width="32" height="32"/>
-                </div>
-            </div>
+            <TokenIconView tokenIcon={placeHolderX} tokenIconSize={32}/>
             <span className="select-token-text">
                 Select a Token
                 <img src={selectorIcon} alt="select icon" width="15" height="15"/>
@@ -33,16 +105,11 @@ const SelectTokenView = () => {
 }
 
 const SelectedTokenView = (props) => {
-
     const { tokenDisplayName, tokenSymbol, tokenIcon } = props.token;
 
     return (
         <div className="select-token">
-            <div className="token-selector-border">
-                <div className="token-border">
-                    <img src={tokenIcon} alt="selected token" width="55" height="55"/>
-                </div>
-            </div>
+            <TokenIconView tokenIcon={tokenIcon} tokenIconSize={52}/>
             <div className="selected-token">
                 <span className="selected-token-name">
                     {tokenDisplayName}
@@ -57,7 +124,6 @@ const SelectedTokenView = (props) => {
     );
 
 }
-
 
 const SetInputToken = () => {
     const { inputToken } = useSelector((state) => state.searchTokens);
@@ -74,13 +140,13 @@ const SetLPToken2 = () => {
     return <SelectedTokenView token={lpToken2}/>
 }
 
-const setInputPlaceholder = (inputToken) => {
 
+const setInputPlaceholder = (inputToken) => {
     let placeholder = '0.00';
 
     if (inputToken !== null) {
         if (inputToken.tokenBal > 0 ){
-            placeholder = inputToken.tokenBal +  " "  + inputToken.tokenSymbol.toUpperCase() ;
+            placeholder = inputToken.tokenBal +  " "  + inputToken.tokenSymbol.toUpperCase();
         }
     }
 
@@ -92,7 +158,6 @@ const InputTokenView = () => {
     const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } = useSelector((state) => state.searchTokens);
     const dispatch = useDispatch();
   
-
     return (
         <div className="select-input-token">
             <div onClick={() => dispatch(showSearchModal({showSearch:true, searchCaller: constants.inputToken}))}>
@@ -112,7 +177,8 @@ const InputTokenView = () => {
                     ?
                     (inputToken.tokenBal > 0 ?  
                         <InputGroup.Append onClick={() =>{
-
+                            
+                            // for now we'll mock this and redo it later with real values
                             const tokens = {
                                 input : inputToken.tokenBal + " " + inputToken.tokenSymbol.toUpperCase(),
                                 lp1: "103.5678 " + lpToken1.tokenSymbol.toUpperCase(),
@@ -159,7 +225,7 @@ const LPTokenView = () => {
                     />
                 </InputGroup>
             </div>
-            <img className="pair-icon" src={pair} width="13" height="37" alt="pair"/>
+            <img className="pair-icon" src={pair} width="13" height="37" alt="pair-icon"/>
             <div className="select-lp2-token">
                 <div className="lp-token2"  onClick={ inputToken === null ? null : () => dispatch(showSearchModal({showSearch:true, searchCaller: constants.lpToken2}))}>
                     { lpToken2 === null  ?  <SelectTokenView/> : <SetLPToken2/>}
@@ -185,11 +251,17 @@ const TokenSelector = (props) => {
     const { viewType } = props;
     let element = null;
 
-    if (viewType === 1) {
+    if (viewType === tokenViewTypes.inputToken) {
         element = <InputTokenView/>;
     }
-    if (viewType === 2) {
+    if (viewType === tokenViewTypes.selectLPPair) {
         element = <LPTokenView/>;
+    }
+    if (viewType === tokenViewTypes.supplyingLP) {
+        element = <SupplyingLPTokenView token={props.token} />;
+    }
+    if( viewType === tokenViewTypes.generatingLP) {
+        element = <GeneratingLPTokenView lpTokens={props.lpTokens} />;
     }
     
     return element;

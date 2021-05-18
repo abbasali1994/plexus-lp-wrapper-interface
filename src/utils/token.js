@@ -33,19 +33,19 @@ const tokens=[
         tokenName:"Pickle-Finance", 
         tokenDisplayName: "Pickle", 
         tokenSymbol: "pickle", 
-        tokenBal:  "0.00"
+        tokenBal:  0
     }, 
     {
         tokenName:"Sushiswap", 
         tokenDisplayName: "Sushiswap", 
         tokenSymbol: "sushi", 
-        tokenBal:  "0.00"
+        tokenBal:  0
     }, 
     {
         tokenName:"Uniswap", 
         tokenDisplayName: "Uniswap", 
         tokenSymbol: "uni", 
-        tokenBal:  "0.00"
+        tokenBal:  0
     }];
 
 
@@ -74,4 +74,12 @@ export const getAllTokens = () => {
 
     return tokens;
 
-}
+};
+
+export const tokenViewTypes = {
+    inputToken: 'INPUT-TOKEN',
+    selectLPPair: 'LP-PAIR-SELECT',
+    supplyingLP: 'SUPPLYING-LP',
+    generatingLP: 'GENERATING-LP',
+    selectToken: 'SELECT-TOKEN'
+};

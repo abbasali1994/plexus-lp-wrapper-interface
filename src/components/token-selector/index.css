@@ -6,7 +6,7 @@
     cursor: pointer;
 }
 
-.token-selector-border {
+.token-selector {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,9 +15,9 @@
     border: 3px solid #050818;
     border-radius: 10%;
     background-color: #191E3A;
-
 }
-.token-border {
+
+.token-background {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,6 +25,10 @@
     height: 57px;
     background: url('../../assets/images/ellipse.svg');
     background-repeat: no-repeat;
+}
+
+.token-background  .token-selected-icon{
+  border-radius: 50%;
 }
 
 .select-token-text {
@@ -53,7 +57,6 @@
 }
 
 .selected-token-name {
-
     font-family: 'Nova Mono Regular';
     font-size: 16px;
     font-style: normal;
@@ -179,7 +182,97 @@ input.input-token-text:focus {
     background-color: #050818;
     border: none;
 }
+
 #max-token img {
     margin-top: -3px;
     margin-left: 5px;
+}
+
+.supply-token {
+    padding-left: 20px;
+    cursor:auto;
+}
+
+.supply-token-amount {
+    font-family: "Azo Sans Regular";
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #F2F2F2;
+}
+
+.supply-token-amount-usd {
+    font-family: 'Nova Mono Regular';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    color: #828282;
+}
+
+/* Selector for Paired LP tokens */
+.horizontal-lp-view{
+    display: flex;
+    flex-direction: row;
+}
+
+.lp-token-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 78px;
+    height: 78px;
+    border: 3px solid #050818;
+    border-radius: 10%;
+    background-color: #191E3A;
+}
+
+.lp-token-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 57px;
+    height: 57px;
+    background: url('../../assets/images/ellipse.svg');
+    background-repeat: no-repeat;
+}
+
+.lp-token-background  .lp-token-selected-icon{
+  border-radius: 50%;
+}
+
+.lp-pair-icon {
+    margin-top: 15px;
+}
+
+.lp-pair-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.lp-pair-text{
+    font-family: "Azo Sans Regular";
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0.05em;
+    color: #F2F2F2;
+    text-transform: uppercase;
+}
+
+.lp-pair-desc {
+    font-family: "Azo Sans Regular";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0em;
+    color: #F2F2F2;
+}
+
+.lp-pair-dex {
+    color: #62B0E5;
 }

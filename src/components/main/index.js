@@ -9,7 +9,17 @@ import faq from '../../assets/images/faq.svg';
 
 // the other components
 import TokenSelector from '../token-selector';
-import Transaction from '../transaction';
+import Transaction from '../transaction-button';
+import Dexes from '../dex';
+
+// redux
+import { useSelector } from "react-redux";
+
+// token view types
+import { tokenViewTypes } from '../../utils/token';
+
+// constants
+import { constants } from '../../utils';
 
 const dexStats = [{
     dexStatKey: "Protocol Liquidity",
@@ -25,23 +35,25 @@ const dexStats = [{
 }];
 
 const actionButtons = ["Generate","Unwrap","Remix"];
-const dexButtons = ["Sushiswap","Uniswap"];
 
 const MainComponent = () => {
 
     const [activeActionBtn, setActiveActionBtn] = useState("Generate");
-    const [selectedDex, setSelectedDex] = useState(dexButtons[0]);
+    const { dexes, selectedDex } = useSelector((state) => state.dexes);
+    const dexName = dexes[selectedDex].name;
+
+    const bg = dexName === constants.dexSushi ? "left-sidebar-sushi" : "left-sidebar-uni";
 
     return (
       <div className="main-section">
             <Row>
-                <Col lg="3" className="left-sidebar">
+                <Col lg="3" className={bg}>
                     <div className="left-sidebar-wrapper">
                         <div className="left-action main-header-text">
                             ACTION
                             <img className="float-right" src={action} alt="logo" width="17" height="17"/>
                         </div>
-                        <div className="left-action-buttons">
+                        <div>
                             <ButtonGroup className="mb-2 action-btns">
                                 { 
                                     actionButtons.map(btn => (
@@ -54,18 +66,11 @@ const MainComponent = () => {
                             DEX
                             <img className="float-right" src={dex} alt="logo" width="17" height="17"/>
                         </div>
-                        <div className="left-action-buttons">
-                            <ButtonGroup className="mb-2 action-btns">
-                                { 
-                                    dexButtons.map(btn => (
-                                        <Button key={btn} id={btn === selectedDex ? 'active-btn': ''} onClick={() => setSelectedDex(btn)}>{btn}</Button>
-                                    ))
-                                }
-                            </ButtonGroup>
-                        </div>
+                        {/* The dex buttons */}
+                        <Dexes/>
                         <div className="dex-stats">
                             <div className="dex-stats-header">
-                                {selectedDex} stats
+                                {dexes[selectedDex].name} stats
                             </div>
                             {
                                 dexStats.map(dex => (
@@ -88,17 +93,17 @@ const MainComponent = () => {
                 </Col>
                 <Col lg="9" className="main-wrapper">
                     <div className="main-wrapper-header main-header-text">
-                        Generate {selectedDex} LP Tokens     
+                        Generate {dexes[selectedDex].name} LP Tokens     
                     </div>
                     <div className="main-wrapper-interface">
                         <div className="input-token-section">
                             <div className="token-label">Input Token Amount</div>
-                            <TokenSelector viewType={1}/>
+                            <TokenSelector viewType={tokenViewTypes.inputToken}/>
                         </div>
                         <div className="select-token-pair-section">
-                            <TokenSelector viewType={2}/>
+                            <TokenSelector viewType={tokenViewTypes.selectLPPair}/>
                         </div>
-                        <div className="txn">
+                        <div className="input-btn">
                             <Transaction/>
                         </div>
                     </div>
@@ -113,7 +118,6 @@ const MainComponent = () => {
             </Row>
       </div>
     );
-
-}
+};
 
 export default MainComponent;

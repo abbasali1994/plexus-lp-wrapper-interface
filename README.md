@@ -1,3 +1,6 @@
+# LPWrapperUI
+Facelift LP wrapper User interface for Plexus Tools
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

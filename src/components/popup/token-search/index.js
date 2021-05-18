@@ -46,7 +46,7 @@ const SearchTokensModal = () => {
                       <div key={token.tokenSymbol} className="token" onClick={() => dispatch(setSelectedToken(token))}>
                         <img className="token-icon" src={token.tokenIcon} alt={token.tokenSymbol} width="36" height="36"/>
                         <span className="token-name">{token.tokenSymbol.toUpperCase()}</span>
-                        <span className="token-bal">{token.tokenBal}</span>
+                        <span className="token-bal">{token.tokenBal.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
                       </div>
                     );
                   })

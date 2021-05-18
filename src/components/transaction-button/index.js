@@ -3,7 +3,8 @@ import './index.css';
 import { Button } from 'react-bootstrap';
 
 // redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { showConfirmModal } from "../../redux/transactions";
 
 // this component is responsible for handling all the blockchain txn's in the app
 const Transaction = () => {
@@ -14,10 +15,17 @@ const Transaction = () => {
     const disableBtn = allTokensNotSelected || allTokenValuesNotSet;
 
     let btnText = disableBtn ? allTokensNotSelected ? "Input Amount & Select Tokens": "Input Amount" : "Confirm LP Generation";
+
+    const dispatch = useDispatch();
     
     return (
-        <Button variant="primary" size="lg" block className="input-amount" disabled={disableBtn}>
-           {btnText}
+        disableBtn ?
+        <Button variant="primary" size="lg" block className="input-amount" disabled={disableBtn}  >
+            {btnText}
+        </Button>
+         :
+        <Button variant="primary" size="lg" block className="input-amount confirm-lp" disabled={disableBtn}  onClick={() => dispatch(showConfirmModal({ showConfirm: true } ))} >
+            {btnText}
         </Button>
     );
 }

@@ -14,19 +14,20 @@ export const searchTokensSlice = createSlice({
     inputTokenValue: '',
     lpToken1Value: '',
     lpToken2Value: '',
+    inputTokenValueUSD: '',
+    lpToken1ValueUSD: '',
+    lpToken2ValueUSD: '',
+    totalLPTokens: ''
   },
   reducers: {
     showSearchModal: (state, action) => {
       const { showSearch, searchCaller } = action.payload;
       state.showSearch = showSearch;
       state.searchCaller = searchCaller;
-
     },
     hideSearchModal: (state, { payload }) => {
       const { showSearch } = payload;
       state.showSearch = showSearch;
-
-   
     },
     setSelectedToken: (state, { payload }) => {
       const  token = payload;
@@ -58,8 +59,12 @@ export const searchTokensSlice = createSlice({
       state.inputTokenValue = "";
       state.lpToken1Value = "";
       state.lpToken2Value = "";
+      state.inputTokenValueUSD = "";
+      state.lpToken1ValueUSD = "";
+      state.lpToken2ValueUSD = "";
+      state.totalLPTokens = "";
     },
-    // for now we spoof it
+    // for now we mock it
     setTokensValue(state, { payload}) {
       const { input, lp1, lp2 } = payload;
 
@@ -67,7 +72,13 @@ export const searchTokensSlice = createSlice({
       state.lpToken1Value = lp1;
       state.lpToken2Value = lp2;
 
-      // hide the show max button
+      // mocked for now
+      state.inputTokenValueUSD = "~$4,623.45";
+      state.lpToken1ValueUSD = "~$10,000.67";
+      state.lpToken2ValueUSD = "~$9,877.57";
+      state.totalLPTokens = "4.5324 LP Tokens";
+
+      // hide the max button
       state.showMax = false;
     }
   }

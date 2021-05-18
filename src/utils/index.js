@@ -6,5 +6,7 @@ export const  formatAddress = (ethAddress) => {
 export const constants = {
     inputToken: 'INPUT-TOKEN-SELECTOR',
     lpToken1: 'LP-TOKEN-1',
-    lpToken2: 'LP-TOKEN-2'
+    lpToken2: 'LP-TOKEN-2',
+    dexUni: 'Uniswap',
+    dexSushi: 'Sushiswap'
 }
