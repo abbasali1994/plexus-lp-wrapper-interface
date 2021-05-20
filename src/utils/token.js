@@ -51,9 +51,7 @@ const tokens=[
 
 export const getAllTokens = () => {
 
-
     tokens.forEach( token => {
-
         let icon = null;
 
         try {
@@ -73,7 +71,6 @@ export const getAllTokens = () => {
     });
 
     return tokens;
-
 };
 
 export const tokenViewTypes = {

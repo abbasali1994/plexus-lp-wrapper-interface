@@ -1,0 +1,82 @@
+.txn-success{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.success-txt {
+    font-family: 'Codeink Regular';
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: #62B0E5;
+}
+
+.txn-submitted-txt {
+    font-family: 'Azo Sans Regular';
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #E5E5E5;
+}
+
+.txn-submitted-etherscan {
+    font-family: 'Azo Sans Regular';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #236EDC;
+}
+
+/* Txn Details Box */
+.txn-details {
+    background-color: #050818;
+    margin-left: 90px;
+    margin-right: 90px;
+    border-radius: 20px;
+    padding: 15px;
+}
+
+.txn-details-line {
+   
+   
+}
+
+.txn-details-label1,
+.txn-details-label2 {
+    font-family: 'Azo Sans Regular';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+.txn-details-label1 {
+    color: #828282;
+}
+
+.txn-details-label2 {
+    letter-spacing: 0.05em;
+    color: #F2F2F2;
+}
+
+.txn-details-label3 {
+    font-family: 'Nova Mono Regular';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #828282;
+}

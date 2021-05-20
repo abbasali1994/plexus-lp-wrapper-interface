@@ -2,32 +2,32 @@
     padding: 0px !important;
 }
 
-.popup-content {
+.confirm-popup-content {
     padding: 40px;
 }
 
-.top-section, 
-.bottom-section {
+.confirm-popup-top-section, 
+.confirm-popup-bottom-section {
     min-height: 200px;
 }
 
-.top-section {
+.confirm-popup-top-section {
     background-color: #191E3A;
     background-image: url('../../../assets/images/popup-grid.svg');
     background-repeat: no-repeat;
     background-size: 100%;
 }
 
-.bottom-uni-section:before {
+.confirm-popup-bottom-uni-section:before {
     background-image: url('../../../assets/images/uni.png');
 }
 
-.bottom-sushi-section:before {
+.confirm-popup-bottom-sushi-section:before {
     background-image: url('../../../assets/images/sushi.png');
 }
 
-.bottom-uni-section:before,
-.bottom-sushi-section:before {
+.confirm-popup-bottom-uni-section:before,
+.confirm-popup-bottom-sushi-section:before {
     content: ' ';
     display: block;
     position: absolute;
@@ -41,15 +41,15 @@
     background-position: right bottom;
 }
 
-.bottom-sushi-section,
-.bottom-uni-section {
+.confirm-popup-bottom-sushi-section,
+.confirm-popup-bottom-uni-section {
     position: relative;
     background-color: #0E1726;
     padding-top: 5px;
     z-index:999;
 }
 
-.popup-header{
+.confirm-popup-header{
     font-family: "Codeink Regular";
     font-size: 26px;
     font-style: normal;
@@ -94,7 +94,7 @@
     color: #828282;
 }
 
-.popup-footer{
+.confirm-popup-footer{
     background-color: #191E3A;
     border: none !important;
 }

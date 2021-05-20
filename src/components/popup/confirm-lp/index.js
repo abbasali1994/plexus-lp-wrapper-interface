@@ -5,7 +5,7 @@ import { Modal, Button } from 'react-bootstrap';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showConfirmModal } from "../../../redux/transactions";
+import { showConfirmModal, showAwaitingTxnModal } from "../../../redux/transactions";
 
 // constants
 import { tokenViewTypes } from '../../../utils/token';
@@ -19,16 +19,12 @@ import arrowDown from '../../../assets/images/arrow-down.svg';
 // constants
 import { constants } from '../../../utils';
 
-
 const ConfirmLPModal = () => {
 
     const { showConfirm } = useSelector((state) => state.transactions);
     const { dexes, selectedDex } = useSelector((state) => state.dexes);
-
     const dexName = dexes[selectedDex].name;
-
-    const bottomSectionClass = dexName === constants.dexSushi ? "bottom-sushi-section" : "bottom-uni-section";
-
+    const bottomSectionClass = dexName === constants.dexSushi ? "confirm-popup-bottom-sushi-section" : "confirm-popup-bottom-uni-section";
 
     const { 
       inputToken, 
@@ -41,14 +37,13 @@ const ConfirmLPModal = () => {
       lpToken1ValueUSD,
       lpToken2ValueUSD,
       totalLPTokens
-    } = useSelector((state) => state.searchTokens);
+    } = useSelector((state) => state.tokens);
 
     // the input token prop
     const token = {};
     Object.assign(token, inputToken);
     token.tokenAmount = inputTokenValue;
     token.tokenAmountUSD = inputTokenValueUSD;
-
 
     // the input token prop
     const token1 = {};
@@ -71,50 +66,59 @@ const ConfirmLPModal = () => {
       <>
         <Modal 
             show={showConfirm} 
-            onHide={() => dispatch(showConfirmModal(false))} 
+            onHide={() => dispatch(showConfirmModal({showConfirm: false}))} 
             backdrop="static"
             keyboard={false}
-            animation={false}>
-
+            animation={true}>
             <Modal.Header closeButton>
               <Modal.Title>Confirm LP Generation</Modal.Title>
             </Modal.Header>
-              <Modal.Body className="confirm-popup-body">
-                <div className="top-section">
-                  <div className="popup-content">
-                    <div className="popup-header">
-                      Supplying
-                    </div>
-                    <div className="supply-details">
-                      <TokenSelector viewType={tokenViewTypes.supplyingLP} token={token}/>
+              <Modal.Body>
+                <div  className="confirm-popup-body">
+                  <div className="confirm-popup-top-section">
+                    <div className="confirm-popup-content">
+                      <div className="confirm-popup-header">
+                        Supplying
+                      </div>
+                      <div className="supply-details">
+                        <TokenSelector viewType={tokenViewTypes.supplyingLP} token={token}/>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <img className="down-arrow" src={arrowDown} alt="down arrow" width="46" height="50"/>
-                <div className={bottomSectionClass}>
-                  <div className="popup-content">
-                    <div className="popup-header">
-                      Generating
-                    </div>
-                    <div className="generate-lp-details">
-                      <TokenSelector viewType={tokenViewTypes.generatingLP} lpTokens={lpTokens}/>
-                    </div>
-                    <div className="lp-token-stats">
-                      <div className="lp-token-amount">
-                        {totalLPTokens}
+                  <img className="down-arrow" src={arrowDown} alt="down arrow" width="46" height="50"/>
+                  <div className={bottomSectionClass}>
+                    <div className="confirm-popup-content">
+                      <div className="confirm-popup-header">
+                        Generating
                       </div>
-                      <div className="lp-token-value">
-                        {lpToken1Value}
+                      <div className="generate-lp-details">
+                        <TokenSelector viewType={tokenViewTypes.generatingLP} lpTokens={lpTokens}/>
                       </div>
-                      <div className="lp-token-value">
-                        {lpToken2Value}
+                      <div className="lp-token-stats">
+                        <div className="lp-token-amount">
+                          {totalLPTokens} &nbsp; LP Tokens
+                        </div>
+                        <div className="lp-token-value">
+                          {lpToken1Value}
+                        </div>
+                        <div className="lp-token-value">
+                          {lpToken2Value}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </Modal.Body>
-              <Modal.Footer className="popup-footer">
-                <Button variant="primary" size="lg" block className="confirm-tx">
+              <Modal.Footer className="confirm-popup-footer">
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  block 
+                  className="confirm-tx"
+                  onClick={()=> {
+                    dispatch(showConfirmModal({showConfirm: false}));
+                    dispatch(showAwaitingTxnModal({showAwaitingTxn: true}));
+                  }}>
                   Confirm
                 </Button>
               </Modal.Footer>

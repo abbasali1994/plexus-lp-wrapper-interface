@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { constants } from '../utils';
 
-export const searchTokensSlice = createSlice({
-  name: "searchTokens",
+export const tokensSlice = createSlice({
+  name: "tokens",
   initialState: {
     showSearch: false,
     searchCaller: "",
@@ -17,7 +16,9 @@ export const searchTokensSlice = createSlice({
     inputTokenValueUSD: '',
     lpToken1ValueUSD: '',
     lpToken2ValueUSD: '',
-    totalLPTokens: ''
+    totalLPTokens: '',
+    networkFeeETH: '',
+    networkFeeUSD: ''
   },
   reducers: {
     showSearchModal: (state, action) => {
@@ -63,6 +64,8 @@ export const searchTokensSlice = createSlice({
       state.lpToken1ValueUSD = "";
       state.lpToken2ValueUSD = "";
       state.totalLPTokens = "";
+      state.networkFeeETH = "";
+      state.networkFeeUSD = "";
     },
     // for now we mock it
     setTokensValue(state, { payload}) {
@@ -76,7 +79,9 @@ export const searchTokensSlice = createSlice({
       state.inputTokenValueUSD = "~$4,623.45";
       state.lpToken1ValueUSD = "~$10,000.67";
       state.lpToken2ValueUSD = "~$9,877.57";
-      state.totalLPTokens = "4.5324 LP Tokens";
+      state.totalLPTokens = "4.5324";
+      state.networkFeeETH = "0.008654 ETH";
+      state.networkFeeUSD = "~$17.35";
 
       // hide the max button
       state.showMax = false;
@@ -85,6 +90,6 @@ export const searchTokensSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  showSearchModal, hideSearchModal, setSelectedToken, clearTokens,  setTokensValue } = searchTokensSlice.actions;
+export const {  showSearchModal, hideSearchModal, setSelectedToken, clearTokens,  setTokensValue } = tokensSlice.actions;
 
-export default searchTokensSlice.reducer;
+export default tokensSlice.reducer;

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 // reducers
-import searchTokensReducer from "./redux/searchTokens";
+import tokensReducer from "./redux/tokens";
 import transactionsReducer from "./redux/transactions";
 import dexReducer from "./redux/dex";
 
@@ -10,7 +10,7 @@ import logger from 'redux-logger';
 
 export default configureStore({
   reducer: {
-    searchTokens: searchTokensReducer,
+    tokens: tokensReducer,
     transactions: transactionsReducer,
     dexes: dexReducer
   },

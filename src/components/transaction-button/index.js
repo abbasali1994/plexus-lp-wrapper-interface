@@ -9,7 +9,7 @@ import { showConfirmModal } from "../../redux/transactions";
 // this component is responsible for handling all the blockchain txn's in the app
 const Transaction = () => {
 
-    const { inputToken, lpToken1, lpToken2, inputTokenValue, lpToken1Value, lpToken2Value } = useSelector((state) => state.searchTokens);
+    const { inputToken, lpToken1, lpToken2, inputTokenValue, lpToken1Value, lpToken2Value } = useSelector((state) => state.tokens);
     const allTokensNotSelected = inputToken === null || lpToken1 === null || lpToken2 === null;
     const allTokenValuesNotSet = inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
     const disableBtn = allTokensNotSelected || allTokenValuesNotSet;

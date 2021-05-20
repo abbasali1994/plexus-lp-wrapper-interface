@@ -1,6 +1,10 @@
 .search-token-body {
     margin-top: 0px;
     background-color: #191E3A;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 20px;
+    overflow-y: scroll;
 }
 
 input.token-search-text{
@@ -20,7 +24,6 @@ input.token-search-text::placeholder {
     text-align: left;
     color: #828282;
     text-transform: uppercase;
-
 }
 
 input.token-search-text::-ms-input-placeholder { 

@@ -1,10 +1,21 @@
-import './index.css';
+import { Row } from 'react-bootstrap';
 
-// import the various components
-import Main from '../../components/main';
+// the other components
+import Sidebar from '../../components/sidebar';
+import GenerateLP from '../../components/generate';
+import Copyright from '../../components/copyright';
 
-function Home() {
-  return <Main/>
-}
+const HomeView = () => {
+  
+    return (
+        <div className="main-section">
+            <Row>
+                <Sidebar/>
+                <GenerateLP/>
+            </Row>
+            <Copyright/>
+        </div>
+    );
+};
 
-export default Home;
+export default HomeView;

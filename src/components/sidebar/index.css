@@ -1,7 +1,3 @@
-.main-section {
-    width: 1266px;
-}
-
 .left-sidebar-sushi.col-lg-3,
 .left-sidebar-uni.col-lg-3{
     padding: 0px;
@@ -36,21 +32,6 @@
     background-repeat: no-repeat;
     background-size: 242px 306px;
     background-position: right bottom;
-}
-
-.main-wrapper {
-    background: #0E1726;
-    border-radius: 10px;
-}
-
-.main-header-text {
-    font-family: "Azo Sans Regular";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 36px;
-    letter-spacing: 0.1em;
-    color: #E0E0E0;
 }
 
 .left-sidebar-wrapper {
@@ -123,72 +104,4 @@
 .faq img {
     margin-top: 4px;
     margin-right: 10px;
-}
-
-.copyright {
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-family: "Azo Sans Regular";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 36px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #62B0E5;
-}
-
-.main-wrapper {
-    border-radius: 0px 10px 0px 0px;
-}
-.main-wrapper.col-lg-9 {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-.main-wrapper-header, .main-wrapper-interface{
-    padding-left: 90px;
-}
-
-.main-wrapper-header, .token-label {
-    font-family: "Azo Sans Regular";
-    font-style: normal;
-    font-weight: 600;
-}
-
-.main-wrapper-header {
-    font-size: 22px;
-    line-height: 36px;
-    text-align: left;
-    color: #E5E5E5;
-    padding-top:20px;
-    padding-bottom: 20px;
-    background-color: #050818;
-    border: 2px solid #0E1726;
-    box-sizing: border-box;
-    border-radius: 0px 10px 0px 0px;
-}
-
-.token-label {
-    font-family: "Azo Sans Regular";
-    font-size: 16px;
-    line-height: 36px;
-    letter-spacing: 0.1em;
-    text-align: left;
-    text-transform: uppercase;
-    color:  #E0E0E0;
-    margin-bottom:20px;
-}
-
-.input-token-section {
-    margin-top: 30px; 
-}
-
-.select-token-pair-section {
-    margin-top:50px;
-}
-
-.input-btn {
-    margin-top: 35px;
 }

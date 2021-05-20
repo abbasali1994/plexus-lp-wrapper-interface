@@ -10,7 +10,7 @@ import arrowUp from '../../assets/images/arrow-up.svg';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showSearchModal, setTokensValue } from "../../redux/searchTokens";
+import { showSearchModal, setTokensValue } from "../../redux/tokens";
 
 // constants
 import { constants } from '../../utils';
@@ -126,17 +126,17 @@ const SelectedTokenView = (props) => {
 }
 
 const SetInputToken = () => {
-    const { inputToken } = useSelector((state) => state.searchTokens);
+    const { inputToken } = useSelector((state) => state.tokens);
     return <SelectedTokenView token={inputToken}/>
 }
 
 const SetLPToken1 = () => {
-    const { lpToken1 } = useSelector((state) => state.searchTokens);
+    const { lpToken1 } = useSelector((state) => state.tokens);
     return <SelectedTokenView token={lpToken1}/>
 }
 
 const SetLPToken2 = () => {
-    const { lpToken2 } = useSelector((state) => state.searchTokens);
+    const { lpToken2 } = useSelector((state) => state.tokens);
     return <SelectedTokenView token={lpToken2}/>
 }
 
@@ -155,7 +155,7 @@ const setInputPlaceholder = (inputToken) => {
 
 const InputTokenView = () => {
 
-    const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } = useSelector((state) => state.searchTokens);
+    const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } = useSelector((state) => state.tokens);
     const dispatch = useDispatch();
   
     return (
@@ -204,7 +204,7 @@ const InputTokenView = () => {
 
 const LPTokenView = () => {
    
-    const { inputToken, lpToken1, lpToken2, lpToken1Value, lpToken2Value } = useSelector((state) => state.searchTokens);
+    const { inputToken, lpToken1, lpToken2, lpToken1Value, lpToken2Value } = useSelector((state) => state.tokens);
     const dispatch = useDispatch();
 
     return (

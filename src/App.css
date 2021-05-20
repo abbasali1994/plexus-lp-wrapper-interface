@@ -2,7 +2,7 @@
   content: ' ';
   display: block;
   position: absolute;
-  left: -230px;
+  left: 10px;
   top: 0;
   width: 100%;
   height: 100%;
@@ -10,7 +10,7 @@
   background-repeat: no-repeat;
   background-image: url('./assets/images/big-x.svg');
   background-position: left;
-  background-size:80%;
+
 }
 
 .App {
@@ -38,13 +38,139 @@
 
 }
 
-.app-wrapper {
- 
-}
-
 .app-views {
   margin-top: 30px;
 }
 
+/* App Sizeable */
+.main-section {
+  width: 1266px;
+}
 
 
+/* Global Modal Styling*/
+.modal-dialog {
+  width: 445px;
+  height: 696px;
+  border-radius: 10px !important;
+}
+
+.modal-content {
+  border-radius: 10px !important;
+  border: none !important;
+  background: none !important;
+}
+
+.modal-header {
+  background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+  border-bottom: none !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.modal-title {
+  font-family: "Azo Sans Regular";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-align: left;
+  color: #E0E0E0;
+  text-transform: uppercase;
+
+}
+
+.modal-header button.close {
+  background:url(./assets/images/close.svg) 0 0 no-repeat;
+  display:block;
+  height:10px; /* your image height */
+  text-indent:-99999em;
+  width:10px; /* your image width */
+  overflow:hidden;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.modal-body {
+  padding: 0px !important;
+}
+
+/* Styling for the Dex and Action Buttons*/
+.action-btns {
+  width: 255px;
+  border: 3px solid #0E1726;
+  border-radius: 5px;
+  
+}
+.action-btns .btn {
+
+  font-family: "Azo Sans Regular";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #828282;
+  background: #050818;
+  border: none;
+  border-radius: 5px;
+}
+
+.action-btns .btn:hover {
+  color: #F2F2F2;
+  background-color:#050818;
+}
+
+.action-btns .btn#active-btn {
+  color: #F2F2F2;
+  background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+  border-radius: 5px;
+  box-shadow: none;
+}
+
+/*Main Wrapper CSS that is shared*/
+.main-wrapper {
+  background: #0E1726;
+  border-radius: 10px;
+}
+
+.main-header-text {
+  font-family: "Azo Sans Regular";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  color: #E0E0E0;
+}
+
+.main-wrapper {
+  border-radius: 0px 10px 0px 0px;
+}
+.main-wrapper.col-lg-9 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.main-wrapper-header, 
+.main-wrapper-interface{
+  padding-left: 90px;
+}
+
+.main-wrapper-header {
+  font-family: "Azo Sans Regular";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 36px;
+  text-align: left;
+  color: #E5E5E5;
+  padding-top:20px;
+  padding-bottom: 20px;
+  background-color: #050818;
+  border: 2px solid #0E1726;
+  box-sizing: border-box;
+  border-radius: 0px 10px 0px 0px;
+}
