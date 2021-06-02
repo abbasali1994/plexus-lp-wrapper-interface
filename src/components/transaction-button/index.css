@@ -1,0 +1,28 @@
+.input-amount {
+    font-family: "Azo Sans Regular";
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em;
+    height: 61px !important;
+    width: 782px !important;
+    border-radius: 10px !important;
+    text-transform: uppercase;
+    box-shadow: none;
+}
+
+.input-amount.btn-primary {
+    background: #236EDC;
+    color: #E0E0E0 !important;
+}
+
+.input-amount.btn-primary:disabled {
+    background: #191E3A;
+    color: #4F4F4F;
+    border: none;
+}
+
+.input-amount.btn-primary.confirm-lp:hover {
+    background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+    color: #E0E0E0 !important;
+}

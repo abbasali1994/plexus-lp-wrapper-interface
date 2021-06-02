@@ -1,0 +1,107 @@
+.left-sidebar-sushi.col-lg-3,
+.left-sidebar-uni.col-lg-3{
+    padding: 0px;
+}
+
+.left-sidebar-sushi,
+.left-sidebar-uni {
+    position: relative;
+    z-index:999;
+    background: #191E3A;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.left-sidebar-uni:before {
+    background-image: url('../../assets/images/uni.png');
+}
+
+.left-sidebar-sushi:before {
+    background-image: url('../../assets/images/sushi.png');
+}
+
+.left-sidebar-uni:before,
+.left-sidebar-sushi:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.04;
+    background-repeat: no-repeat;
+    background-size: 242px 306px;
+    background-position: right bottom;
+}
+
+.left-sidebar-wrapper {
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.left-action {
+    margin-top: 45px;
+    margin-bottom: 20px;
+}
+
+.left-action img {
+    margin-top: 10px;
+}
+
+.dex-stats {
+    margin-top: 20px;
+}
+
+.dex-stats-header {
+    font-family: "Azo Sans Regular";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #E0E0E0;
+    text-transform: uppercase;
+}
+
+.dex-stats-key {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #828282;
+}
+
+.dex-stats-value {
+    margin-top: -15px;
+    font-family: 'Nova Mono Regular';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #62B0E5;
+}
+
+.faq {
+    margin-top: 50px;
+    margin-bottom: 24px;
+    font-family: "Azo Sans Regular";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    color: #E0E0E0;
+}
+
+.faq img {
+    margin-top: 4px;
+    margin-right: 10px;
+}

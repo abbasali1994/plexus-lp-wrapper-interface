@@ -1,0 +1,22 @@
+.token-label {
+    font-family: "Azo Sans Regular";
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    text-transform: uppercase;
+    color:  #E0E0E0;
+    margin-bottom:20px;
+}
+
+.input-token-section {
+    margin-top: 30px; 
+}
+
+.select-token-pair-section {
+    margin-top:50px;
+}
+
+.input-btn {
+    margin-top: 35px;
+}
