@@ -1,6 +1,7 @@
 .header {
+    width: 1200px;
     margin-top: 45px;
-    width: 1310px;
+    width: 1290px;
     height: 36px;
     margin-left: 3px !important;
 }
@@ -40,4 +41,8 @@ button.header-btn {
 
 .user-info {
     float: right;
+}
+
+.logo {
+    cursor: pointer;
 }

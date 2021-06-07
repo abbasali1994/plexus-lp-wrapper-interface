@@ -8,12 +8,10 @@ export const transactionsSlice = createSlice({
     },
     reducers: {
         showConfirmModal: (state, { payload }) => {
-            console.log(payload);
             const { showConfirm } = payload;
             state.showConfirm = showConfirm;
         },
         showAwaitingTxnModal: (state, { payload }) => {
-            console.log(payload);
             const { showAwaitingTxn } = payload;
             state.showAwaitingTxn = showAwaitingTxn;
         }

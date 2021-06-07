@@ -11,6 +11,9 @@ import profileWhite from '../../assets/images/profile-white.svg';
 // utils
 import { formatAddress } from '../../utils';
 
+// navigate
+import { navigate } from 'hookrouter';
+
 const Header = () => {
  
   // we use Vitalik's address as the placeholder :)
@@ -20,7 +23,7 @@ const Header = () => {
   return (
     <Row className="header">
       <Col>
-        <img src={ logo } alt="logo" width="170" height="32"/>
+        <img className="logo" src={ logo } alt="logo" width="170" height="32" onClick={() => navigate('/')}/>
       </Col>
       <Col>
         <div className="user-info">
@@ -29,7 +32,8 @@ const Header = () => {
           <button 
             className='header-btn' 
             onMouseEnter={() => setToggleIcon(true)}
-            onMouseLeave={() => setToggleIcon(false)}>
+            onMouseLeave={() => setToggleIcon(false)}
+           >
               <img src={ toggleIcon ? profileWhite : profileBlue } alt="profile-icon" width="13" height="13"/>
               dashboard
           </button>

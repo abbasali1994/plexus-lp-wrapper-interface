@@ -5,9 +5,13 @@ import { Button } from 'react-bootstrap';
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmModal } from "../../redux/transactions";
+import { resetState } from "../../redux/tokens";
+
+// button view types
+import { tokenViewTypes } from '../../utils';
 
 // this component is responsible for handling all the blockchain txn's in the app
-const Transaction = () => {
+const InputButton = () => {
 
     const { inputToken, lpToken1, lpToken2, inputTokenValue, lpToken1Value, lpToken2Value } = useSelector((state) => state.tokens);
     const allTokensNotSelected = inputToken === null || lpToken1 === null || lpToken2 === null;
@@ -28,6 +32,33 @@ const Transaction = () => {
             {btnText}
         </Button>
     );
+}
+
+const GenerateMoreLPS = () => {
+    const dispatch = useDispatch();
+    return (
+        <Button variant="primary" size="lg" block className="input-amount confirm-lp" onClick={()=>{
+            // clear the global state
+            dispatch(resetState());
+        }} >
+            Generate New LP Tokens
+        </Button>
+    )
+}
+
+const Transaction = ({ viewType }) => {
+
+    let element = null;
+
+    if (viewType === tokenViewTypes.inputButton) {
+        element = <InputButton/>
+    }
+
+    if (viewType === tokenViewTypes.generateMoreLPsButton) {
+        element = <GenerateMoreLPS/>
+    }
+
+    return element;
 }
 
 export default Transaction;

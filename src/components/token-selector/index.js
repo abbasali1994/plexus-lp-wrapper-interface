@@ -12,9 +12,8 @@ import arrowUp from '../../assets/images/arrow-up.svg';
 import { useDispatch, useSelector } from "react-redux";
 import { showSearchModal, setTokensValue } from "../../redux/tokens";
 
-// constants
-import { constants } from '../../utils';
-import { tokenViewTypes } from '../../utils/token';
+// utils
+import { constants, tokenViewTypes } from '../../utils';
 
 // The single token icon view
 const TokenIconView = ({ tokenIcon, tokenIconSize }) => {

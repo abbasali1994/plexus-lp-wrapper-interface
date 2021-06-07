@@ -5,9 +5,8 @@ import { Col } from 'react-bootstrap';
 import TokenSelector from '../token-selector';
 import TransactionButton from '../transaction-button';
 
-
 // token view types
-import { tokenViewTypes } from '../../utils/token';
+import { tokenViewTypes } from '../../utils';
 
 // redux
 import { useSelector } from "react-redux";
@@ -30,7 +29,7 @@ const GenerateLPComponent = () => {
                     <TokenSelector viewType={tokenViewTypes.selectLPPair}/>
                 </div>
                 <div className="input-btn">
-                    <TransactionButton/>
+                    <TransactionButton viewType={tokenViewTypes.inputButton} />
                 </div>
             </div> 
         </Col>

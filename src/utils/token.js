@@ -73,10 +73,3 @@ export const getAllTokens = () => {
     return tokens;
 };
 
-export const tokenViewTypes = {
-    inputToken: 'INPUT-TOKEN',
-    selectLPPair: 'LP-PAIR-SELECT',
-    supplyingLP: 'SUPPLYING-LP',
-    generatingLP: 'GENERATING-LP',
-    selectToken: 'SELECT-TOKEN'
-};

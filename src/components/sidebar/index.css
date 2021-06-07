@@ -3,6 +3,7 @@
     padding: 0px;
 }
 
+.dashboard-sidebar,
 .left-sidebar-sushi,
 .left-sidebar-uni {
     position: relative;
@@ -89,6 +90,7 @@
     color: #62B0E5;
 }
 
+.faq1,
 .faq {
     margin-top: 50px;
     margin-bottom: 24px;
@@ -101,7 +103,52 @@
     color: #E0E0E0;
 }
 
-.faq img {
+.faq img,
+.faq1 img {
     margin-top: 4px;
     margin-right: 10px;
+}
+
+/* Dashboard Sidebar Styling */
+
+.dashboard-sidebar {
+    height: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border: 3px solid #050818;
+    border-radius: 10%;
+    background-color: #191E3A;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+.dashboard-icon#active-path {
+    border: 3px solid #236EDC;
+}
+
+.dashboard-icon-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: #E5E5E5;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    border: 3px solid #236EDC;
+}
+
+.faq1 { 
+    margin-top: 220px;
+    margin-left: 2px;
 }

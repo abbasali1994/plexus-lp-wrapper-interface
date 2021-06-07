@@ -1,10 +1,5 @@
 import './App.css';
 
-// The modals
-import SearchTokensModal from './components/popup/token-search';
-import ConfirmLPModal from './components/popup/confirm-lp';
-import AwaitingTxnModal from './components/popup/awaiting-txn';
-
 //  The components
 import Header from './components/header';
 
@@ -15,22 +10,28 @@ import routes from './router'
 // Bootstrap Container
 import { Container } from 'react-bootstrap';
 
-function App() {
+// The Modals
+import SearchTokensModal from './components/popup/token-search';
+import ConfirmLPModal from './components/popup/confirm-lp';
+import AwaitingTxnModal from './components/popup/awaiting-txn';
 
-  const routeResult = useRoutes(routes);
+const App = () => {
+
+  const routesResult = useRoutes(routes);
 
   return (
     <Container fluid className="App">
 
-      {/* We add all the modals in the HOC so that they can be rendered any where */}
+        {/*Render the Popups first */}
         <SearchTokensModal/>
-        <ConfirmLPModal />
+        <ConfirmLPModal/>
         <AwaitingTxnModal/>
-        
+
       <div className="app-wrapper">
         <Header/>
         <div className="app-views">
-         {routeResult}
+          {/*Render all the routes */}
+          { routesResult }
         </div>
       </div>
     </Container>

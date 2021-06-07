@@ -7,9 +7,17 @@ import success from '../../../assets/gifs/success.gif';
 // redux
 import { useSelector } from "react-redux";
 
+// html parser
 import ReactHtmlParser from 'react-html-parser'; 
 
 // txn button
+import TransactionButton from '../../transaction-button';
+
+// button view types
+import { tokenViewTypes } from '../../../utils';
+
+// navigate
+import { navigate } from 'hookrouter';
 
 const TransactionSuccessful = () => {
 
@@ -24,16 +32,28 @@ const TransactionSuccessful = () => {
         } = useSelector((state) => state.tokens);
 
     const { dexes, selectedDex } = useSelector((state) => state.dexes);
-    const dexName = dexes[selectedDex].name;
+  
 
     const space1 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     const space2 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     const space3 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     const space4 = "&nbsp;&nbsp;";
 
-    const txnDesc1 = `${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
-    const txnDesc2 = `${dexName} LP Tokens`;
+    let dexName = "", txnDesc1 = "", txnDesc2 = "";
 
+    if (lpToken1 !== null && lpToken2 !== null) {
+    
+        let newDexes = {};
+        Object.assign(newDexes, dexes);
+        dexName = newDexes[selectedDex].name;
+
+        txnDesc1 = `${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+        txnDesc2 = `${dexName} LP Tokens`;
+    } else {
+        navigate('/');
+    }
+
+   
     return (
         <Col lg="9" className="main-wrapper">
             <div className="main-wrapper-header main-header-text">
@@ -49,7 +69,7 @@ const TransactionSuccessful = () => {
                 Your transaction has been submitted
             </div>
             <div className="txn-submitted-etherscan">
-                View on etherscan
+                View on Etherscan
             </div>
             <div className="txn-details">
                 <div className="txn-details-line">
@@ -67,6 +87,9 @@ const TransactionSuccessful = () => {
                     <span className="txn-details-label2">{networkFeeETH}</span>
                     <span className="txn-details-label3">{ReactHtmlParser(space4)}{networkFeeUSD}</span>
                 </div>
+            </div>
+            <div className="generate-more-btn">
+                <TransactionButton viewType={tokenViewTypes.generateMoreLPsButton} />
             </div>
         </Col>
     );

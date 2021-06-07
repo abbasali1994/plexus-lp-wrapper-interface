@@ -2,7 +2,7 @@
   content: ' ';
   display: block;
   position: absolute;
-  left: 10px;
+  left: 20px;
   top: 0;
   width: 100%;
   height: 100%;
@@ -10,7 +10,6 @@
   background-repeat: no-repeat;
   background-image: url('./assets/images/big-x.svg');
   background-position: left;
-
 }
 
 .App {
@@ -26,7 +25,7 @@
   content: ' ';
   display: block;
   position: absolute;
-  right: 190px;
+  right: 170px;
   top: 30px;
   width: 100%;
   height: 100%;
@@ -131,6 +130,7 @@
 }
 
 /*Main Wrapper CSS that is shared*/
+.main-dashboard-wrapper,
 .main-wrapper {
   background: #0E1726;
   border-radius: 10px;

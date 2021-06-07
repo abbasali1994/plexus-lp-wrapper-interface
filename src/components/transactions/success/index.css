@@ -1,7 +1,13 @@
-.txn-success{
+.txn-success,
+.generate-more-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.txn-success {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .success-txt {
@@ -35,6 +41,7 @@
     letter-spacing: 0em;
     text-align: center;
     color: #236EDC;
+    cursor: pointer;
 }
 
 /* Txn Details Box */
@@ -44,11 +51,7 @@
     margin-right: 90px;
     border-radius: 20px;
     padding: 15px;
-}
-
-.txn-details-line {
-   
-   
+    margin-top: 20px;
 }
 
 .txn-details-label1,
@@ -79,4 +82,8 @@
     letter-spacing: 0em;
     text-align: left;
     color: #828282;
+}
+
+.generate-more-btn {
+    margin-top: 50px;
 }
