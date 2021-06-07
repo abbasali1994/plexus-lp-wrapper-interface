@@ -7,17 +7,14 @@ import { Modal, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmModal, showAwaitingTxnModal } from "../../../redux/transactions";
 
-// constants
-import { tokenViewTypes } from '../../../utils/token';
-
 // token selector component
 import TokenSelector from '../../token-selector';
 
 // arrow
 import arrowDown from '../../../assets/images/arrow-down.svg';
 
-// constants
-import { constants } from '../../../utils';
+// Utils
+import { constants, tokenViewTypes } from '../../../utils';
 
 const ConfirmLPModal = () => {
 

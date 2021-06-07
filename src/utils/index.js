@@ -10,3 +10,15 @@ export const constants = {
     dexUni: 'Uniswap',
     dexSushi: 'Sushiswap'
 }
+
+export const tokenViewTypes = {
+    inputToken: 'INPUT-TOKEN',
+    selectLPPair: 'LP-PAIR-SELECT',
+    supplyingLP: 'SUPPLYING-LP',
+    generatingLP: 'GENERATING-LP',
+    selectToken: 'SELECT-TOKEN',
+    inputButton: 'INPUT-BUTTON',
+    generateMoreLPsButton: 'GENERATE-MORE-LPS-BUTTON',
+    mainInterface: 'MAIN',
+    dashboardInterface: 'DASHBOARD'
+};

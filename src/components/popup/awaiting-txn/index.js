@@ -10,6 +10,7 @@ import { showAwaitingTxnModal } from "../../../redux/transactions";
 // images
 import spinner from '../../../assets/gifs/confirmation.gif';
 
+// navigate
 import { navigate } from 'hookrouter';
 
 const AwaitingTxnsModal = () => {
@@ -20,13 +21,16 @@ const AwaitingTxnsModal = () => {
     const dexName = dexes[selectedDex].name;
     let txnDesc = '';
 
-    if (lpToken1 !== null && lpToken2 !== null){
+
+    // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
+    if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn){
         txnDesc = `Generating ${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()} ${dexName} LP Tokens`;
 
-        setTimeout(() => {
+        // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
+        const timeoutId  = setTimeout(() => {
             dispatch(showAwaitingTxnModal({showAwaitingTxn: false}));
             navigate('/success');
-            
+            clearTimeout(timeoutId);
         }, 6000);
 
     }
@@ -36,7 +40,6 @@ const AwaitingTxnsModal = () => {
     return (
         <Modal 
             show={showAwaitingTxn} 
-            onHide={() => dispatch(showAwaitingTxnModal({showAwaitingTxn: false}))} 
             backdrop="static"
             keyboard={false}
             animation={true}
