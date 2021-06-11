@@ -11,3 +11,9 @@
     text-transform: uppercase;
     color: #62B0E5;
 }
+
+@media screen and (max-width: 1024px) {
+    .copyright {
+       display: none;
+    }
+  }

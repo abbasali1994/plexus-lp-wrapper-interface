@@ -1,4 +1,4 @@
-import {  ButtonGroup, Button } from 'react-bootstrap';
+import {  Col, ButtonGroup, Button } from 'react-bootstrap';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ const Dexes = () => {
     const dispatch = useDispatch();
 
     return (
-        <div>
+        <Col>
             <ButtonGroup className="mb-2 action-btns">
             { 
                 dexes.map(dex => (
@@ -23,7 +23,7 @@ const Dexes = () => {
                 ))
             }
             </ButtonGroup>
-        </div>
+        </Col>
     );
 }
 

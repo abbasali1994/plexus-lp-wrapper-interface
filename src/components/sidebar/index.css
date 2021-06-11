@@ -40,11 +40,6 @@
     padding-right: 35px;
 }
 
-.left-action {
-    margin-top: 45px;
-    margin-bottom: 20px;
-}
-
 .left-action img {
     margin-top: 10px;
 }
@@ -109,6 +104,11 @@
     margin-right: 10px;
 }
 
+.dex-text {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 /* Dashboard Sidebar Styling */
 
 .dashboard-sidebar {
@@ -145,10 +145,98 @@
     background-color: #E5E5E5;
     background-repeat: no-repeat;
     border-radius: 50%;
-    border: 3px solid #236EDC;
+  border: 3px solid #236EDC;
+}
+
+/* CSS for bottom sidebar Wrapper */
+.bottom-sidebar-wrapper {
+  z-index: 999;
+  background: #191e3a;
+  border-radius: 25px 25px 0px 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+  position: fixed;
+  bottom: 0%;
+  width: 100%;
+  overflow-y: scroll;
+  max-height: 100%;
+}
+
+.bottom-header {
+  /* justify-content: center; */
+  margin:15px;
+  display: flex;
+}
+
+.display-header-button {
+  width:10%;
+}
+
+.display-header-text {
+  font-family: "Azo Sans Regular";
+  font-style: normal;
+  font-weight: 600;
+  font-size: calc(0.7em + 1vw);
+  line-height: 36px;
+  width:90%;
+  display: flex;
+  /* align-items: center; */
+  letter-spacing: -0.02em;
+  color: #62b0e5;
+  /* justify-content: center; */
 }
 
 .faq1 { 
     margin-top: 220px;
     margin-left: 2px;
+}
+
+.select-lp-generate {
+margin: 20px 0;
+width: 100%;
+height: 61px;
+font-family: "Azo Sans Regular";
+font-style: normal;
+font-weight: 600!important;
+line-height: 36px!important;
+/* or 225% */
+justify-content: center;
+display: flex;
+align-items: center;
+text-align: center;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+}
+
+@media screen and (min-width: 1024px) {
+  .left-action {
+    margin-top: 45px;
+    margin-bottom: 20px;
+}
+  .dex-text {
+    position: relative;
+    width: 100%;
+  }
+  .select-lp-generate {
+    font-size: 12px!important;
+    display: none!important;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+  .left-action {
+    margin-top: 15px;
+    margin-bottom: 11px;
+  }
+  .dex-img {
+    display: none;
+  }
+
+  .dex-buttons {
+    margin-top:30px;
+    margin-bottom:10px;
+  }
+  .select-lp-generate {
+    font-size: calc(0.6em + 1.4vw)!important;
+    }
 }

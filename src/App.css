@@ -1,59 +1,4 @@
-.App:before {
-  content: ' ';
-  display: block;
-  position: absolute;
-  left: 20px;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.05;
-  background-repeat: no-repeat;
-  background-image: url('./assets/images/big-x.svg');
-  background-position: left;
-}
-
-.App {
-  background-color: #060818;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.app-wrapper:before {
-  content: ' ';
-  display: block;
-  position: absolute;
-  right: 170px;
-  top: 30px;
-  width: 100%;
-  height: 100%;
-  opacity: 0.7;
-  background-repeat: no-repeat;
-  background-image: url('./assets/images/bg-grid.svg');
-  background-position: right;
-  background-size: 45%;
-
-}
-
-.app-views {
-  margin-top: 30px;
-}
-
-/* App Sizeable */
-.main-section {
-  width: 1266px;
-}
-
-
 /* Global Modal Styling*/
-.modal-dialog {
-  width: 445px;
-  height: 696px;
-  border-radius: 10px !important;
-}
-
 .modal-content {
   border-radius: 10px !important;
   border: none !important;
@@ -61,7 +6,7 @@
 }
 
 .modal-header {
-  background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+  background: linear-gradient(270deg, #7ac2e8 0%, #236edc 100%);
   border-bottom: none !important;
   border-top-left-radius: 10px !important;
   border-top-right-radius: 10px !important;
@@ -154,11 +99,6 @@
   padding-right: 0px;
 }
 
-.main-wrapper-header, 
-.main-wrapper-interface{
-  padding-left: 90px;
-}
-
 .main-wrapper-header {
   font-family: "Azo Sans Regular";
   font-style: normal;
@@ -173,4 +113,110 @@
   border: 2px solid #0E1726;
   box-sizing: border-box;
   border-radius: 0px 10px 0px 0px;
+}
+
+@media screen and (min-width: 1024px) {
+  .App:before {
+    content: "";
+    /* display: flex; */
+    position: fixed;
+    /* left: 10px;
+  top: 0; */
+    width: 100%;
+    height: 100vh;
+    opacity: 0.05;
+    background-repeat: no-repeat;
+    background-image: url("./assets/images/big-x.svg");
+    /* background-position: left; */
+  }
+
+  .App {
+    /* background-color: #060818; */
+    /* min-height: 100vh;  */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-wrapper:before {
+    content: "";
+    display: block;
+    position: fixed;
+    right: 180px;
+    top: 30px;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    background-repeat: no-repeat;
+    background-image: url("./assets/images/bg-grid.svg");
+    background-position: right;
+    /* background-size: 45%; */
+  }
+
+  .app-views {
+    margin-top: 30px;
+  }
+
+  /* App Sizeable */
+  .main-section {
+    width: 1266px;
+  }
+
+  .action-btns {
+    width: 255px;
+  }
+
+  .main-wrapper-header,
+  .main-wrapper-interface {
+    padding-left: 90px;
+  }
+
+  .modal-dialog {
+    width: 445px;
+    height: 696px;
+    border-radius: 10px !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .App:before,
+  .app-wrapper:before {
+    display: none;
+  }
+  .main-section > .row {
+    display: block !important;
+  }
+
+  .App {
+    width: 100%;
+    height: 100%;
+  }
+
+  .main-wrapper-header {
+    display: none;
+  }
+  .main-wrapper-interface {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 70px;
+  }
+  .modal-dialog {
+    height: 696px;
+    border-radius: 10px !important;
+  }
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+*::-webkit-scrollbar {
+  width: 5px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #191E3A;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(0deg, #7AC2E8 0%, #236EDC 100%);
 }
