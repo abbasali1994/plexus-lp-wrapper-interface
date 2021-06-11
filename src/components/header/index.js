@@ -25,7 +25,7 @@ const Header = () => {
       <Col>
         <img className="logo" src={ logo } alt="logo" width="170" height="32" onClick={() => navigate('/')}/>
       </Col>
-      <Col>
+      <Col lg={6} xs={12}>
         <div className="user-info">
           <img src={ msg } alt="notification" width="28" height="28"/>
           <button className='header-btn'> { formatAddress(walletAddress) } </button >

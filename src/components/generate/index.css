@@ -13,10 +13,19 @@
     margin-top: 30px; 
 }
 
-.select-token-pair-section {
-    margin-top:50px;
-}
-
 .input-btn {
     margin-top: 35px;
 }
+
+@media screen and (min-width: 1024px) {
+    .select-token-pair-section {
+        margin-top:50px;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    .select-token-pair-section {
+        margin-top:20px;
+    }
+  }
+  

@@ -1,11 +1,9 @@
 .input-amount {
     font-family: "Azo Sans Regular";
-    font-size: 16px !important;
     font-style: normal !important;
     font-weight: 600 !important;
     letter-spacing: 0.1em;
     height: 61px !important;
-    width: 782px !important;
     border-radius: 10px !important;
     text-transform: uppercase;
     box-shadow: none;
@@ -26,3 +24,24 @@
     background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
     color: #E0E0E0 !important;
 }
+
+@media screen and (max-width: 1024px) {
+    .input-amount {
+        line-height: 36px; 
+    }
+    .input-amount.btn-primary:disabled {
+        white-space: nowrap;
+        font-size: calc(3px + 3vw)!important;
+    }
+    .input-amount.btn-primary.confirm-lp {
+        font-size: calc(3px + 3vw)!important;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .input-amount {
+        width: 782px !important;
+        font-size: 16px !important;
+    }
+  }
+  

@@ -8,7 +8,10 @@ export const constants = {
     lpToken1: 'LP-TOKEN-1',
     lpToken2: 'LP-TOKEN-2',
     dexUni: 'Uniswap',
-    dexSushi: 'Sushiswap'
+    dexSushi: 'Sushiswap',
+    width: {
+        mobile: 1024
+    }
 }
 
 export const tokenViewTypes = {
