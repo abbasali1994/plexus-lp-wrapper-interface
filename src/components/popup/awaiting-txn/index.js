@@ -19,13 +19,13 @@ const AwaitingTxnsModal = () => {
     const { lpToken1, lpToken2, totalLPTokens } = useSelector((state) => state.tokens);
     const { dexes, selectedDex } = useSelector((state) => state.dexes);
     const dexName = dexes[selectedDex].name;
-    let txnDesc = '';
-
+    let txnDescLine1 = '';
+    let txnDescLine2 = '';
 
     // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
     if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn){
-        txnDesc = `Generating ${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()} ${dexName} LP Tokens`;
-
+        txnDescLine1 = `Generating ${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+        txnDescLine2 = ` ${dexName} LP Tokens `
         // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
         const timeoutId  = setTimeout(() => {
             dispatch(showAwaitingTxnModal({showAwaitingTxn: false}));
@@ -57,7 +57,9 @@ const AwaitingTxnsModal = () => {
                     </div>
                     <img className="spinner" src={spinner} alt="spinner" width="144" height="144"/>
                     <div className="awaiting-txn-desc">
-                        {txnDesc}
+                        {txnDescLine1}
+                        <br className="awaiting-txn-desc-line-break"/>
+                        {txnDescLine2}
                     </div>
                     <div className="awaiting-txn-confirm">
                         Confirm this transaction in your wallet
