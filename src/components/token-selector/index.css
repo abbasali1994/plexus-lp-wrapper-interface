@@ -73,7 +73,6 @@
     margin-top: 20px;
 }
 
-
 input.input-token-text:focus {
     color:  #F2F2F2;
 }
@@ -116,7 +115,6 @@ input.input-token-text:focus {
 .input-disabled:hover .div.select-token {
     cursor: default;
 }
-
 
 .input-group-append > #max-token {
     font-family: 'Codeink Regular';
@@ -208,15 +206,14 @@ input.input-token-text {
 }
 
 .lp-pair-info {
+  margin-left: 10px;
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
-    margin-top: 10px;
+  overflow-wrap: anywhere;
 }
 
 .lp-pair-text{
     font-family: "Azo Sans Regular";
-    font-size: 26px;
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
@@ -294,6 +291,33 @@ input.input-token-text {
   z-index: 99;
   position: absolute;
 }
+
+  .horizontal-lp-view > .select-token > .lp-token-selector {
+    width: 58px;
+    height: 58px;
+  }
+
+  .lp-token-background {
+    width: 42px;
+    height: 42px;
+    background-size: contain;
+  }
+
+  .lp-token-background > .lp-token-selected-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .lp-pair-icon {
+    margin-top: 10px;
+    width: 13px;
+    height: 36px;
+  }
+  .lp-pair-text {
+    font-size: calc(18px + 8 * ((100vw - 320px) / 680));
+  }
+  .lp-pair-desc {
+    font-size: calc(14px + 4 * ((100vw - 320px) / 680));
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -332,4 +356,11 @@ input.input-token-text {
   z-index: 99;
   position: absolute;
 }
+
+  .lp-pair-info {
+    margin-top: 10px;
+  }
+  .lp-pair-text {
+    font-size: 26px;
+  }
 }

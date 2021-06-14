@@ -2,10 +2,6 @@
     padding: 0px !important;
 }
 
-.confirm-popup-content {
-    padding: 40px;
-}
-
 .confirm-popup-top-section, 
 .confirm-popup-bottom-section {
     min-height: 200px;
@@ -46,7 +42,6 @@
     position: relative;
     background-color: #0E1726;
     padding-top: 5px;
-    z-index:999;
 }
 
 .confirm-popup-header{
@@ -70,8 +65,6 @@
 .down-arrow {
     position: absolute;
     margin-top: -25px;
-    margin-left: 60px;
-    z-index: 9999;
 }
 
 .lp-token-stats {
@@ -80,7 +73,6 @@
 
 .lp-token-amount {
     font-family: "Azo Sans Regular";
-    font-size: 26px;
     font-style: normal;
     font-weight: 600;
     color: #236EDC;
@@ -88,22 +80,21 @@
 
 .lp-token-value {
     font-family: 'Nova Mono Regular';
-    font-size: 18px;
     font-style: normal;
     font-weight: 400;
     color: #828282;
 }
 
 .confirm-popup-footer{
-    background-color: #191E3A;
     border: none !important;
+  justify-content: space-between !important;
 }
 
 .confirm-tx {
     font-family: "Azo Sans Regular";
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+  font-weight: 600 !important;
     line-height: 36px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -114,6 +105,59 @@
 }
 
 .btn-primary.confirm-tx:hover {
-    background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
-    color: #E0E0E0 !important;
+  background: linear-gradient(270deg, #7ac2e8 0%, #236edc 100%);
+  color: #e0e0e0 !important;
+}
+
+@media screen and (min-width: 1024px) {
+  .confirm-popup-content {
+    padding: 40px;
+  }
+  .confirm-popup-footer {
+    background-color: #191e3a;
+  }
+  .confirm-popup-bottom-sushi-section,
+  .confirm-popup-bottom-uni-section {
+    z-index: 999;
+  }
+  .lp-token-amount {
+    font-size: 26px;
+  }
+  .lp-token-value {
+    font-size: 18px;
+  }
+  .down-arrow {
+    margin-left: 60px;
+    z-index: 9999;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .confirm-popup-content {
+    padding: 36px 28px;
+  }
+  .confirm-lp-mobile-wrapper {
+    padding-bottom: 70px;
+  }
+  .confirm-popup-footer {
+    display: flex;
+    padding: 0px 32px 32px;
+  }
+  .lp-token-amount {
+    font-size: calc(18px + 8 * ((100vw - 320px) / 680));
+  }
+  .lp-token-value {
+    font-size: calc(14px + 4 * ((100vw - 320px) / 680));
+  }
+  .down-arrow {
+    margin-left: 45px;
+    z-index: 10;
+  }
+  .confirm-popup-bottom-uni-section:before,
+  .confirm-popup-bottom-sushi-section:before {
+    background-size: 202px 255px;
+  }
+  .confirm-tx {
+      height: 50px;
+  }
 }
