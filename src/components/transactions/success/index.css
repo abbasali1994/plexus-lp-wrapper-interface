@@ -47,10 +47,7 @@
 /* Txn Details Box */
 .txn-details {
     background-color: #050818;
-    margin-left: 90px;
-    margin-right: 90px;
     border-radius: 20px;
-    padding: 15px;
     margin-top: 20px;
 }
 
@@ -84,6 +81,31 @@
     color: #828282;
 }
 
-.generate-more-btn {
-    margin-top: 50px;
-}
+@media screen and (max-width: 1024px) {
+    .generate-more-btn {
+        margin-top: 20px;
+        margin-left: 32px;
+        margin-right: 32px;
+        padding-bottom: 90px;
+    }
+    .txn-details {
+        margin-left: 12px;
+        margin-right: 12px;
+        padding: 27px 32px 17px;
+    }
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .txn-details {
+        margin-left: 90px;
+        margin-right: 90px;
+        padding: 15px;
+    }
+    .generate-more-btn {
+        margin-top: 50px;
+    }
+    .txn-details-line-break {
+        display: none;
+    }
+  }
+  
