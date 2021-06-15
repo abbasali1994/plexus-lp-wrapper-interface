@@ -53,7 +53,7 @@ const AwaitingTxnsModal = () => {
             <Modal.Body >
                 <div className="awaiting-txn-body">
                     <div className="awaiting-txn-text">
-                        Awaiting Confirmation 
+                        Awaiting<br />Confirmation 
                     </div>
                     <img className="spinner" src={spinner} alt="spinner" width="144" height="144"/>
                     <div className="awaiting-txn-desc">

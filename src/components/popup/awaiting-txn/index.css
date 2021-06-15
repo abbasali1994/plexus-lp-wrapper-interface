@@ -1,8 +1,3 @@
-.awaiting-txn {
-  width: 488px;
-  height: 488px;
-}
-
 .modal-header.awaiting-txn-header {
   background: #191E3A !important;
   border-bottom: none !important;
