@@ -74,18 +74,22 @@ const TransactionSuccessful = () => {
             <div className="txn-details">
                 <div className="txn-details-line">
                     <span className="txn-details-label1">Supplied: {ReactHtmlParser(space1)}</span>
+                    <br className="txn-details-line-break" />
                     <span className="txn-details-label2">{inputTokenValue}</span>
                     <span className="txn-details-label3">{ReactHtmlParser(space4)}{inputTokenValueUSD}</span>
                 </div>
                 <div className="txn-details-line">
                     <span className="txn-details-label1">Generated: {ReactHtmlParser(space2)}</span>
-                    <span className="txn-details-label2">{txnDesc1}</span>
-                    <span className="txn-details-label3">{ReactHtmlParser(space4)}{txnDesc2}</span>
+                    <br className="txn-details-line-break" />
+                    <span className="txn-details-label2">{txnDesc1}{ReactHtmlParser(space4)}</span>
+                    <br className="txn-details-line-break" />
+                    <span className="txn-details-label3">{txnDesc2}</span>
                 </div>
                 <div className="txn-details-line">
                     <span className="txn-details-label1">Network Fee:{ReactHtmlParser(space3)}</span>
-                    <span className="txn-details-label2">{networkFeeETH}</span>
-                    <span className="txn-details-label3">{ReactHtmlParser(space4)}{networkFeeUSD}</span>
+                    <br className="txn-details-line-break" />
+                    <span className="txn-details-label2">{networkFeeETH}{ReactHtmlParser(space4)}</span>
+                    <span className="txn-details-label3">{networkFeeUSD}</span>
                 </div>
             </div>
             <div className="generate-more-btn">
