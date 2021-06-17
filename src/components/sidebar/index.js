@@ -82,7 +82,6 @@ const DashboardSideBarComponent = () => {
 
 //Desktop Wrapper (min-width : 1024 px)
 const DesktopSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
-  console.log(window.screen.width > constants.width.mobile);
   const bg =
     dexName === constants.dexSushi ? "left-sidebar-sushi" : "left-sidebar-uni";
   return (
