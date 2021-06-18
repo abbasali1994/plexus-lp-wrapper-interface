@@ -2,11 +2,10 @@ import Home from './views/home';
 import TransactionSuccessful from './views/transaction/success';
 import Dashboard from './views/dashboard';
 import SkeletonWrapper from './components/skeleton-wrapper';
-import { DashBoardImages, MainPageImages, TransactionImages } from './utils/imageList';
 const routes = {
-  "/": () => <SkeletonWrapper images={MainPageImages} children={<Home/>}/>,
-  "/success": () => <SkeletonWrapper images={TransactionImages} children={<TransactionSuccessful/>}/>,
-  "/dashboard*": () => <SkeletonWrapper images={DashBoardImages} children={<Dashboard/>}/>
+  "/": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<Home/>}/>,
+  "/success": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<TransactionSuccessful/>}/>,
+  "/dashboard*": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<Dashboard/>}/>
 };
 
 export default routes;

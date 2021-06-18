@@ -14,6 +14,7 @@ import { Container } from 'react-bootstrap';
 import SearchTokensModal from './components/popup/token-search';
 import ConfirmLPModal from './components/popup/confirm-lp';
 import AwaitingTxnModal from './components/popup/awaiting-txn';
+import HeaderWrapper from './components/skeleton-wrapper/header';
 
 const App = () => {
 
@@ -28,7 +29,7 @@ const App = () => {
         <AwaitingTxnModal/>
 
       <div className="app-wrapper">
-        <Header/>
+        <HeaderWrapper checks={["images"]} children={<Header/>}/>
         <div className="app-views">
           {/*Render all the routes */}
           { routesResult }
