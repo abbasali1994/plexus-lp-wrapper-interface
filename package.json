@@ -23,8 +23,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "setImages": "node setImages",
+    "start": "node scripts/setImages && react-scripts start",
+    "build": "node scripts/setImages && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

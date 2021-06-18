@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { constants } from "../../utils";
+import { assets } from "../../utils/images";
 import "./index.css";
 
-export default function SkeletonWrapper({ images, children }) {
+export default function SkeletonWrapper({ checks, children }) {
+  let images = [];
+  checks.map((key) => {
+    images = [...images, ...assets[key]];
+    return 0;
+  });
   const [loading, setloading] = useState(images.length);
   const [fontsLoading, setFontsloading] = useState(true);
   const [width, setWidth] = useState(window.innerWidth);
@@ -13,9 +19,9 @@ export default function SkeletonWrapper({ images, children }) {
     function handleResize() {
       setWidth(window.innerWidth);
     }
-    document.fonts.ready.then(function () {
+    document.fonts.onloadingdone = (font) => {
       setFontsloading(false);
-    });
+    };
     window.addEventListener("resize", handleResize);
   });
 
@@ -29,18 +35,27 @@ export default function SkeletonWrapper({ images, children }) {
     <>
       {loading > 0 || fontsLoading ? wrapper : children}
       {
-        <div hidden>
-          {images.map((src, index) => {
-            return (
-              <img
-                key={index}
-                src={src}
-                alt={"img"}
-                onLoad={() => setloading(loading - 1)}
-              />
-            );
-          })}
-        </div>
+        <>
+          <div hidden>
+            {images.map((src, index) => {
+              return (
+                <img
+                  key={index}
+                  src={src.image.default}
+                  alt={"img"}
+                  onLoad={() => setloading(loading - 1)}
+                />
+              );
+            })}
+          </div>
+          <div hidden={!fontsLoading} className="font-skeleton">
+            <i style={{ fontFamily: "Codeink Regular" }}>.</i>
+            <i style={{ fontFamily: "Nova Mono Regular" }}>.</i>
+            <i style={{ fontFamily: "Codeink italic" }}>.</i>
+            <i style={{ fontFamily: "Azo Sans Regular" }}>.</i>
+            <i style={{ fontFamily: "Azo Sans Bold" }}>.</i>
+          </div>
+        </>
       }
     </>
   );
