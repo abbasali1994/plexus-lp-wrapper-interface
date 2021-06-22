@@ -12,7 +12,7 @@ export default function SkeletonWrapper({ checks, children }) {
     return 0;
   });
   const [loading, setloading] = useState(images.length);
-  const [fontsLoading, setFontsloading] = useState(true);
+  const [fontsLoading, setFontsloading] = useState(!document.fonts.load("22px 'Azo Sans Regular'"));
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
