@@ -101,7 +101,6 @@ input.input-token-text::-ms-input-placeholder {
 
 input.input-token-text.form-control:disabled,
 input.input-token-text:focus {
-    background-color: #050818;
     border: 3px solid #0E1726;
     box-shadow: none;
     opacity: 1;
@@ -125,7 +124,6 @@ input.input-token-text:focus {
     letter-spacing: 0.05em;
     text-align: center;
     color: #BDBDBD;
-    background-color: #050818;
     border: none;
 }
 
@@ -137,7 +135,6 @@ input.input-token-text {
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;
-    background-color: #050818;
     border: 3px solid #0e1726;
     border-radius: 10px;
     color: #f2f2f2;
@@ -184,7 +181,6 @@ input.input-token-text {
     height: 78px;
     border: 3px solid #050818;
     border-radius: 10%;
-    background-color: #191E3A;
 }
 
 .lp-token-background {
@@ -242,7 +238,6 @@ input.input-token-text {
     justify-content: center;
     border: 3px solid #050818;
     border-radius: 10%;
-    background-color: #191e3a;
   }
 
 @media screen and (max-width: 1024px) {

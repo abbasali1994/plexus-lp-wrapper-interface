@@ -8,7 +8,6 @@
 }
 
 .confirm-popup-top-section {
-    background-color: #191E3A;
     background-image: url('../../../assets/images/popup-grid.svg');
     background-repeat: no-repeat;
     background-size: 100%;
@@ -40,7 +39,6 @@
 .confirm-popup-bottom-sushi-section,
 .confirm-popup-bottom-uni-section {
     position: relative;
-    background-color: #0E1726;
     padding-top: 5px;
 }
 
@@ -99,7 +97,6 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color:  #E0E0E0 !important;
-    background-color: #236EDC;
     height: 61px;
     border-radius: 10px;
 }
@@ -112,9 +109,6 @@
 @media screen and (min-width: 1024px) {
   .confirm-popup-content {
     padding: 40px;
-  }
-  .confirm-popup-footer {
-    background-color: #191e3a;
   }
   .confirm-popup-bottom-sushi-section,
   .confirm-popup-bottom-uni-section {
