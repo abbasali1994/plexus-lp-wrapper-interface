@@ -1,6 +1,5 @@
 .search-token-body {
     margin-top: 0px;
-    background-color: #191E3A;
     padding-left: 25px;
     padding-right: 25px;
     padding-top: 20px;
@@ -8,7 +7,6 @@
 }
 
 input.token-search-text{
-    background-color: #050818;
     border: 3px solid #0E1726;
     height: 56px;
     border-radius: 10px;
@@ -39,7 +37,6 @@ input.token-search-text::-ms-input-placeholder {
 }
 
 input.token-search-text:focus {
-    background-color: #050818;
     color:  #F2F2F2;
     font-family: "Azo Sans Regular";
     font-size: 16px;

@@ -1,0 +1,98 @@
+@font-face {
+  font-family: "Codeink Regular";
+  src: url("assets/fonts/CODEINK-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Codeink Italic";
+  src: url("assets/fonts/CODEINK-Italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Nova Mono Regular";
+  src: url("assets/fonts/NovaMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Azo Sans Regular";
+  src: url("assets/fonts/AzoSans-Regular.ttf") format("truetype");
+}
+
+/* color schemes */
+$theme-background: #050818;
+$theme-token-background: #191e3a;
+$theme-icon-background: #e5e5e5;
+$theme-button-background: #236edc;
+$theme-confirm-popup-background: #0e1726;
+$theme-gradient-background: linear-gradient(270deg, #7ac2e8 0%, #236edc 100%);
+
+$theme-color: #f2f2f2;
+/* color schemes */
+
+body {
+  margin: 0;
+  font-family: "Codeink Regular", "Codeink italic", "Nova Mono Regular",
+    "Azo Sans Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $theme-background !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+*:focus {
+  outline: none;
+}
+
+/* Background colours Dark Theme */
+.action-btns .btn:hover {
+  color: $theme-color;
+  background-color: $theme-background;
+}
+
+.main-wrapper-header,
+.dashboard-header,
+.txn-details {
+  background-color: $theme-background;
+}
+
+.input-group-append > #max-token,
+input.token-search-text,
+input.token-search-text:focus,
+input.input-token-text,
+input.input-token-text.form-control:disabled,
+input.input-token-text:focus {
+  background-color: $theme-background;
+}
+
+.confirm-popup-top-section,
+.lp-token-selector,
+.token-selector,
+.search-token-body,
+.dashboard-icon {
+  background-color: $theme-token-background;
+}
+
+.confirm-popup-bottom-sushi-section,
+.confirm-popup-bottom-uni-section {
+  background-color: $theme-confirm-popup-background;
+}
+
+.confirm-tx {
+  background-color: $theme-button-background;
+}
+
+.dashboard-icon-background {
+  background-color: $theme-icon-background;
+}
+
+@media screen and (min-width: 1024px) {
+  .confirm-popup-footer {
+    background-color: $theme-token-background;
+  }
+}

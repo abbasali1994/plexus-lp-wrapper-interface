@@ -64,7 +64,6 @@
 
 .action-btns .btn:hover {
   color: #F2F2F2;
-  background-color:#050818;
 }
 
 .action-btns .btn#active-btn {
@@ -109,7 +108,6 @@
   color: #E5E5E5;
   padding-top:20px;
   padding-bottom: 20px;
-  background-color: #050818;
   border: 2px solid #0E1726;
   box-sizing: border-box;
   border-radius: 0px 10px 0px 0px;
@@ -118,21 +116,15 @@
 @media screen and (min-width: 1024px) {
   .App:before {
     content: "";
-    /* display: flex; */
     position: fixed;
-    /* left: 10px;
-  top: 0; */
     width: 100%;
     height: 100vh;
     opacity: 0.05;
     background-repeat: no-repeat;
     background-image: url("./assets/images/big-x.svg");
-    /* background-position: left; */
   }
 
   .App {
-    /* background-color: #060818; */
-    /* min-height: 100vh;  */
     display: flex;
     flex-direction: column;
     align-items: center;
