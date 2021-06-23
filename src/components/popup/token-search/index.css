@@ -80,19 +80,36 @@ input.token-search-text:focus {
     padding-right: 5px;
 }
 
-.token {
+.token, .token-selected {
     margin-top: 20px;
     margin-bottom: 20px;
     cursor: pointer;
 }
 
+.token-selected {
+    border-color: #236EDC;
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 1px;
+    overflow: hidden;
+}
+
+.token-selected > span.token-name,
 .token:hover > span.token-name{
     color: #236EDC;
     font-weight: bolder;
 }
-
+.token-selected > span.token-bal,
 .token:hover > span.token-bal{
     color: #236EDC;
     font-weight: bolder;
 }
 
+.token-selected > span.token-name,
+.token-selected > span.token-bal{
+    margin: -1px;
+}
+
+.token-selected >.token-icon {
+    margin-left: 2px;
+}
