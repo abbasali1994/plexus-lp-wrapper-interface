@@ -46,6 +46,65 @@ const tokens=[
         tokenDisplayName: "Uniswap", 
         tokenSymbol: "uni", 
         tokenBal:  0
+    },{
+        tokenName: "BNB", 
+        tokenDisplayName: "BinanceCoin", 
+        tokenSymbol: "bnb", 
+        tokenBal: 0
+    },
+    {
+        tokenName:"Atom", 
+        tokenDisplayName: "Atom", 
+        tokenSymbol: "atom", 
+        tokenBal: 0
+    }, 
+    {
+        tokenName:"Bat", 
+        tokenDisplayName: "Bat", 
+        tokenSymbol: "bat", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"Dai",
+        tokenDisplayName: "Dai", 
+        tokenSymbol: "dai", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"Doge", 
+        tokenDisplayName: "DogeCoin", 
+        tokenSymbol: "doge", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"Tron", 
+        tokenDisplayName: "Tron", 
+        tokenSymbol: "trx", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"Pax-Gold", 
+        tokenDisplayName: "Pax", 
+        tokenSymbol: "pax", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"USDT", 
+        tokenDisplayName: "USDT", 
+        tokenSymbol: "usdt", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"Ripple", 
+        tokenDisplayName: "Xmr", 
+        tokenSymbol: "xmr", 
+        tokenBal:  0
+    }, 
+    {
+        tokenName:"DashCoin", 
+        tokenDisplayName: "Dash", 
+        tokenSymbol: "dash", 
+        tokenBal:  0
     }];
 
 

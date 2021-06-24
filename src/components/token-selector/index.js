@@ -14,6 +14,7 @@ import { showSearchModal, setTokensValue } from "../../redux/tokens";
 
 // utils
 import { constants, tokenViewTypes } from '../../utils';
+import { useState, useEffect, useCallback, useRef } from "react";
 
 // The single token icon view
 const TokenIconView = ({ tokenIcon, tokenIconSize }) => {
@@ -153,14 +154,50 @@ const setInputPlaceholder = (inputToken) => {
 }
 
 const InputTokenView = () => {
-
-    const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } = useSelector((state) => state.tokens);
+  const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } =
+    useSelector((state) => state.tokens);
+  const [inputAmount, setInputAmount] = useState(inputTokenValue);
+  const inputRef = useRef(null);
     const dispatch = useDispatch();
+
+  useEffect(() => {
+    setInputAmount(inputTokenValue);
+  }, [inputTokenValue]);
+
+  useEffect(() => {
+    inputRef.current.focus()
+  }, [inputToken]);
+
+  const handleInputChange = (value) => {
+    if (/^(|[1-9]\d*)(\.\d*)?$/.test(value)) {
+      setInputAmount(value);
+    }
+  };
+  const handleInputFocus = (value) => {
+    const newInputAmount = value.split(" ")[0];
+    if(newInputAmount) setInputAmount(newInputAmount.trim());
+  };
+  const handleInputBlur = useCallback((value) => {
+    if (value.trim().length) {
+      const newInputAmount =
+      value.trim() + " " + inputToken.tokenSymbol.toUpperCase();
+      setInputAmount(newInputAmount);
+    }
+  },[inputToken]);
   
     return (
         <div className="select-input-token">
-            <div onClick={() => dispatch(showSearchModal({showSearch:true, searchCaller: constants.inputToken}))}>
-                { inputToken === null ?  <SelectTokenView/> : <SetInputToken/>}
+      <div
+        onClick={() =>
+          dispatch(
+            showSearchModal({
+              showSearch: true,
+              searchCaller: constants.inputToken,
+            })
+          )
+        }
+      >
+        {inputToken === null ? <SelectTokenView /> : <SetInputToken />}
             </div>
             <InputGroup className="mb-3">
                 <FormControl
@@ -169,37 +206,40 @@ const InputTokenView = () => {
                   aria-describedby="inputGroup-sizing-default"
                   placeholder={setInputPlaceholder(inputToken)}
                   disabled={inputToken === null}
-                  value={inputTokenValue}
+          value={inputAmount}
+          ref={inputRef}
+          onBlur={(evt) => handleInputBlur(evt.target.value)}
+          onFocus={(evt) => handleInputFocus(evt.target.value)}
+          onChange={(evt) => handleInputChange(evt.target.value)}
                 />
-                {
-                    showMax
-                    ?
-                    (inputToken.tokenBal > 0 ?  
-                        <InputGroup.Append onClick={() =>{
-                            
+        {showMax ? (
+          inputToken.tokenBal > 0 ? (
+            <InputGroup.Append
+              onClick={() => {
                             // for now we'll mock this and redo it later with real values
                             const tokens = {
-                                input : inputToken.tokenBal + " " + inputToken.tokenSymbol.toUpperCase(),
+                  input:
+                    inputToken.tokenBal +
+                    " " +
+                    inputToken.tokenSymbol.toUpperCase(),
                                 lp1: "103.5678 " + lpToken1.tokenSymbol.toUpperCase(),
                                 lp2: "206.0873 " + lpToken2.tokenSymbol.toUpperCase(),
                             };
 
-                            dispatch(setTokensValue(tokens))
-
-                        } }> 
+                dispatch(setTokensValue(tokens));
+              }}
+            >
                             <InputGroup.Text id="max-token">
                                 max
-                                <img src={arrowUp} alt="up-arrow" width="13" height="13"/>
+                <img src={arrowUp} alt="up-arrow" width="13" height="13" />
                             </InputGroup.Text>
-                        </InputGroup.Append> : null)
-                    :
-                    null
-                }
+            </InputGroup.Append>
+          ) : null
+        ) : null}
             </InputGroup>
         </div>
     );
-
-}
+};
 
 const LPTokenView = () => {
    

@@ -77,7 +77,7 @@ input.token-search-text:focus {
     padding-right: 5px;
 }
 
-.token, .token-selected {
+.token {
     margin-top: 20px;
     margin-bottom: 20px;
     cursor: pointer;
@@ -89,6 +89,9 @@ input.token-search-text:focus {
     border-style: dashed;
     border-width: 1px;
     overflow: hidden;
+    padding: 10px;
+    cursor: pointer;
+    margin: -10px -10px 20px -10px;
 }
 
 .token-selected > span.token-name,
