@@ -19,11 +19,14 @@ import { constants, tokenViewTypes } from "../../utils";
 import Dexes from "../dex-buttons";
 
 // Redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Routing
 import { navigate } from "hookrouter";
 import { usePath } from "hookrouter";
+
+import { resetState } from "../../redux/tokens";
+import { showConfirmModal } from "../../redux/transactions";
 
 const dexStats = [
   {
@@ -118,18 +121,20 @@ const MobileSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
           Generate <span className="text-white">&nbsp;LP Tokens for&nbsp;</span>
           SushiSwap
         </div>
-        <div className="display-header-button"><img
+        <div className="display-header-button">
+          <img
             className="float-right"
             src={toggleButtonImg}
             alt="logo"
             width="21"
             height="30"
             onClick={() => showSideMenu(!toggleSideMenu)}
-          /></div>
+          />
+        </div>
       </div>
       {toggleSideMenu && (
         <div className={bg}>
-          <SideBarContent dexes={dexes} selectedDex={selectedDex} />
+          <SideBarContent dexes={dexes} selectedDex={selectedDex} showSideMenu={showSideMenu}/>
         </div>
       )}
     </div>
@@ -137,10 +142,17 @@ const MobileSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
 };
 
 //Internal Sidebar Content
-const SideBarContent = ({ dexes, selectedDex }) => {
+const SideBarContent = ({ dexes, selectedDex, showSideMenu }) => {
   const actionButtons = ["Generate", "Unwrap", "Remix"];
 
   const [activeActionBtn, setActiveActionBtn] = useState("Generate");
+  const [lpGenerateBtn, setLpGenerateBtn] = useState("SELECT LP TOKEN TO GENERATE");
+  const { showConfirm } = useSelector((state) => state.transactions);
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    showConfirm?setLpGenerateBtn("START OVER"):setLpGenerateBtn("SELECT LP TOKEN TO GENERATE")
+  },[showConfirm])
   return (
     <>
       <div className="left-action main-header-text">
@@ -180,7 +192,21 @@ const SideBarContent = ({ dexes, selectedDex }) => {
         {/* The dex buttons */}
         <Dexes />
       </Row>
-      <Button className="select-lp-generate btn btn-primary" style={activeActionBtn !== "Generate"?{visibility:"hidden"}:{}}>SELECT LP TOKEN TO GENERATE</Button>
+      <Row>
+        <Col><Button
+          className="select-lp-generate"
+          style={activeActionBtn !== "Generate" ? { visibility: "hidden" } : {}}
+          onClick={() => {
+            // clear the global state
+            showSideMenu(false)
+            dispatch(resetState());
+            dispatch(showConfirmModal({ showConfirm: false }));
+          }}
+        >
+          {lpGenerateBtn}
+        </Button></Col>
+        
+      </Row>
       <div className="dex-stats">
         <div className="dex-stats-header">{dexes[selectedDex].name} stats</div>
         {dexStats.map((dex) => (

@@ -18,7 +18,7 @@ const InputButton = () => {
     const allTokenValuesNotSet = inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
     const disableBtn = allTokensNotSelected || allTokenValuesNotSet;
 
-    let btnText = disableBtn ? allTokensNotSelected ? "Input Amount & Select Tokens": "Input Amount" : "Confirm LP Generation";
+    let btnText = disableBtn ? allTokensNotSelected ? "Input Amount & Select Tokens": "Input Amount" : "Review Transaction";
 
     const dispatch = useDispatch();
     
