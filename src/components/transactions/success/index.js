@@ -60,7 +60,7 @@ const TransactionSuccessful = () => {
                 Transaction Details 
             </div>
             <div className="txn-success">
-                <img src={success} alt="success" width="146" height="146"/>
+                <img src={success} alt="success" className="success-img"/>
             </div>
             <div className="success-txt">
                 success

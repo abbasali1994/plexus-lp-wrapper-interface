@@ -236,5 +236,8 @@ text-transform: uppercase;
   }
   .select-lp-generate {
     font-size: calc(0.6em + 1.4vw)!important;
-    }
+  }
+  .action-btns {
+  width: -webkit-fill-available;
+  }
 }

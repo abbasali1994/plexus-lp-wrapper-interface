@@ -28,6 +28,7 @@
 @media screen and (max-width: 1024px) {
     .input-amount {
         line-height: 36px; 
+        margin-bottom: 35px;
     }
     .input-amount.btn-primary:disabled {
         white-space: nowrap;

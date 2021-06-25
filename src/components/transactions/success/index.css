@@ -11,36 +11,30 @@
 }
 
 .success-txt {
-    font-family: 'Codeink Regular';
-    font-size: 36px;
+  font-family: 'Codeink Regular';
     font-style: normal;
     font-weight: 400;
-    line-height: 36px;
     letter-spacing: 0.1em;
     text-align: center;
-    color: #62B0E5;
+  color: #62B0E5;
 }
 
 .txn-submitted-txt {
-    font-family: 'Azo Sans Regular';
-    font-size: 26px;
+  font-family: 'Azo Sans Regular';
     font-style: normal;
     font-weight: 600;
-    line-height: 36px;
     letter-spacing: 0em;
     text-align: center;
-    color: #E5E5E5;
+  color: #E5E5E5;
 }
 
 .txn-submitted-etherscan {
-    font-family: 'Azo Sans Regular';
-    font-size: 18px;
+  font-family: 'Azo Sans Regular';
     font-style: normal;
     font-weight: 600;
-    line-height: 36px;
     letter-spacing: 0em;
     text-align: center;
-    color: #236EDC;
+  color: #236EDC;
     cursor: pointer;
 }
 
@@ -92,6 +86,26 @@
         margin-right: 12px;
         padding: 27px 32px 17px;
     }
+
+  .success-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .success-txt {
+    font-size: 26px;
+    line-height: 36px;
+  }
+
+  .txn-submitted-txt {
+    font-size: 23px;
+    line-height: 36px;
+  }
+
+  .txn-submitted-etherscan {
+    font-size: 18px;
+    line-height: 36px;
+  }
   }
   
   @media screen and (min-width: 1024px) {
@@ -106,5 +120,24 @@
     .txn-details-line-break {
         display: none;
     }
+  .success-img {
+    width: 146px;
+    height: 146px;
+  }
+
+  .success-txt {
+    font-size: 36px;
+    line-height: 36px;
+  }
+
+  .txn-submitted-txt {
+    font-size: 26px;
+    line-height: 36px;
+  }
+
+  .txn-submitted-etherscan {
+    font-size: 18px;
+    line-height: 36px;
+  }
   }
   

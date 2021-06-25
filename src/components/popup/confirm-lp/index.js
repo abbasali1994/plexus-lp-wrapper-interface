@@ -85,16 +85,6 @@ export const MobileConfirmLPWrapper = () => {
         >
           Confirm
         </Button>
-        <Button
-          variant="primary"
-          size="lg"
-          className="confirm-tx"
-          onClick={() => {
-            dispatch(showConfirmModal({ showConfirm: false }));
-          }}
-        >
-          Cancel
-        </Button>
       </div>
     </div>
   );

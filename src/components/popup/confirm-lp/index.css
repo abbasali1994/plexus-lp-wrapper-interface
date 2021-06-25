@@ -85,7 +85,7 @@
 
 .confirm-popup-footer{
     border: none !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
 }
 
 .confirm-tx {
@@ -152,6 +152,7 @@
     background-size: 202px 255px;
   }
   .confirm-tx {
+    width: -webkit-fill-available;
       height: 50px;
   }
 }
