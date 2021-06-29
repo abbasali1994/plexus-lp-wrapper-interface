@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 import { Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 

@@ -1,11 +1,11 @@
 .token-label {
-    font-family: "Azo Sans Regular";
-    font-size: 16px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-small-3);
     line-height: 36px;
     letter-spacing: 0.1em;
     text-align: left;
     text-transform: uppercase;
-    color:  #E0E0E0;
+    color:  var(--color-text-4);
     margin-bottom:20px;
 }
 

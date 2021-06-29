@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 
 //  The components
 import Header from './components/header';
@@ -19,14 +19,15 @@ import HeaderWrapper from './components/skeleton-wrapper/header';
 const App = () => {
 
   const routesResult = useRoutes(routes);
-
+  const theme = "dark"
+  
   return (
-    <Container fluid className="App">
+    <Container fluid className={`App ${theme}`}>
 
         {/*Render the Popups first */}
-        <SearchTokensModal/>
-        <ConfirmLPModal/>
-        <AwaitingTxnModal/>
+        <SearchTokensModal theme={theme}/>
+        <ConfirmLPModal theme={theme}/>
+        <AwaitingTxnModal theme={theme}/>
 
       <div className="app-wrapper">
         <HeaderWrapper checks={["images"]} children={<Header/>}/>

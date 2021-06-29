@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 
 // React Bootstrap
 import { Col } from 'react-bootstrap';

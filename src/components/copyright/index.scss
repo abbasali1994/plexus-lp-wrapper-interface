@@ -2,14 +2,14 @@
     margin-left: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-    font-family: "Azo Sans Regular";
+    font-family: var(--font-family-primary);
     font-style: normal;
     font-weight: 600;
-    font-size: 12px;
+    font-size: var(--font-size-small-5);
     line-height: 36px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #62B0E5;
+    color: var(--color-text-6);
 }
 
 @media screen and (max-width: 1024px) {

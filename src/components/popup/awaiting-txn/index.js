@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 
 // bootstrap
 import { Modal } from 'react-bootstrap';
@@ -13,7 +13,7 @@ import spinner from '../../../assets/gifs/confirmation.gif';
 // navigate
 import { navigate } from 'hookrouter';
 
-const AwaitingTxnsModal = () => {
+const AwaitingTxnsModal = ({theme}) => {
 
     const { showAwaitingTxn } = useSelector((state) => state.transactions);
     const { lpToken1, lpToken2, totalLPTokens } = useSelector((state) => state.tokens);
@@ -38,14 +38,14 @@ const AwaitingTxnsModal = () => {
     const dispatch = useDispatch();
 
     return (
-        <Modal 
+        <Modal
             show={showAwaitingTxn} 
             backdrop="static"
             keyboard={false}
             animation={true}
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            className="awaiting-txn"
+            className={`${theme} awaiting-txn`}
             >
             <Modal.Header closeButton className="awaiting-txn-header">
                 <Modal.Title>{}</Modal.Title>

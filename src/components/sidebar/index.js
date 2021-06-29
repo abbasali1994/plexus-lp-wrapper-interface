@@ -1,4 +1,4 @@
-import "./index.css";
+import "./index.scss";
 import { Col, ButtonGroup, Button, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
 

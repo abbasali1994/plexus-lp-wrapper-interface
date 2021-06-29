@@ -1,7 +1,7 @@
 .header-btn {    
-    background: #191E3A;
+    background: var(--color-secondary-background);
     border-radius: 10px;
-    font-family: 'Nova Mono Regular';
+    font-family: var(--font-family-secondary);
     
     font-style: normal;
     font-weight: 400;
@@ -10,7 +10,7 @@
     text-align: center;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #E0E0E0;
+    color: var(--color-text-4);
     margin-left: 15px;
     padding-left: 0px;
     height: 36px;
@@ -22,7 +22,7 @@
 }
 
 .header-btn:hover {
-    background: linear-gradient(270deg, #7AC2E8 0%, #236EDC 100%);
+    background: var(--color-gradient-background);
 }
 
 .header-btn img {
@@ -44,7 +44,7 @@ button.header-btn {
     }
 
     .header-btn { 
-        font-size: calc(2px + 3vw);   
+        font-size: var(--font-mobile-2);   
         width: 40%;
     }
 
@@ -60,7 +60,7 @@ button.header-btn {
     }
 
     .header-btn {   
-        font-size: 14px;  
+        font-size: var(--font-size-small-4);  
         width: 130px;
     }
 

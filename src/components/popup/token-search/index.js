@@ -1,4 +1,4 @@
-import "./index.css";
+import "./index.scss";
 import { useEffect, useRef, useState } from "react";
 // bootstrap
 import { Modal, InputGroup, FormControl } from "react-bootstrap";
@@ -13,7 +13,7 @@ import { getAllTokens } from "../../../utils/token";
 // the tokens
 const tokens = getAllTokens();
 
-const SearchTokensModal = () => {
+const SearchTokensModal = ({theme}) => {
   const { showSearch } = useSelector((state) => state.tokens);
   const dispatch = useDispatch();
   const [searchToken, setSearchToken] = useState("");
@@ -51,6 +51,7 @@ const SearchTokensModal = () => {
   return (
     <>
       <Modal
+        className={theme}
         show={showSearch}
         onHide={() => dispatch(hideSearchModal(false))}
         backdrop="static"

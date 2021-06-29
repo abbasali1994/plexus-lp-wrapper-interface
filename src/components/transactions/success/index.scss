@@ -16,7 +16,7 @@
     font-weight: 400;
     letter-spacing: 0.1em;
     text-align: center;
-  color: #62B0E5;
+  color: var(--color-text-6);
 }
 
 .txn-submitted-txt {
@@ -25,7 +25,7 @@
     font-weight: 600;
     letter-spacing: 0em;
     text-align: center;
-  color: #E5E5E5;
+  color: var(--color-text-1);
 }
 
 .txn-submitted-etherscan {
@@ -34,7 +34,7 @@
     font-weight: 600;
     letter-spacing: 0em;
     text-align: center;
-  color: #236EDC;
+  color: var(--color-text-2);
     cursor: pointer;
 }
 
@@ -42,12 +42,13 @@
 .txn-details {
     border-radius: 20px;
     margin-top: 20px;
+    background-color: var(--color-primary-background);
 }
 
 .txn-details-label1,
 .txn-details-label2 {
     font-family: 'Azo Sans Regular';
-    font-size: 18px;
+    font-size: var(--font-size-small-2);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
@@ -55,23 +56,23 @@
     text-align: left;
 }
 .txn-details-label1 {
-    color: #828282;
+    color: var(--color-text-5);
 }
 
 .txn-details-label2 {
     letter-spacing: 0.05em;
-    color: #F2F2F2;
+    color: var(--color-text-3);
 }
 
 .txn-details-label3 {
-    font-family: 'Nova Mono Regular';
-    font-size: 18px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-small-2);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
     letter-spacing: 0em;
     text-align: left;
-    color: #828282;
+    color: var(--color-text-5);
 }
 
 @media screen and (max-width: 1024px) {
@@ -93,17 +94,17 @@
   }
 
   .success-txt {
-    font-size: 26px;
+    font-size: var(--font-size-medium-1);
     line-height: 36px;
   }
 
   .txn-submitted-txt {
-    font-size: 23px;
+    font-size: var(--font-size-medium-2);
     line-height: 36px;
   }
 
   .txn-submitted-etherscan {
-    font-size: 18px;
+    font-size: var(--font-size-small-2);
     line-height: 36px;
   }
   }
@@ -126,17 +127,17 @@
   }
 
   .success-txt {
-    font-size: 36px;
+    font-size: var(--font-size-large-1);
     line-height: 36px;
   }
 
   .txn-submitted-txt {
-    font-size: 26px;
+    font-size: var(--font-size-medium-1);
     line-height: 36px;
   }
 
   .txn-submitted-etherscan {
-    font-size: 18px;
+    font-size: var(--font-size-small-2);
     line-height: 36px;
   }
   }
