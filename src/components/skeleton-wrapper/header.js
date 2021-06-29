@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { assets } from "../../utils/images";
-import "./index.css";
+import "./index.scss";
 
 export default function HeaderWrapper({ checks, children }) {
   let images = [];

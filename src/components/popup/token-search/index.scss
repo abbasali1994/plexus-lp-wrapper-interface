@@ -4,48 +4,51 @@
     padding-right: 25px;
     padding-top: 20px;
     overflow-y: scroll;
+    background-color: var(--color-secondary-background);
 }
 
 input.token-search-text{
-    border: 3px solid #0E1726;
+    border: 3px solid var(--color-border-background-3);
     height: 56px;
     border-radius: 10px;
+    background-color: var(--color-primary-background);
 }
 
 input.token-search-text::placeholder { 
-    font-family: "Azo Sans Regular";
-    font-size: 16px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-small-3);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;
-    color: #828282;
+    color: var(--color-text-5);
     text-transform: uppercase;
 }
 
 input.token-search-text::-ms-input-placeholder { 
-    font-family: "Azo Sans Regular";
-    font-size: 16px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-small-3);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;
-    color: #828282;
+    color: var(--color-text-5);
     text-transform: uppercase;
 }
 
 input.token-search-text:focus {
-    color:  #F2F2F2;
-    font-family: "Azo Sans Regular";
-    font-size: 16px;
+    color:  var(--color-text-3);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-small-3);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
     letter-spacing: 0.05em;
     box-shadow: none;
-    border: 3px solid #0E1726;
+    border: 3px solid var(--color-border-background-3);
+    background-color: var(--color-primary-background);
 }
 
 .token-icon {
@@ -54,26 +57,26 @@ input.token-search-text:focus {
 }
 
 .token-name {
-    font-family: "Azo Sans Regular";
-    font-size: 18px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-small-2);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
     letter-spacing: 0.05em;
-    color: #F2F2F2;
+    color: var(--color-text-3);
     padding-left: 20px;
 }
 
 .token-bal{
     float: right;
-    font-family: 'Nova Mono Regular';
-    font-size: 16px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-small-3);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: right;
-    color: #BDBDBD;
+    color: var(--color-text-7);
     padding-right: 5px;
 }
 
@@ -84,7 +87,7 @@ input.token-search-text:focus {
 }
 
 .token-selected {
-    border-color: #236EDC;
+    border-color: var(--color-border-background-2);
     border-radius: 10px;
     border-style: dashed;
     border-width: 1px;
@@ -96,12 +99,12 @@ input.token-search-text:focus {
 
 .token-selected > span.token-name,
 .token:hover > span.token-name{
-    color: #236EDC;
+    color: var(--color-text-2);
     font-weight: bolder;
 }
 .token-selected > span.token-bal,
 .token:hover > span.token-bal{
-    color: #236EDC;
+    color: var(--color-text-2);
     font-weight: bolder;
 }
 

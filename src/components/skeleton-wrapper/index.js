@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { constants } from "../../utils";
 import { assets } from "../../utils/images";
-import "./index.css";
+import "./index.scss";
 
 export default function SkeletonWrapper({ checks, children }) {
   let images = [];

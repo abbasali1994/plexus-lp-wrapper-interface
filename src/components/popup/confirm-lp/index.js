@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import './index.css';
+import './index.scss';
 
 // bootstrap
 import { Modal, Button } from 'react-bootstrap';
@@ -17,7 +17,7 @@ import arrowDown from '../../../assets/images/arrow-down.svg';
 // Utils
 import { constants, tokenViewTypes } from '../../../utils';
 
-const ConfirmLPModal = () => {
+const ConfirmLPModal = ({theme}) => {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -28,16 +28,17 @@ const ConfirmLPModal = () => {
   });
 
   let element =
-    width > constants.width.mobile ? <DesktopConfirmLPWrapper /> : "";
+    width > constants.width.mobile ? <DesktopConfirmLPWrapper theme={theme}/> : "";
 
   return element;
 };
 
-const DesktopConfirmLPWrapper = () => {
+const DesktopConfirmLPWrapper = ({theme}) => {
     const { showConfirm } = useSelector((state) => state.transactions);
   const dispatch = useDispatch();
   return (
     <Modal
+      className={theme}
       show={showConfirm}
       onHide={() => dispatch(showConfirmModal({ showConfirm: false }))}
       backdrop="static"

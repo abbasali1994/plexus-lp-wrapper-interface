@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 
 // Redux
 import { useSelector } from "react-redux";

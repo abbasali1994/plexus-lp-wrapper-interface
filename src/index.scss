@@ -1,3 +1,5 @@
+@import "colors.scss";
+
 @font-face {
   font-family: "Codeink Regular";
   src: url("assets/fonts/CODEINK-Regular.ttf") format("truetype");
@@ -18,17 +20,6 @@
   src: url("assets/fonts/AzoSans-Regular.ttf") format("truetype");
 }
 
-/* color schemes */
-$theme-background: #050818;
-$theme-token-background: #191e3a;
-$theme-icon-background: #e5e5e5;
-$theme-button-background: #236edc;
-$theme-confirm-popup-background: #0e1726;
-$theme-gradient-background: linear-gradient(270deg, #7ac2e8 0%, #236edc 100%);
-
-$theme-color: #f2f2f2;
-/* color schemes */
-
 body {
   margin: 0;
   font-family: "Codeink Regular", "Codeink italic", "Nova Mono Regular",
@@ -37,7 +28,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $theme-background !important;
+  background-color: $black-russian !important;
 }
 
 code {
@@ -49,50 +40,50 @@ code {
   outline: none;
 }
 
-/* Background colours Dark Theme */
-.action-btns .btn:hover {
-  color: $theme-color;
-  background-color: $theme-background;
-}
+.dark {
+  --color-primary-background: #{$black-russian};
+  --color-secondary-background: #{$midnight-express};
+  --color-tertiary-background: #{$black-pearl};
 
-.main-wrapper-header,
-.dashboard-header,
-.txn-details {
-  background-color: $theme-background;
-}
+  --color-icon-background: #{$whisper};
+  --color-button-background: #{$royal-blue};
 
-.input-group-append > #max-token,
-input.token-search-text,
-input.token-search-text:focus,
-input.input-token-text,
-input.input-token-text.form-control:disabled,
-input.input-token-text:focus {
-  background-color: $theme-background;
-}
+  --color-gradient-background: #{$sky-blue-linear-gradient};
+  --color-vertical-gradient-background: #{$sky-blue-vertical-gradient};
 
-.confirm-popup-top-section,
-.lp-token-selector,
-.token-selector,
-.search-token-body,
-.dashboard-icon {
-  background-color: $theme-token-background;
-}
+  --color-text-1: #{$whisper};
+  --color-text-2: #{$royal-blue};
+  --color-text-3: #{$white-smoke};
+  --color-text-4: #{$gainsboro};
+  --color-text-5: #{$grey};
+  --color-text-6: #{$malibu};
+  --color-text-7: #{$silver};
+  --color-text-8: #{$matterhorn};
 
-.confirm-popup-bottom-sushi-section,
-.confirm-popup-bottom-uni-section {
-  background-color: $theme-confirm-popup-background;
-}
+  --color-border-background-1: #{$black-russian};
+  --color-border-background-2: #{$royal-blue};
+  --color-border-background-3: #{$black-pearl};
 
-.confirm-tx {
-  background-color: $theme-button-background;
-}
+  --font-family-primary: "Azo Sans Regular";
+  --font-family-secondary: "Nova Mono Regular";
+  --font-family-tertiary: "Codeink Regular";
 
-.dashboard-icon-background {
-  background-color: $theme-icon-background;
-}
+  --font-size-large-1:36px;
+  --font-size-large-2:32px;
+  
+  --font-size-medium-1:26px;
+  --font-size-medium-2:22px;
+  
+  --font-size-small-1:20px;
+  --font-size-small-2:18px;
+  --font-size-small-3:16px;
+  --font-size-small-4:14px;
+  --font-size-small-5:12px;
 
-@media screen and (min-width: 1024px) {
-  .confirm-popup-footer {
-    background-color: $theme-token-background;
-  }
+  --font-mobile-1: calc(3px + 3vw);
+  --font-mobile-2: calc(2px + 3vw); 
+  --font-mobile-3: calc(18px + 8 * ((100vw - 320px) / 680));
+  --font-mobile-4: calc(14px + 4 * ((100vw - 320px) / 680));
+  --font-mobile-5: calc(0.7em + 1vw);
+  --font-mobile-6: calc(0.6em + 1.4vw);
 }

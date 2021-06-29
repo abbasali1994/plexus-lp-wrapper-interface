@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import './index.css';
+import './index.scss';
 import { Col } from 'react-bootstrap';
 
 // the other components

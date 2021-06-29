@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 // bootstrap
 import {  InputGroup, FormControl } from 'react-bootstrap';
 

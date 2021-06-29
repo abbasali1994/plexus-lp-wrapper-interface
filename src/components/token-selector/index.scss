@@ -13,14 +13,14 @@
 }
 
 .select-token-text {
-    font-family: "Azo Sans Regular";
-    font-size: 22px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-medium-2);
     font-style: normal;
     font-weight: 600;
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
-    color: #828282;
+    color: var(--color-text-5);
     width: 100px;
     word-wrap: break-word;
     margin-top: 20px;
@@ -38,24 +38,24 @@
 }
 
 .selected-token-name {
-    font-family: 'Nova Mono Regular';
-    font-size: 16px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-small-3);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
     letter-spacing: 0em;
-    color: #828282;
+    color: var(--color-text-5);
     margin-left: 10px;
 }
 
 .selected-token-symbol {
-    font-family: "Azo Sans Regular";
-    font-size: 32px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-large-2);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
     letter-spacing: 0em;
-    color: #E0E0E0;
+    color: var(--color-text-4);
     text-transform: uppercase;
     margin-left: 10px;
 }
@@ -74,12 +74,12 @@
 }
 
 input.input-token-text:focus {
-    color:  #F2F2F2;
+    color:  var(--color-text-3);
 }
 
 input.input-token-text::placeholder { 
-    font-family: 'Nova Mono Regular';
-    font-size: 22px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-medium-2);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
@@ -89,8 +89,8 @@ input.input-token-text::placeholder {
 }
 
 input.input-token-text::-ms-input-placeholder { 
-    font-family: 'Nova Mono Regular';
-    font-size: 22px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-medium-2);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
@@ -101,14 +101,15 @@ input.input-token-text::-ms-input-placeholder {
 
 input.input-token-text.form-control:disabled,
 input.input-token-text:focus {
-    border: 3px solid #0E1726;
+    border: 3px solid var(--color-border-background-3);
     box-shadow: none;
     opacity: 1;
+    background-color: var(--color-primary-background);
 }
 
 .input-disabled{
     opacity: 0.3;
-    color: #E0E0E0;
+    color: var(--color-text-4);
 }
 
 .input-disabled:hover .div.select-token {
@@ -117,27 +118,29 @@ input.input-token-text:focus {
 
 .input-group-append > #max-token {
     font-family: 'Codeink Regular';
-    font-size: 18px;
+    font-size: var(--font-size-small-2);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: center;
-    color: #BDBDBD;
+    color: var(--color-text-7);
     border: none;
+    background-color: var(--color-primary-background);
 }
 
 input.input-token-text {
-    font-family: "Nova Mono Regular";
-    font-size: 22px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-medium-2);
     font-style: normal;
     font-weight: 400;
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;
-    border: 3px solid #0e1726;
+    border: 3px solid var(--color-border-background-3);
     border-radius: 10px;
-    color: #f2f2f2;
+    color: var(--color-text-3);
+    background-color: var(--color-primary-background);
   }
 
 #max-token img {
@@ -151,20 +154,20 @@ input.input-token-text {
 }
 
 .supply-token-amount {
-    font-family: "Azo Sans Regular";
-    font-size: 22px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-medium-2);
     font-style: normal;
     font-weight: 600;
     letter-spacing: 0.05em;
-    color: #F2F2F2;
+    color: var(--color-text-3);
 }
 
 .supply-token-amount-usd {
-    font-family: 'Nova Mono Regular';
-    font-size: 18px;
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-small-2);
     font-style: normal;
     font-weight: 400;
-    color: #828282;
+    color: var(--color-text-5);
 }
 
 /* Selector for Paired LP tokens */
@@ -179,8 +182,9 @@ input.input-token-text {
     justify-content: center;
     width: 78px;
     height: 78px;
-    border: 3px solid #050818;
+    border: 3px solid var(--color-border-background-1);
     border-radius: 10%;
+    background-color: var(--color-secondary-background);
 }
 
 .lp-token-background {
@@ -209,35 +213,36 @@ input.input-token-text {
 }
 
 .lp-pair-text{
-    font-family: "Azo Sans Regular";
+    font-family: var(--font-family-primary);
     font-style: normal;
     font-weight: 600;
     line-height: 36px;
     letter-spacing: 0.05em;
-    color: #F2F2F2;
+    color: var(--color-text-3);
     text-transform: uppercase;
 }
 
 .lp-pair-desc {
-    font-family: "Azo Sans Regular";
-    font-size: 18px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-small-2);
     font-style: normal;
     font-weight: 600;
     line-height: 20px;
     letter-spacing: 0em;
-    color: #F2F2F2;
+    color: var(--color-text-3);
 }
 
 .lp-pair-dex {
-  color: #62B0E5;
+  color: var(--color-text-6);
 }
 
 .token-selector {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid #050818;
+    border: 3px solid var(--color-border-background-1);
     border-radius: 10%;
+    background-color: var(--color-secondary-background);
   }
 
 @media screen and (max-width: 1024px) {
@@ -308,10 +313,10 @@ input.input-token-text {
     height: 36px;
   }
   .lp-pair-text {
-    font-size: calc(18px + 8 * ((100vw - 320px) / 680));
+    font-size: var(--font-mobile-3);
   }
   .lp-pair-desc {
-    font-size: calc(14px + 4 * ((100vw - 320px) / 680));
+    font-size: var(--font-mobile-4);
   }
 }
 
@@ -356,6 +361,6 @@ input.input-token-text {
     margin-top: 10px;
   }
   .lp-pair-text {
-    font-size: 26px;
+    font-size: var(--font-size-medium-1);
   }
 }
