@@ -1,31 +1,9 @@
 @import "colors.scss";
-
-@font-face {
-  font-family: "Codeink Regular";
-  src: url("assets/fonts/CODEINK-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Codeink Italic";
-  src: url("assets/fonts/CODEINK-Italic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Nova Mono Regular";
-  src: url("assets/fonts/NovaMono-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Azo Sans Regular";
-  src: url("assets/fonts/AzoSans-Regular.ttf") format("truetype");
-}
+@import "fonts.scss";
 
 body {
   margin: 0;
-  font-family: "Codeink Regular", "Codeink italic", "Nova Mono Regular",
-    "Azo Sans Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: $global-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: $black-russian !important;
@@ -63,27 +41,4 @@ code {
   --color-border-background-1: #{$black-russian};
   --color-border-background-2: #{$royal-blue};
   --color-border-background-3: #{$black-pearl};
-
-  --font-family-primary: "Azo Sans Regular";
-  --font-family-secondary: "Nova Mono Regular";
-  --font-family-tertiary: "Codeink Regular";
-
-  --font-size-large-1:36px;
-  --font-size-large-2:32px;
-  
-  --font-size-medium-1:26px;
-  --font-size-medium-2:22px;
-  
-  --font-size-small-1:20px;
-  --font-size-small-2:18px;
-  --font-size-small-3:16px;
-  --font-size-small-4:14px;
-  --font-size-small-5:12px;
-
-  --font-mobile-1: calc(3px + 3vw);
-  --font-mobile-2: calc(2px + 3vw); 
-  --font-mobile-3: calc(18px + 8 * ((100vw - 320px) / 680));
-  --font-mobile-4: calc(14px + 4 * ((100vw - 320px) / 680));
-  --font-mobile-5: calc(0.7em + 1vw);
-  --font-mobile-6: calc(0.6em + 1.4vw);
 }

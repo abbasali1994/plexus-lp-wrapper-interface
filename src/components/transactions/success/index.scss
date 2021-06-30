@@ -11,27 +11,27 @@
 }
 
 .success-txt {
-  font-family: 'Codeink Regular';
+  font-family: var(--font-family-tertiary);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     letter-spacing: 0.1em;
     text-align: center;
   color: var(--color-text-6);
 }
 
 .txn-submitted-txt {
-  font-family: 'Azo Sans Regular';
+  font-family: var(--font-family-primary);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     letter-spacing: 0em;
     text-align: center;
   color: var(--color-text-1);
 }
 
 .txn-submitted-etherscan {
-  font-family: 'Azo Sans Regular';
+  font-family: var(--font-family-primary);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     letter-spacing: 0em;
     text-align: center;
   color: var(--color-text-2);
@@ -47,10 +47,10 @@
 
 .txn-details-label1,
 .txn-details-label2 {
-    font-family: 'Azo Sans Regular';
+    font-family: var(--font-family-primary);
     font-size: var(--font-size-small-2);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     line-height: 36px;
     letter-spacing: 0em;
     text-align: left;
@@ -68,7 +68,7 @@
     font-family: var(--font-family-secondary);
     font-size: var(--font-size-small-2);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     line-height: 36px;
     letter-spacing: 0em;
     text-align: left;

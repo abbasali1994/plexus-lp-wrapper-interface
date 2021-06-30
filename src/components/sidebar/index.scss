@@ -52,7 +52,7 @@
   font-family: var(--font-family-primary);
   font-size: var(--font-size-small-3);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   line-height: 36px;
   letter-spacing: 0.1em;
   text-align: left;
@@ -65,7 +65,7 @@
   margin-bottom: 0px;
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   font-size: var(--font-size-small-4);
   line-height: 36px;
   letter-spacing: 0em;
@@ -78,7 +78,7 @@
   font-family: var(--font-family-secondary);
   font-size: var(--font-size-small-1);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--font-weight-2);
   line-height: 36px;
   letter-spacing: 0.1em;
   text-align: left;
@@ -91,7 +91,7 @@
   margin-bottom: 24px;
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   font-size: var(--font-size-small-2);
   line-height: 36px;
   letter-spacing: 0.1em;
@@ -175,7 +175,7 @@
 .display-header-text {
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   font-size: var(--font-mobile-5);
   line-height: 36px;
   width: 90%;
@@ -197,7 +197,7 @@
   height: 61px;
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600 !important;
+  font-weight: var(--font-weight-1) !important;
   line-height: 36px !important;
   /* or 225% */
   justify-content: center;
