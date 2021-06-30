@@ -16,7 +16,7 @@
     font-family: var(--font-family-primary);
     font-size: var(--font-size-medium-2);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
@@ -41,7 +41,7 @@
     font-family: var(--font-family-secondary);
     font-size: var(--font-size-small-3);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     line-height: 36px;
     letter-spacing: 0em;
     color: var(--color-text-5);
@@ -52,7 +52,7 @@
     font-family: var(--font-family-primary);
     font-size: var(--font-size-large-2);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     line-height: 36px;
     letter-spacing: 0em;
     color: var(--color-text-4);
@@ -81,7 +81,7 @@ input.input-token-text::placeholder {
     font-family: var(--font-family-secondary);
     font-size: var(--font-size-medium-2);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;    
@@ -92,7 +92,7 @@ input.input-token-text::-ms-input-placeholder {
     font-family: var(--font-family-secondary);
     font-size: var(--font-size-medium-2);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;    
@@ -117,10 +117,10 @@ input.input-token-text:focus {
 }
 
 .input-group-append > #max-token {
-    font-family: 'Codeink Regular';
+    font-family: var(--font-family-tertiary);
     font-size: var(--font-size-small-2);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: center;
@@ -133,7 +133,7 @@ input.input-token-text {
     font-family: var(--font-family-secondary);
     font-size: var(--font-size-medium-2);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;
@@ -157,7 +157,7 @@ input.input-token-text {
     font-family: var(--font-family-primary);
     font-size: var(--font-size-medium-2);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     letter-spacing: 0.05em;
     color: var(--color-text-3);
 }
@@ -166,7 +166,7 @@ input.input-token-text {
     font-family: var(--font-family-secondary);
     font-size: var(--font-size-small-2);
     font-style: normal;
-    font-weight: 400;
+    font-weight: var(--font-weight-2);
     color: var(--color-text-5);
 }
 
@@ -215,7 +215,7 @@ input.input-token-text {
 .lp-pair-text{
     font-family: var(--font-family-primary);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     line-height: 36px;
     letter-spacing: 0.05em;
     color: var(--color-text-3);
@@ -226,7 +226,7 @@ input.input-token-text {
     font-family: var(--font-family-primary);
     font-size: var(--font-size-small-2);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-1);
     line-height: 20px;
     letter-spacing: 0em;
     color: var(--color-text-3);

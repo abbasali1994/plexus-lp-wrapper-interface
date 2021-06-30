@@ -48,7 +48,7 @@
   font-family: var(--font-family-tertiary);
   font-size: var(--font-size-medium-1);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--font-weight-2);
   line-height: 36px;
   letter-spacing: 0.1em;
   text-align: left;
@@ -74,14 +74,14 @@
 .lp-token-amount {
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   color: var(--color-text-2);
 }
 
 .lp-token-value {
   font-family: var(--font-family-secondary);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--font-weight-2);
   color: var(--color-text-5);
 }
 
@@ -94,7 +94,7 @@
   font-family: var(--font-family-primary);
   font-size: var(--font-size-small-3);
   font-style: normal;
-  font-weight: 600 !important;
+  font-weight: var(--font-weight-1) !important;
   line-height: 36px;
   letter-spacing: 0.1em;
   text-transform: uppercase;

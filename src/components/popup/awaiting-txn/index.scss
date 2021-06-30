@@ -17,7 +17,7 @@
   font-family: var(--font-family-tertiary);
   font-size: var(--font-size-medium-1);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--font-weight-2);
   line-height: 36px;
   letter-spacing: 0.1em;
   text-align: center;
@@ -31,7 +31,7 @@
 .awaiting-txn-desc {
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   line-height: 28px;
   text-align: center;
   color: var(--color-text-7);
@@ -42,7 +42,7 @@
 .awaiting-txn-confirm {
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--font-weight-1);
   line-height: 20px;
   letter-spacing: 0em;
   text-align: center;
