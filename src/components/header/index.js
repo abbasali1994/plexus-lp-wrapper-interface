@@ -30,6 +30,7 @@ const Header = () => {
           <img src={ msg } alt="notification" width="28" height="28"/>
           <button className='header-btn'> { formatAddress(walletAddress) } </button >
           <button 
+            onClick={()=> navigate("/dashboard")}
             className='header-btn' 
             onMouseEnter={() => setToggleIcon(true)}
             onMouseLeave={() => setToggleIcon(false)}

@@ -29,7 +29,7 @@ const TokenIconView = ({ tokenIcon, tokenIconSize }) => {
 }
 
 // The lp token view
-const LpTokenIconView = ({ tokenIcon, tokenIconSize }) => {
+export const LpTokenIconView = ({ tokenIcon, tokenIconSize }) => {
     const tokenIconSelected = tokenIconSize === 32 ? "" : "lp-token-selected-icon";
     return (
         <div className="lp-token-selector">
@@ -63,7 +63,7 @@ const SupplyingLPTokenView = ({ token }) => {
 
 // Pair token view shown in the confirm popup
 const GeneratingLPTokenView = ({ lpTokens }) => {
-
+    
     const { token1, token2, dexName } = lpTokens;
     const lpPair = token1.tokenSymbol + "/" + token2.tokenSymbol;
    

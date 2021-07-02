@@ -1,0 +1,53 @@
+.history {
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: var(--font-weight-1);
+  margin-bottom: 30px;
+}
+
+.history-timestamp {
+  font-size: var(--font-size-small-2);
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-5);
+}
+
+.history-action {
+  font-size: var(--font-size-small-2);
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-6);
+}
+
+.history-amount {
+  font-size: var(--font-size-small-2);
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+
+  color: var(--color-text-1);
+}
+
+.history-hash {
+  font-family: var(--font-family-secondary) !important;
+  font-weight: normal;
+  font-size: var(--font-size-small-3);
+  line-height: 36px;
+
+  color: var(--color-text-2);
+}
+
+//Table
+.dashboard-table-hash {
+  font-family: var(--font-family-secondary) !important;
+  font-weight: normal;
+  font-size: var(--font-size-small-3);
+  line-height: 36px;
+  color: var(--color-text-1);
+}
+
+.dashboard-table-action {
+  color: var(--color-text-6) !important;
+}

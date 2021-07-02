@@ -84,7 +84,13 @@ const DashboardSideBarComponent = () => {
 };
 
 //Desktop Wrapper (min-width : 1024 px)
-const DesktopSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
+const DesktopSideBarWrapper = ({
+  dexes,
+  selectedDex,
+  dexName,
+  activeActionBtn,
+  setActiveActionBtn,
+}) => {
   const bg =
     dexName === constants.dexSushi ? "left-sidebar-sushi" : "left-sidebar-uni";
   return (
@@ -94,6 +100,8 @@ const DesktopSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
           toggleSideMenu={true}
           dexes={dexes}
           selectedDex={selectedDex}
+          activeActionBtn={activeActionBtn}
+          setActiveActionBtn={setActiveActionBtn}
         />
       </div>
     </Col>
@@ -101,7 +109,13 @@ const DesktopSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
 };
 
 //Mobile Wrapper (max-width : 1024 px)
-const MobileSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
+const MobileSideBarWrapper = ({
+  dexes,
+  selectedDex,
+  dexName,
+  activeActionBtn,
+  setActiveActionBtn,
+}) => {
   const [toggleSideMenu, setToggleSideMenu] = useState(false);
   const [toggleButtonImg, settoggleButtonImg] = useState(upArrow);
 
@@ -118,8 +132,9 @@ const MobileSideBarWrapper = ({ dexes, selectedDex, dexName }) => {
     <div className="bottom-sidebar-wrapper">
       <div className="bottom-header">
         <div className="display-header-text">
-          Generate <span className="text-white">&nbsp;LP Tokens for&nbsp;</span>
-          SushiSwap
+          {activeActionBtn}{" "}
+          <span className="text-white">&nbsp;LP Tokens for&nbsp;</span>
+          {dexes[selectedDex].name}
         </div>
         <div className="display-header-button">
           <img
@@ -234,6 +249,7 @@ const SideBarComponent = ({ viewType }) => {
   let element = null;
   const [width, setWidth] = useState(window.innerWidth);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
+  const [activeActionBtn, setActiveActionBtn] = useState("Generate");
   const dexName = dexes[selectedDex].name;
   useEffect(() => {
     function handleResize() {
@@ -242,7 +258,13 @@ const SideBarComponent = ({ viewType }) => {
     window.addEventListener("resize", handleResize);
   });
 
-  let props = { dexes, selectedDex, dexName };
+  let props = {
+    dexes,
+    selectedDex,
+    dexName,
+    activeActionBtn,
+    setActiveActionBtn,
+  };
   if (viewType === tokenViewTypes.dashboardInterface) {
     element = <DashboardSideBarComponent />;
   }

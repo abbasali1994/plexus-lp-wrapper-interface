@@ -72,6 +72,38 @@
   box-shadow: none;
 }
 
+// Dashboard table Styling
+.dashboard-table {
+  font-family: var(--font-family-primary);
+  color: var(--color-text-1) !important;
+  font-style: normal;
+  font-weight: var(--font-weight-1);
+  align-items: center;
+  letter-spacing: 0.05em;
+}
+
+.dashboard-table-header {
+  text-transform: uppercase;
+  color: var(--color-text-5) !important;
+  padding: 10px 40px;
+  font-size: var(--font-size-small-3);
+}
+
+.dashboard-table-body {
+  padding: 20px 20px;
+  font-size: var(--font-size-small-2);
+  background-color: var(--color-primary-background);
+  display: block;
+  height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 20px;
+}
+
+.dashboard-table-row {
+  padding: 15px 20px;
+}
+
 /*Main Wrapper CSS that is shared*/
 .main-dashboard-wrapper,
 .main-wrapper {
@@ -164,6 +196,10 @@
     padding-left: 90px;
   }
 
+  .dashboard-wrapper-interface {
+    padding: 30px;
+  }
+
   .modal-dialog {
     width: 445px;
     height: 696px;
@@ -194,8 +230,8 @@
     display: none;
   }
   .main-wrapper-interface {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-bottom: 70px;
   }
   .modal-dialog {

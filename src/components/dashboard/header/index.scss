@@ -1,6 +1,30 @@
-.dashboard-header {
+.back-arrow {
+  margin-right: 10px;
+}
+
+.dashboard-dex {
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: var(--font-weight-1);
+  font-size: var(--font-size-small-2);
+  line-height: 36px;
+  color: var(--color-text-1);
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.dashboard-dex-btns {
+  float: right;
+}
+
+.dex-name {
+  color: var(--color-text-6);
+}
+@media screen and (min-width: 1024px) {
+  .dashboard-header {
     width: 1215px;
-    padding-top:20px;
+    padding-top: 20px;
     padding-bottom: 20px;
     border: 2px solid var(--color-border-background-3);
     box-sizing: border-box;
@@ -43,9 +67,31 @@
     margin-top: 10px;
     margin-left: 20px;
 }
+}
 
-.dashboard-dex-btns {
-    float: right;
+@media screen and (max-width: 1024px) {
+  .dashboard-dex-col,
+  .dashboard-static-path {
+    display: none;
+  }
+  .dashboard-header {
+    padding: 30px 20px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .dashboard-path {
+    font-family: var(--font-family-tertiary);
+    font-style: normal;
+    font-weight: normal;
+
+    line-height: 36px;
+  }
+  .dashboard-path-name {
+    color: var(--color-text-6);
+    vertical-align: sub;
+    text-transform: uppercase;
+    font-size: var(--font-size-medium-1);
+  }
 }
 
 .dex-name {
