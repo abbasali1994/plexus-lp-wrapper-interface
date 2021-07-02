@@ -5,7 +5,7 @@ import SkeletonWrapper from './components/skeleton-wrapper';
 const routes = {
   "/": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<Home/>}/>,
   "/success": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<TransactionSuccessful/>}/>,
-  "/dashboard*": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<Dashboard/>}/>
+  "/dashboard*": () => <Dashboard/>
 };
 
 export default routes;
