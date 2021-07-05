@@ -1,0 +1,36 @@
+.connect-wallet {
+  justify-content: center;
+  text-align: center;
+}
+
+.connect-wallet-text {
+  font-family: var(--font-family-tertiary);
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-large-3);
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-6);
+}
+.connect-wallet-btn {
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: var(--font-weight-1) !important;
+  font-size: var(--font-size-small-4) !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 10px;
+}
+@media screen and (min-width: 1024px) {
+  .connect-wallet {
+    padding-top: 14vh;
+    margin-left: -90px !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .connect-wallet {
+    padding-top: 11vh;
+  }
+}

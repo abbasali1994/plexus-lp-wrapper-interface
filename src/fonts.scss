@@ -30,6 +30,7 @@ $global-font-family: "Codeink Regular", "Codeink italic", "Nova Mono Regular",
 
   --font-size-large-1: 36px;
   --font-size-large-2: 32px;
+  --font-size-large-3: 28px;
 
   --font-size-medium-1: 26px;
   --font-size-medium-2: 22px;
@@ -41,7 +42,7 @@ $global-font-family: "Codeink Regular", "Codeink italic", "Nova Mono Regular",
   --font-size-small-5: 12px;
 
   --font-mobile-1: calc(3px + 3vw);
-  --font-mobile-2: calc(2px + 3vw);
+  --font-mobile-2: calc(1px + 3vw);
   --font-mobile-3: calc(18px + 8 * ((100vw - 320px) / 680));
   --font-mobile-4: calc(14px + 4 * ((100vw - 320px) / 680));
   --font-mobile-5: calc(0.7em + 1vw);

@@ -13,11 +13,10 @@ import { formatAddress } from '../../utils';
 
 // navigate
 import { navigate } from 'hookrouter';
-
+import { useSelector } from "react-redux";
 const Header = () => {
- 
-  // we use Vitalik's address as the placeholder :)
-  const [walletAddress] = useState("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B");
+  
+  const { walletAddress } = useSelector((state) => state.wallet);
   const [toggleIcon, setToggleIcon] = useState(false);
 
   return (
@@ -28,7 +27,7 @@ const Header = () => {
       <Col lg={6} xs={12}>
         <div className="user-info">
           <img src={ msg } alt="notification" width="28" height="28"/>
-          <button className='header-btn'> { formatAddress(walletAddress) } </button >
+          <button className='header-btn'> {walletAddress?formatAddress(walletAddress):"Connect Wallet" } </button >
           <button 
             onClick={()=> navigate("/dashboard")}
             className='header-btn' 
