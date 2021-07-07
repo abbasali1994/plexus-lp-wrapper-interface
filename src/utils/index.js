@@ -4,6 +4,7 @@ export const  formatAddress = (ethAddress) => {
 }
 
 export const constants = {
+    outputToken: 'OUTPUT-TOKEN-SELECTOR',
     inputToken: 'INPUT-TOKEN-SELECTOR',
     lpToken1: 'LP-TOKEN-1',
     lpToken2: 'LP-TOKEN-2',
@@ -15,6 +16,7 @@ export const constants = {
 }
 
 export const tokenViewTypes = {
+    outputToken: 'OUTPUT-TOKEN',
     inputToken: 'INPUT-TOKEN',
     selectLPPair: 'LP-PAIR-SELECT',
     supplyingLP: 'SUPPLYING-LP',
@@ -22,6 +24,7 @@ export const tokenViewTypes = {
     selectToken: 'SELECT-TOKEN',
     inputButton: 'INPUT-BUTTON',
     generateMoreLPsButton: 'GENERATE-MORE-LPS-BUTTON',
+    unwrapMoreLPsButton: 'UNWRAP-MORE-LPS-BUTTON',
     mainInterface: 'MAIN',
     dashboardInterface: 'DASHBOARD'
 };

@@ -11,7 +11,7 @@ import { constants, tokenViewTypes } from '../../utils';
 
 // redux
 import { useSelector } from "react-redux";
-import {MobileConfirmLPWrapper} from "../popup/confirm-lp";
+import { MobileLPWrapper } from "../popup/confirm-lp";
 
 const GenerateLPComponent = () => {
     const [width, setWidth] = useState(window.innerWidth);
@@ -23,11 +23,11 @@ const GenerateLPComponent = () => {
       window.addEventListener("resize", handleResize);
     });
   
-    let children = <GenerateLPContent />
-    if(width < constants.width.mobile)
-        if(showConfirm) children=<MobileConfirmLPWrapper />;
+  let children = <GenerateLPContent />
+  if(width < constants.width.mobile)
+    if(showConfirm) children=<MobileLPWrapper />;
   
-    return <Col lg="9" className="main-wrapper">{children}</Col>;
+  return <Col lg="9" className="main-wrapper">{children}</Col>;
 };
 
 const GenerateLPContent = () => {

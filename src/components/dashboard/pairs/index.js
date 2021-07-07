@@ -7,11 +7,8 @@ import { Col, Row } from "react-bootstrap";
 import { LpTokenIconView } from "../../token-selector";
 import pair from "../../../assets/images/pair.svg";
 import { getAllTokens } from "../../../utils/token";
-import { ButtonGroup, Button } from "react-bootstrap";
 import { constants } from "../../../utils";
-// redux
-import { useDispatch, useSelector } from "react-redux";
-import { setActiveDex } from "../../../redux/dex";
+import { MobileDexes } from "../../dex-buttons";
 
 const tokens = getAllTokens();
 const token1 = tokens.find((token) => token.tokenSymbol === "eth");
@@ -41,7 +38,7 @@ const MobileDashboardPairs = () => {
   let lpTokens = { token1, token2 };
   return (
     <div className="main-wrapper-interface">
-      <DashboardDexes />
+      <MobileDexes />
       {[...Array(5)].map((value, id) => (
         <div key={id} className="dashboard-pair">
           <GeneratingLPTokenMobileView lpTokens={lpTokens} />
@@ -145,25 +142,6 @@ const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
         </Row>
       </Col>
     </Row>
-  );
-};
-
-const DashboardDexes = () => {
-  const { dexes, selectedDex } = useSelector((state) => state.dexes);
-  const dispatch = useDispatch();
-
-  return (
-    <ButtonGroup className="dashboard-action-btns">
-      {dexes.map((dex) => (
-        <Button
-          key={dex.id}
-          id={dex.id === selectedDex ? "active-btn" : ""}
-          onClick={() => dispatch(setActiveDex({ selectedDex: dex.id }))}
-        >
-          {dex.name}
-        </Button>
-      ))}
-    </ButtonGroup>
   );
 };
 

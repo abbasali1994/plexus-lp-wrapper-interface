@@ -10,6 +10,7 @@ export const tokensSlice = createSlice({
     showSearch: false,
     searchCaller: "",
     inputToken: null,
+    outputToken: null,
     lpToken1: null,
     lpToken2: null,
     showMax: false,
@@ -38,6 +39,9 @@ export const tokensSlice = createSlice({
 
       if (state.searchCaller === constants.inputToken) {
         state.inputToken = token;
+      }
+      if (state.searchCaller === constants.outputToken) {
+        state.outputToken = token;
       }
       if (state.searchCaller === constants.lpToken1) {
         state.lpToken1 = token;

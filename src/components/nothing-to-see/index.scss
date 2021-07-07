@@ -1,0 +1,22 @@
+.nothing-to-see {
+  margin-top: -40px;
+}
+
+.nothing-to-see-1,
+.nothing-to-see-2 {
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: var(--font-weight-1);
+  font-size: var(--font-size-medium-1);
+  line-height: 36px;
+  align-items: center;
+  text-align: center;
+}
+
+.nothing-to-see-1 {
+  color: var(--color-text-1);
+}
+
+.nothing-to-see-2 {
+  color: var(--color-text-2);
+}

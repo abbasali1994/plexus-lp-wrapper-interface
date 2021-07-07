@@ -126,7 +126,7 @@ export const getAllTokens = () => {
             
         }
 
-        token.tokenIcon = icon;
+        if(!token.tokenIcon) token.tokenIcon = icon;
     });
 
     return tokens;

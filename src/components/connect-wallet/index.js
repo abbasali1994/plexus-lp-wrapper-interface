@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setWalletAddress } from "../../redux/wallet";
 import wallet from "../../assets/images/wallet.svg";
 const ConnectWallet = () => {
-  const { dexes, selectedDex } = useSelector((state) => state.dexes);
+  const { activeAction, dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ const ConnectWallet = () => {
   return (
     <Col lg="9" className="main-wrapper">
       <div className="main-wrapper-header main-header-text">
-        Generate {dexName} LP Tokens
+        {activeAction} {dexName} LP Tokens
       </div>
       <div className="main-wrapper-interface">
         <Row className="connect-wallet">

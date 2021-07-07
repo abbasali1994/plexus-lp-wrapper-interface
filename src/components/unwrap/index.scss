@@ -1,0 +1,43 @@
+.unwrap-token-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small-3);
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--color-text-4);
+  margin-bottom: 20px;
+}
+
+.input-token-section {
+  margin-top: 30px;
+}
+
+.input-btn {
+  margin-top: 35px;
+}
+
+@media screen and (min-width: 1024px) {
+  .select-token-pair-section {
+    margin-top: 50px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .select-token-pair-section {
+    margin-top: 20px;
+  }
+ 
+}
+
+.unwrap-dex {
+  float: right;
+  font-style: normal;
+font-weight: var(--font-weight-1);
+font-size: var(--font-size-small-2);
+line-height: 36px;
+}
+.unwrap-dex-btns {
+  float: right;
+  margin-top: -10px;
+}
