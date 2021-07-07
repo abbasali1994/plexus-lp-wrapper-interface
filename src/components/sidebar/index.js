@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { navigate } from "hookrouter";
 import { usePath } from "hookrouter";
 
+import { setActiveAction } from "../../redux/dex";
 import { resetState } from "../../redux/tokens";
 import { showConfirmModal } from "../../redux/transactions";
 
@@ -88,8 +89,7 @@ const DesktopSideBarWrapper = ({
   dexes,
   selectedDex,
   dexName,
-  activeActionBtn,
-  setActiveActionBtn,
+  activeAction,
 }) => {
   const bg =
     dexName === constants.dexSushi ? "left-sidebar-sushi" : "left-sidebar-uni";
@@ -100,8 +100,7 @@ const DesktopSideBarWrapper = ({
           toggleSideMenu={true}
           dexes={dexes}
           selectedDex={selectedDex}
-          activeActionBtn={activeActionBtn}
-          setActiveActionBtn={setActiveActionBtn}
+          activeAction={activeAction}
         />
       </div>
     </Col>
@@ -113,8 +112,7 @@ const MobileSideBarWrapper = ({
   dexes,
   selectedDex,
   dexName,
-  activeActionBtn,
-  setActiveActionBtn,
+  activeAction,
 }) => {
   const [toggleSideMenu, setToggleSideMenu] = useState(false);
   const [toggleButtonImg, settoggleButtonImg] = useState(upArrow);
@@ -132,7 +130,7 @@ const MobileSideBarWrapper = ({
     <div className="bottom-sidebar-wrapper">
       <div className="bottom-header">
         <div className="display-header-text">
-          {activeActionBtn}{" "}
+          {activeAction}{" "}
           <span className="text-white">&nbsp;LP Tokens for&nbsp;</span>
           {dexes[selectedDex].name}
         </div>
@@ -149,7 +147,12 @@ const MobileSideBarWrapper = ({
       </div>
       {toggleSideMenu && (
         <div className={bg}>
-          <SideBarContent dexes={dexes} selectedDex={selectedDex} showSideMenu={showSideMenu}/>
+          <SideBarContent
+            activeAction={activeAction}
+            dexes={dexes}
+            selectedDex={selectedDex}
+            showSideMenu={showSideMenu}
+          />
         </div>
       )}
     </div>
@@ -157,17 +160,19 @@ const MobileSideBarWrapper = ({
 };
 
 //Internal Sidebar Content
-const SideBarContent = ({ dexes, selectedDex, showSideMenu }) => {
+const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
   const actionButtons = ["Generate", "Unwrap", "Remix"];
-
-  const [activeActionBtn, setActiveActionBtn] = useState("Generate");
-  const [lpGenerateBtn, setLpGenerateBtn] = useState("SELECT LP TOKEN TO GENERATE");
+  const [lpGenerateBtn, setLpGenerateBtn] = useState(
+    "SELECT LP TOKEN TO GENERATE"
+  );
   const { showConfirm } = useSelector((state) => state.transactions);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    showConfirm?setLpGenerateBtn("START OVER"):setLpGenerateBtn("SELECT LP TOKEN TO GENERATE")
-  },[showConfirm])
+  useEffect(() => {
+    showConfirm
+      ? setLpGenerateBtn("START OVER")
+      : setLpGenerateBtn("SELECT LP TOKEN TO GENERATE");
+  }, [showConfirm]);
   return (
     <>
       <div className="left-action main-header-text">
@@ -185,15 +190,24 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu }) => {
           {actionButtons.map((btn) => (
             <Button
               key={btn}
-              id={btn === activeActionBtn ? "active-btn" : ""}
-              onClick={() => setActiveActionBtn(btn)}
+              id={btn === activeAction ? "active-btn" : ""}
+              onClick={() => {
+                dispatch(setActiveAction({ activeAction: btn }));
+                switch(btn) {
+                  case "Unwrap": navigate("/unwrap"); break;
+                  default:navigate("/");
+                }
+              }}
             >
               {btn}
             </Button>
           ))}
         </ButtonGroup>
       </div>
-      <Row className="dex-buttons">
+      <Row
+        className="dex-buttons"
+        style={activeAction !== "Generate" ? { visibility: "hidden" } : {}}
+      >
         <div className="dex-text left-action main-header-text">
           DEX
           <img
@@ -208,18 +222,19 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu }) => {
         <Dexes />
       </Row>
       <Row>
-        <Col><Button
-          className="select-lp-generate"
-          style={activeActionBtn !== "Generate" ? { visibility: "hidden" } : {}}
-          onClick={() => {
-            // clear the global state
-            showSideMenu(false)
-            dispatch(resetState());
-            dispatch(showConfirmModal({ showConfirm: false }));
-          }}
-        >
-          {lpGenerateBtn}
-        </Button></Col>
+        <Col>
+          <Button
+            className="select-lp-generate"
+            style={activeAction !== "Generate" ? { visibility: "hidden" } : {}}
+            onClick={() => {
+              // clear the global state
+              showSideMenu(false)
+              dispatch(resetState());
+              dispatch(showConfirmModal({ showConfirm: false }));
+            }}
+          >
+            {lpGenerateBtn}
+          </Button></Col>
         
       </Row>
       <div className="dex-stats">
@@ -248,8 +263,9 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu }) => {
 const SideBarComponent = ({ viewType }) => {
   let element = null;
   const [width, setWidth] = useState(window.innerWidth);
-  const { dexes, selectedDex } = useSelector((state) => state.dexes);
-  const [activeActionBtn, setActiveActionBtn] = useState("Generate");
+  const { dexes, selectedDex, activeAction } = useSelector(
+    (state) => state.dexes
+  );
   const dexName = dexes[selectedDex].name;
   useEffect(() => {
     function handleResize() {
@@ -262,8 +278,7 @@ const SideBarComponent = ({ viewType }) => {
     dexes,
     selectedDex,
     dexName,
-    activeActionBtn,
-    setActiveActionBtn,
+    activeAction,
   };
   if (viewType === tokenViewTypes.dashboardInterface) {
     element = <DashboardSideBarComponent />;

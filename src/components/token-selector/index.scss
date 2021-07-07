@@ -85,7 +85,7 @@ input.input-token-text::placeholder {
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;    
-    color:  #4F4F4F;
+    color:  var(--color-text-8);
 }
 
 input.input-token-text::-ms-input-placeholder { 
@@ -96,7 +96,7 @@ input.input-token-text::-ms-input-placeholder {
     line-height: 36px;
     letter-spacing: 0.05em;
     text-align: left;    
-    color:  #4F4F4F;
+    color:  var(--color-text-8);
 }
 
 input.input-token-text.form-control:disabled,

@@ -1,26 +1,29 @@
 import { Row } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+
 // the other components
 import Sidebar from "../../components/sidebar";
-import GenerateLP from "../../components/generate";
+import UnwrapLP from "../../components/unwrap";
 import Copyright from "../../components/copyright";
-import ConnectWallet from "../../components/connect-wallet";
+
 // Utils
 import { tokenViewTypes } from "../../utils";
+import { useSelector,useDispatch } from "react-redux";
+import ConnectWallet from "../../components/connect-wallet";
 import { setActiveAction } from "../../redux/dex";
-const HomeView = () => {
+
+const UnwrapView = () => {
   const { walletAddress } = useSelector((state) => state.wallet);
-  const dispatch = useDispatch();
-  dispatch(setActiveAction({ activeAction: "Generate" }));
+  const dispatch = useDispatch()
+  dispatch(setActiveAction({activeAction: "Unwrap"}))
   return (
     <div className="main-section">
       <Row>
         <Sidebar viewType={tokenViewTypes.mainInterface} />
-        {walletAddress ? <GenerateLP /> : <ConnectWallet />}
+        {walletAddress ? <UnwrapLP /> : <ConnectWallet />}
       </Row>
       <Copyright />
     </div>
   );
 };
 
-export default HomeView;
+export default UnwrapView;
