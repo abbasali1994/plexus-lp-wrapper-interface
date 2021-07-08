@@ -21,6 +21,9 @@ const AwaitingTxnsModal = ({ theme }) => {
     case "Unwrap":
       content = <UnwrapAwaitingTxnsWrapper />;
       break;
+    case "Remix":
+      content = <RemixAwaitingTxnsWrapper />;
+      break;
     default:
       content = <GenerateAwaitingTxnsWrapper />;
   }
@@ -127,6 +130,46 @@ const UnwrapAwaitingTxnsWrapper = () => {
       {txnDescLine2}
       <br />
       {txnDescLine3}
+    </div>
+  );
+};
+
+const RemixAwaitingTxnsWrapper = () => {
+  const { showAwaitingTxn } = useSelector((state) => state.transactions);
+  const unwrap = useSelector((state) => state.unwrap);
+  const tokens = useSelector((state) => state.tokens);
+  const { dexes, selectedDex, newDex } = useSelector((state) => state.dexes);
+  const dexName = dexes[selectedDex].name;
+  const newDexName = dexes[newDex].name;
+  let txnDesc = [];
+  // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
+  if (unwrap.lpToken1 !== null && unwrap.lpToken2 !== null && showAwaitingTxn) {
+    txnDesc[0] = `Remixing ${
+      unwrap.totalLPTokens
+    } ${unwrap.lpToken1.tokenSymbol.toUpperCase()}/${unwrap.lpToken2.tokenSymbol.toUpperCase()}`;
+    txnDesc[1] = ` ${dexName} LP Tokens to `;
+    txnDesc[2] = `${
+      unwrap.newTotalLPTokens
+    } ${tokens.lpToken1.tokenSymbol.toUpperCase()}/${tokens.lpToken2.tokenSymbol.toUpperCase()} `;
+    txnDesc[3] = `${newDexName} LP Tokens`;
+    // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
+    const timeoutId = setTimeout(() => {
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      navigate("/success");
+      clearTimeout(timeoutId);
+    }, 6000);
+  }
+
+  const dispatch = useDispatch();
+
+  return (
+    <div className="awaiting-txn-desc">
+      {txnDesc.map((line) => (
+        <>
+          {line}
+          <br className="awaiting-txn-desc-line-break" />
+        </>
+      ))}
     </div>
   );
 };

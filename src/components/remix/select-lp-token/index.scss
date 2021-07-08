@@ -1,0 +1,72 @@
+.unwrap-row {
+  padding: 15px 0px;
+  font-family: var(--font-family-primary);
+  color: var(--color-text-1) !important;
+  font-style: normal;
+  font-weight: var(--font-weight-1);
+  align-items: center;
+  letter-spacing: 0.05em;
+}
+
+.unwrap-tokens {
+  display: flex;
+  max-width: fit-content !important;
+}
+
+.unwrap-pair-icon {
+  margin-top: 13px;
+  width: 13px;
+  height: 46px;
+  position: absolute;
+  left: 80px;
+}
+
+.unwrap-pair-text {
+  font-size: var(--font-size-small-1);
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: var(--color-text-4);
+}
+
+.unwrap-pair-dex {
+  font-size: var(--font-size-small-2);
+  display: flex;
+  align-items: center;
+  color: var(--color-text-5);
+}
+
+.unwrap-pair-amount {
+  font-family: var(--font-family-secondary);
+  font-weight: normal;
+  font-size: var(--font-size-small-1);
+  display: flex;
+  align-items: center;
+
+  color: var(--color-text-5);
+}
+
+.unwrap-tokens > .lp-token-selector {
+  width: 72px;
+  height: 72px;
+  background-size: contain;
+}
+
+.unwrap-tokens > .lp-token-selector > .lp-token-background {
+  width: 51px;
+  height: 51px;
+  background-size: contain;
+}
+
+@media screen and (min-width: 1024px) {
+  .unwrap-pair-amount {
+    justify-content: center;
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
+  .unwrap-pair-dex {
+    margin: 10px;
+  }
+}

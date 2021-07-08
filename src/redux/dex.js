@@ -6,6 +6,7 @@ export const dexSlice = createSlice({
     initialState: {
     activeAction: null,
         selectedDex: 0,
+        newDex: 0,
         dexes: [{ id: 0, name: constants.dexSushi},
                 { id: 1, name: constants.dexUni}]
     },
@@ -14,6 +15,10 @@ export const dexSlice = createSlice({
             const { selectedDex } = payload;
             state.selectedDex = selectedDex;
     },
+    setNewDex : (state, { payload }) => {
+      const { newDex } = payload;
+      state.newDex = newDex;
+},
     setActiveAction: (state, { payload }) => {
       const { activeAction } = payload;
       state.activeAction = activeAction;
@@ -21,6 +26,6 @@ export const dexSlice = createSlice({
   }
 });
 
-export const { setActiveDex, setActiveAction } = dexSlice.actions;
+export const { setActiveDex, setNewDex, setActiveAction } = dexSlice.actions;
 
 export default dexSlice.reducer;

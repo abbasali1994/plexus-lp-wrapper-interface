@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { constants } from '../utils';
 
-// navigate
-import { navigate } from 'hookrouter';
-
 export const tokensSlice = createSlice({
   name: "tokens",
   initialState: {
@@ -73,9 +70,6 @@ export const tokensSlice = createSlice({
       state.totalLPTokens = "";
       state.networkFeeETH = "";
       state.networkFeeUSD = "";
-
-      // the navigate to home
-      navigate('/');
     },
     // for now we mock it
     setTokensValue(state, { payload}) {

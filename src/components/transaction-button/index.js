@@ -1,15 +1,16 @@
-import './index.scss';
+import "./index.scss";
 
-import { Button } from 'react-bootstrap';
+import { Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmModal } from "../../redux/transactions";
-import { resetState } from "../../redux/tokens";
+import { resetState, setTokensValue } from "../../redux/tokens";
 
 // button view types
-import { tokenViewTypes } from '../../utils';
-import { resetUnwrapState } from "../../redux/unwrap";
+import { tokenViewTypes } from "../../utils";
+import { resetUnwrapState, setUnwrapTokensValue } from "../../redux/unwrap";
+import { navigate } from "hookrouter";
 
 // this component is responsible for handling all the blockchain txn's in the app
 const InputButton = () => {
@@ -25,7 +26,7 @@ const InputButton = () => {
     inputToken === null || lpToken1 === null || lpToken2 === null;
   const allTokenValuesNotSet =
     inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
-    const disableBtn = allTokensNotSelected || allTokenValuesNotSet;
+  const disableBtn = allTokensNotSelected || allTokenValuesNotSet;
 
   let btnText = disableBtn
     ? allTokensNotSelected
@@ -33,8 +34,8 @@ const InputButton = () => {
       : "Input Amount"
     : "Review Transaction";
 
-    const dispatch = useDispatch();
-    
+  const dispatch = useDispatch();
+
   return disableBtn ? (
     <Button
       variant="primary"
@@ -43,8 +44,8 @@ const InputButton = () => {
       className="input-amount"
       disabled={disableBtn}
     >
-            {btnText}
-        </Button>
+      {btnText}
+    </Button>
   ) : (
     <Button
       variant="primary"
@@ -75,67 +76,127 @@ const OutputButton = () => {
       disabled={disableBtn}
       onClick={() => dispatch(showConfirmModal({ showConfirm: true }))}
     >
-            {btnText}
-        </Button>
-    );
-}
+      {btnText}
+    </Button>
+  );
+};
+
+const RemixButton = () => {
+  const { lpToken1, lpToken2 } = useSelector((state) => state.tokens);
+  const disableBtn = lpToken2 === null || lpToken1 == null;
+
+  let btnText = disableBtn ? "Select Tokens" : "Confirm Remix";
+
+  const dispatch = useDispatch();
+  return (
+    <Button
+      variant="primary"
+      size="lg"
+      block
+      className="input-amount"
+      disabled={disableBtn}
+      onClick={() => {
+        //mocks the values
+        const tokens = {
+          input: "",
+          lp1: "103.5678 " + lpToken1.tokenSymbol.toUpperCase(),
+          lp2: "206.0873 " + lpToken2.tokenSymbol.toUpperCase(),
+        };
+        dispatch(setTokensValue(tokens));
+        dispatch(setUnwrapTokensValue({ outputToken: null }));
+
+        dispatch(showConfirmModal({ showConfirm: true }));
+      }}
+    >
+      {btnText}
+    </Button>
+  );
+};
 
 const GenerateMoreLPS = () => {
-    const dispatch = useDispatch();
-    return (
+  const dispatch = useDispatch();
+  return (
     <Button
       variant="primary"
       size="lg"
       block
       className="input-amount confirm-lp"
       onClick={() => {
-            // clear the global state
-            dispatch(resetState());
-        }} >
-            Generate New LP Tokens
-        </Button>
-    )
-}
+        // clear the global state
+        dispatch(resetState());
+        navigate("/");
+      }}
+    >
+      Generate New LP Tokens
+    </Button>
+  );
+};
 
 const UnwrapMoreLPS = () => {
-    const dispatch = useDispatch();
-    return (
-      <Button
-        variant="primary"
-        size="lg"
-        block
-        className="input-amount confirm-lp"
-        onClick={() => {
-          // clear the global state
-          dispatch(resetUnwrapState());
-        }}
-      >
-        Unwrap More LP Tokens
-      </Button>
-    );
-  };
+  const dispatch = useDispatch();
+  return (
+    <Button
+      variant="primary"
+      size="lg"
+      block
+      className="input-amount confirm-lp"
+      onClick={() => {
+        // clear the global state
+        dispatch(resetUnwrapState());
+        navigate("/unwrap");
+      }}
+    >
+      Unwrap More LP Tokens
+    </Button>
+  );
+};
+
+const RemixMoreLPS = () => {
+  const dispatch = useDispatch();
+  return (
+    <Button
+      variant="primary"
+      size="lg"
+      block
+      className="input-amount confirm-lp"
+      onClick={() => {
+        // clear the global state
+        dispatch(resetState());
+        dispatch(resetUnwrapState());
+        navigate("/remix");
+      }}
+    >
+      Remix More LP Tokens
+    </Button>
+  );
+};
 
 const Transaction = ({ viewType }) => {
+  let element = null;
 
-    let element = null;
-
-    if (viewType === tokenViewTypes.inputButton) {
-        element = <InputButton/>
-    }
-
-  if (viewType === tokenViewTypes.outputButton) {
-    element = <OutputButton/>;
+  if (viewType === tokenViewTypes.inputButton) {
+    element = <InputButton />;
   }
 
-    if (viewType === tokenViewTypes.generateMoreLPsButton) {
-        element = <GenerateMoreLPS/>
-    }
+  if (viewType === tokenViewTypes.outputButton) {
+    element = <OutputButton />;
+  }
+
+  if (viewType === tokenViewTypes.remixButton) {
+    element = <RemixButton />;
+  }
+
+  if (viewType === tokenViewTypes.generateMoreLPsButton) {
+    element = <GenerateMoreLPS />;
+  }
 
   if (viewType === tokenViewTypes.unwrapMoreLPsButton) {
     element = <UnwrapMoreLPS />;
   }
-
-    return element;
-}
+  if (viewType === tokenViewTypes.remixMoreLPsButton) {
+    element = <RemixMoreLPS />;
+  }
+  return element;
+};
 
 export default Transaction;

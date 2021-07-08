@@ -32,10 +32,11 @@ export const unwrapSlice = createSlice({
     lpToken2: null,
     lpToken2Value: null,
     totalLPTokens: null,
+    newTotalLPTokens: null,
   },
   reducers: {
     setOutputToken: (state, action) => {
-      console.log(action)
+      console.log(action);
       state.outputToken = action.payload;
     },
     setSelectedLpTokenPair: (state, action) => {
@@ -58,22 +59,25 @@ export const unwrapSlice = createSlice({
       state.lpToken1Value = null;
       state.lpToken2Value = null;
       state.totalLPTokens = null;
+      state.newTotalLPTokens = null;
       // the navigate to home
       navigate("/unwrap");
     },
     // for now we mock it
     setUnwrapTokensValue(state, { payload }) {
       const { outputToken } = payload;
-      if (outputToken) {
+      if (outputToken)
         state.outputTokenValue =
           "0.123645 " + outputToken.tokenSymbol.toUpperCase();
-        state.outputTokenValueUSD = "~$4,623.45";
-        state.lpToken1Value = "1.72806";
-        state.lpToken2Value = "3,659.99";
-        state.totalLPTokens = "4.5324";
-        state.networkFeeETH = "0.008654 ETH";
-        state.networkFeeUSD = "~$17.35";
-      }
+      state.outputTokenValueUSD = "~$4,623.45";
+      state.lpToken1Value =
+        "1.72806 " + state.lpToken1.tokenSymbol.toUpperCase();
+      state.lpToken2Value =
+        "3,659.99 " + state.lpToken2.tokenSymbol.toUpperCase();
+      state.totalLPTokens = "4.5324";
+      state.newTotalLPTokens = "0.04324";
+      state.networkFeeETH = "0.008654 ETH";
+      state.networkFeeUSD = "~$17.35";
       // mocked for now
     },
   },
@@ -84,7 +88,7 @@ export const {
   setUnwrapTokensValue,
   resetUnwrapState,
   setSelectedLpTokenPair,
-  setOutputToken
+  setOutputToken,
 } = unwrapSlice.actions;
 
 export default unwrapSlice.reducer;

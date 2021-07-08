@@ -195,6 +195,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
                 dispatch(setActiveAction({ activeAction: btn }));
                 switch(btn) {
                   case "Unwrap": navigate("/unwrap"); break;
+                  case "Remix": navigate("/remix"); break;
                   default:navigate("/");
                 }
               }}
@@ -231,6 +232,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
               showSideMenu(false)
               dispatch(resetState());
               dispatch(showConfirmModal({ showConfirm: false }));
+              navigate("/");
             }}
           >
             {lpGenerateBtn}
