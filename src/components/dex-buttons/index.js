@@ -2,7 +2,7 @@ import { Col, ButtonGroup, Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveDex } from "../../redux/dex";
+import { setActiveDex,setNewDex } from "../../redux/dex";
 import "./index.scss";
 
 const DesktopDexes = () => {
@@ -37,6 +37,25 @@ export const MobileDexes = () => {
           key={dex.id}
           id={dex.id === selectedDex ? "active-btn" : ""}
           onClick={() => dispatch(setActiveDex({ selectedDex: dex.id }))}
+        >
+          {dex.name}
+        </Button>
+      ))}
+    </ButtonGroup>
+  );
+};
+
+export const RemixDexes = () => {
+  const { dexes, newDex } = useSelector((state) => state.dexes);
+  const dispatch = useDispatch();
+
+  return (
+    <ButtonGroup className="mb-2 action-btns">
+      {dexes.map((dex) => (
+        <Button
+          key={dex.id}
+          id={dex.id === newDex ? "active-btn" : ""}
+          onClick={() => dispatch(setNewDex({ newDex: dex.id }))}
         >
           {dex.name}
         </Button>

@@ -17,14 +17,18 @@ export const constants = {
 
 export const tokenViewTypes = {
     outputToken: 'OUTPUT-TOKEN',
+    remixToken: 'REMIX-TOKEN',
     inputToken: 'INPUT-TOKEN',
     selectLPPair: 'LP-PAIR-SELECT',
     supplyingLP: 'SUPPLYING-LP',
     generatingLP: 'GENERATING-LP',
     selectToken: 'SELECT-TOKEN',
     inputButton: 'INPUT-BUTTON',
+    outputButton: 'OUTPUT-BUTTON',
+    remixButton: 'REMIX-BUTTON',
     generateMoreLPsButton: 'GENERATE-MORE-LPS-BUTTON',
     unwrapMoreLPsButton: 'UNWRAP-MORE-LPS-BUTTON',
+    remixMoreLPsButton: 'REMIX-MORE-LPS-BUTTON',
     mainInterface: 'MAIN',
     dashboardInterface: 'DASHBOARD'
 };

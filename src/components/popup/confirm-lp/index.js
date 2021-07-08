@@ -45,6 +45,9 @@ const DesktopWrapper = ({ theme }) => {
     case "Unwrap":
       content = <ModalUnwrapLPWrapper />;
       break;
+    case "Remix":
+      content = <ModalRemixLPWrapper />;
+      break;
 
     default:
       content = <ModalConfirmLPWrapper />;
@@ -77,7 +80,7 @@ const DesktopWrapper = ({ theme }) => {
     </Modal>
   );
 };
-const ModalConfirmLPWrapper = ({ theme }) => {
+const ModalConfirmLPWrapper = () => {
   return (
     <>
       <Modal.Header closeButton>
@@ -173,7 +176,7 @@ export const ConfirmLPContent = () => {
   );
 };
 
-const ModalUnwrapLPWrapper = ({ theme }) => {
+const ModalUnwrapLPWrapper = () => {
   return (
     <>
       <Modal.Header closeButton>
@@ -240,7 +243,7 @@ export const UnwrapLPContent = () => {
             />
           </div>
           <div className="lp-token-stats">
-            <div className="unwrap-lp-token-amount">
+            <div className="lp-token-amount">
               {totalLPTokens} &nbsp; LP Tokens
             </div>
             <div className="lp-token-value">
@@ -274,6 +277,109 @@ export const UnwrapLPContent = () => {
   );
 };
 
+const ModalRemixLPWrapper = () => {
+  return (
+    <>
+      <Modal.Header closeButton>
+        <Modal.Title>Confirm LP Remix</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <RemixLPContent />
+      </Modal.Body>
+    </>
+  );
+};
+export const RemixLPContent = () => {
+  const { dexes, selectedDex, newDex } = useSelector((state) => state.dexes);
+  const dexName = dexes[selectedDex].name;
+  const newDexName = dexes[newDex].name;
+  const bottomSectionClass =
+    dexName === constants.dexSushi
+      ? "confirm-popup-bottom-sushi-section"
+      : "confirm-popup-bottom-uni-section";
+
+  const { newTotalLPTokens, totalLPTokens } = useSelector(
+    (state) => state.unwrap
+  );
+
+  const unwrap = useSelector((state) => state.unwrap);
+  const tokens = useSelector((state) => state.tokens);
+
+  // the input tokens prop
+  const toToken1 = {};
+  const toToken2 = {};
+  Object.assign(toToken1, tokens.lpToken1);
+  Object.assign(toToken2, tokens.lpToken2);
+  toToken1.tokenAmount = tokens.lpToken1Value;
+  toToken1.tokenAmountUSD = tokens.lpToken1ValueUSD;
+
+  toToken2.tokenAmount = tokens.lpToken2Value;
+  toToken2.tokenAmountUSD = tokens.lpToken2ValueUSD;
+  // the unwrap token prop
+  const fromToken1 = {};
+  const fromToken2 = {};
+  Object.assign(fromToken1, unwrap.lpToken1);
+  Object.assign(fromToken2, unwrap.lpToken2);
+
+  fromToken1.tokenAmount = unwrap.lpToken1Value;
+  fromToken1.tokenAmountUSD = unwrap.lpToken1ValueUSD;
+
+  fromToken2.tokenAmount = unwrap.lpToken2Value;
+  fromToken2.tokenAmountUSD = unwrap.lpToken2ValueUSD;
+
+  const fromLPTokens = { token1: fromToken1, token2: fromToken2, dexName };
+  const toLPTokens = { token1: toToken1, token2: toToken2, dexName:newDexName };
+
+  return (
+    <div className="confirm-popup-body">
+      <div className="confirm-popup-top-section">
+        <div className="confirm-popup-content">
+          <div className="confirm-popup-header">Remixing</div>
+          <div className="generate-lp-details">
+            <TokenSelector
+              viewType={tokenViewTypes.generatingLP}
+              lpTokens={fromLPTokens}
+            />
+          </div>
+          <div className="lp-token-stats">
+            <div className="lp-token-amount">
+              {totalLPTokens} &nbsp; LP Tokens
+            </div>
+            <div className="lp-token-value">
+              {`${fromToken1.tokenAmount} // ${fromToken2.tokenAmount}`}
+            </div>
+          </div>
+        </div>
+      </div>
+      <img
+        className="down-arrow"
+        src={arrowDown}
+        alt="down arrow"
+        width="46"
+        height="50"
+      />
+      <div className={bottomSectionClass}>
+        <div className="confirm-popup-content">
+          <div className="generate-lp-details">
+            <TokenSelector
+              viewType={tokenViewTypes.generatingLP}
+              lpTokens={toLPTokens}
+            />
+          </div>
+          <div className="lp-token-stats">
+            <div className="lp-token-amount">
+              {newTotalLPTokens} &nbsp; LP Tokens
+            </div>
+            <div className="lp-token-value">
+              {`${toToken1.tokenAmount} // ${toToken2.tokenAmount}`}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const MobileLPWrapper = () => {
   const { activeAction } = useSelector((state) => state.dexes);
   const dispatch = useDispatch();
@@ -281,6 +387,9 @@ export const MobileLPWrapper = () => {
   switch (activeAction) {
     case "Unwrap":
       content = <UnwrapLPContent />;
+      break;
+    case "Remix":
+      content = <RemixLPContent />;
       break;
 
     default:

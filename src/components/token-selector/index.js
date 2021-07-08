@@ -1,6 +1,6 @@
 import "./index.scss";
 // bootstrap
-import { InputGroup, FormControl } from "react-bootstrap";
+import { InputGroup, FormControl, Row, Col } from "react-bootstrap";
 
 // import the images
 import placeHolderX from "../../assets/images/token-selector.svg";
@@ -371,6 +371,48 @@ const LPTokenView = () => {
   );
 };
 
+const RemixTokenView = () => {
+  const { lpToken1, lpToken2 } = useSelector((state) => state.tokens);
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <div className="token-label">Select Tokens</div>
+      <Row className="select-input-token">
+        <Col
+          lg="4"
+          className="lp-token1"
+          onClick={() =>
+            dispatch(
+              showSearchModal({
+                showSearch: true,
+                searchCaller: constants.lpToken1,
+              })
+            )
+          }
+        >
+          {lpToken1 === null ? <SelectTokenView /> : <SetLPToken1 />}
+        </Col>
+
+        <Col
+          lg="4"
+          className="lp-token1"
+          onClick={() =>
+            dispatch(
+              showSearchModal({
+                showSearch: true,
+                searchCaller: constants.lpToken2,
+              })
+            )
+          }
+        >
+          {lpToken2 === null ? <SelectTokenView /> : <SetLPToken2 />}
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
 const TokenSelector = (props) => {
   const { viewType } = props;
   let element = null;
@@ -380,6 +422,9 @@ const TokenSelector = (props) => {
   }
   if (viewType === tokenViewTypes.outputToken) {
     element = <OutputTokenView />;
+  }
+  if (viewType === tokenViewTypes.remixToken) {
+    element = <RemixTokenView />;
   }
   if (viewType === tokenViewTypes.selectLPPair) {
     element = <LPTokenView />;
