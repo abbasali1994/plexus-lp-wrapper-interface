@@ -36,7 +36,6 @@ export const unwrapSlice = createSlice({
   },
   reducers: {
     setOutputToken: (state, action) => {
-      console.log(action);
       state.outputToken = action.payload;
     },
     setSelectedLpTokenPair: (state, action) => {

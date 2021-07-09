@@ -7,11 +7,11 @@ export const DesktopLpTokensUnavailable = () => {
   const dexName = dexes[selectedDex].name;
   return (
     <>
-      <div className="main-wrapper-header ">
+      <div className="main-wrapper-header">
         <span className="main-header-text">Remix LP Tokens</span>
-        <span className="unwrap-dex">
+        <span className="remix-dex">
           Your <span className="dex-name">{dexName}</span> LP Tokens
-          <span className="unwrap-dex-btns">
+          <span className="remix-dex-btns">
             <Dexes />
           </span>
         </span>

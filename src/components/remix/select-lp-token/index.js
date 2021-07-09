@@ -1,4 +1,3 @@
-import "./index.scss";
 import { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import pair from "../../../assets/images/pair.svg";
@@ -30,9 +29,9 @@ const DesktopWrapper = ({ lpTokenPairs }) => {
     <>
       <div className="main-wrapper-header ">
         <span className="main-header-text">Remix LP Tokens</span>
-        <span className="unwrap-dex">
+        <span className="remix-dex">
           Your <span className="dex-name">{dexName}</span> LP Tokens
-          <span className="unwrap-dex-btns">
+          <span className="remix-dex-btns">
             <Dexes />
           </span>
         </span>
@@ -75,7 +74,7 @@ const DesktopLpTokens = ({ lpPair, idx }) => {
   const dexName = dexes[selectedDex].name;
   return (
     <Row
-      className="unwrap-row"
+      className="remix-row"
       onClick={() => {
         dispatch(
           setSelectedLpTokenPair({
@@ -85,10 +84,10 @@ const DesktopLpTokens = ({ lpPair, idx }) => {
         );
       }}
     >
-      <Col className="unwrap-tokens">
+      <Col className="remix-tokens">
         <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
         <img
-          className="unwrap-pair-icon"
+          className="remix-pair-icon"
           src={pair}
           width="16"
           height="16"
@@ -97,10 +96,10 @@ const DesktopLpTokens = ({ lpPair, idx }) => {
         <LpTokenIconView tokenIcon={lpToken2.tokenIcon} tokenIconSize={45} />
       </Col>
       <Col>
-        <div className="unwrap-pair-text">{lpPairName}</div>
-        <div className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</div>
+        <div className="remix-pair-text">{lpPairName}</div>
+        <div className="remix-pair-dex">4.5324 {dexName} LP Tokens</div>
       </Col>
-      <Col className="unwrap-pair-amount">$4,623.42</Col>
+      <Col className="remix-pair-amount">$4,623.42</Col>
     </Row>
   );
 };
@@ -113,7 +112,7 @@ const MobileLpTokens = ({ lpPair, idx }) => {
   const dexName = dexes[selectedDex].name;
   return (
     <Row
-      className="unwrap-row"
+      className="remix-row"
       onClick={() => {
         dispatch(
           setSelectedLpTokenPair({
@@ -123,10 +122,10 @@ const MobileLpTokens = ({ lpPair, idx }) => {
         );
       }}
     >
-      <Col className="unwrap-tokens">
+      <Col className="remix-tokens">
         <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
         <img
-          className="unwrap-pair-icon"
+          className="remix-pair-icon"
           src={pair}
           width="16"
           height="16"
@@ -135,10 +134,10 @@ const MobileLpTokens = ({ lpPair, idx }) => {
         <LpTokenIconView tokenIcon={lpToken2.tokenIcon} tokenIconSize={45} />
       </Col>
       <Col>
-        <div className="unwrap-pair-text">{lpPairName}</div>
-        <div className="unwrap-pair-amount">$4,623.42</div>
+        <div className="remix-pair-text">{lpPairName}</div>
+        <div className="remix-pair-amount">$4,623.42</div>
       </Col>
-      <Col className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</Col>
+      <Col className="remix-pair-dex">4.5324 {dexName} LP Tokens</Col>
     </Row>
   );
 };
