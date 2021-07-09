@@ -52,6 +52,14 @@ button.header-btn {
     }
   }
 
+  @media screen and (max-width: 360px) {
+    .header-btn { 
+        font-size: var(--font-mobile-2);   
+        min-width: 20%;
+        margin-left: 10px;
+    }
+  }
+
   @media screen and (min-width: 1024px) {
     .header {
         margin-top: 45px;

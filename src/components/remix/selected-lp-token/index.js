@@ -40,14 +40,14 @@ const DesktopWrapper = () => {
         </span>
       </div>
       <div className="main-wrapper-interface">
-        <Row className="unwrap-row">
-          <Col className="unwrap-tokens">
+        <Row className="remix-row">
+          <Col className="remix-tokens">
             <LpTokenIconView
               tokenIcon={lpToken1.tokenIcon}
               tokenIconSize={45}
             />
             <img
-              className="unwrap-pair-icon"
+              className="remix-pair-icon"
               src={pair}
               width="16"
               height="16"
@@ -59,8 +59,8 @@ const DesktopWrapper = () => {
             />
           </Col>
           <Col>
-            <div className="unwrap-pair-text">{lpPairName}</div>
-            <div className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</div>
+            <div className="remix-pair-text">{lpPairName}</div>
+            <div className="remix-pair-dex">4.5324 {dexName} LP Tokens</div>
           </Col>
         </Row>
         <div className="remix-select-dex">
@@ -89,11 +89,11 @@ const MobileWrapper = () => {
 
   return (
     <div className="main-wrapper-interface">
-      <Row className="unwrap-row">
-        <Col className="unwrap-tokens">
+      <Row className="remix-row">
+        <Col className="remix-tokens">
           <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
           <img
-            className="unwrap-pair-icon"
+            className="remix-pair-icon"
             src={pair}
             width="16"
             height="16"
@@ -102,10 +102,10 @@ const MobileWrapper = () => {
           <LpTokenIconView tokenIcon={lpToken2.tokenIcon} tokenIconSize={45} />
         </Col>
         <Col>
-          <div className="unwrap-pair-text">{lpPairName}</div>
-          <div className="unwrap-pair-amount">$4,623.42</div>
+          <div className="remix-pair-text">{lpPairName}</div>
+          <div className="remix-pair-amount">$4,623.42</div>
         </Col>
-        <Col className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</Col>
+        <Col className="remix-pair-dex">4.5324 {dexName} LP Tokens</Col>
       </Row>
 
       <div className="remix-select-dex-header">Select Dex</div>
