@@ -5,15 +5,32 @@ describe("Cypress", () => {
   });
 });
 describe(
-  "Flow Test",
+  "Home Page Flow Test",
   {
-    viewportHeight: 800,
-    viewportWidth: 1200,
+    viewportHeight: 900,
+    viewportWidth: 400,
   },
   () => {
     it("visits the app", () => {
       cy.visit("/");
     });
+    it("clicks connect wallet button", () => {
+      cy.get(".connect-wallet-btn").first().click();
+    });
+    describe("Check Footer Menu works", () => {
+      it("Clicks footer menu up icon", () => {
+        cy.get(".display-header-button").click();
+      });
+      it("Checks footer menu visible", () => {
+        cy.get(".left-sidebar-sushi").should("be.visible");
+        
+      });
+      
+      it("Clicks footer menu down icon", () => {
+        cy.get(".display-header-button").click();
+      });
+    });
+
     describe("Select input token", () => {
       it("Clicks select token button", () => {
         cy.get(".select-token").first().click();
@@ -50,7 +67,7 @@ describe(
     });
     describe("Confirm txn", () => {
       it("Clicks submit button", () => {
-        cy.get(".confirm-tx").click();
+        cy.get(".confirm-tx").contains("Confirm").click();
       });
     });
     describe("Awaiting txn modal visible", () => {

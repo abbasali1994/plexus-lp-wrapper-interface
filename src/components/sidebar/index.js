@@ -48,9 +48,9 @@ const DashboardSideBarComponent = () => {
   const pathName = usePath();
   const [activeDashboardPath] = useState(pathName);
   const paths = [
-    { icon: pair, name: "/dashboard/pairs" },
-    { icon: token, name: "/dashboard/tokens" },
-    { icon: history, name: "/dashboard/history" },
+    { icon: pair, name: "/dashboard/pairs", id:"pairs"},
+    { icon: token, name: "/dashboard/tokens", id:"tokens" },
+    { icon: history, name: "/dashboard/history", id:"history" },
   ];
   return (
     <Col lg="1" className="dashboard-sidebar">
@@ -65,7 +65,7 @@ const DashboardSideBarComponent = () => {
             }}
           >
             <div className="dashboard-icon-background">
-              <img src={path.icon} width="22" height="22" alt="pair icon" />
+              <img src={path.icon} width="22" height="22" alt={`${path.id} icon`} />
             </div>
           </div>
         ))}
