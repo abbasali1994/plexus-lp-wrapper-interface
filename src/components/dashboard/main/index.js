@@ -16,18 +16,21 @@ const DashboardMainComponent = () => {
   const [activeDashboardPath] = useState(pathName);
   const paths = [
     {
+      id:"pairs",
       icon: pair,
       name: "/dashboard/pairs",
       content:
         "View your SushiSwap and Uniswap LP Tokens, and Unwrap or Remix them",
     },
     {
+      id:"tokens",
       icon: token,
       name: "/dashboard/tokens",
       content:
         "View the tokens in your wallet, and generate SushiSwap or Uniswap LP tokens from them",
     },
     {
+      id:"history",
       icon: history,
       name: "/dashboard/history",
       content: "View your transaction history on Plexus",
@@ -50,7 +53,7 @@ const DashboardMainComponent = () => {
                 }}
               >
                 <div className="dashboard-icon-background">
-                  <img src={path.icon} width="22" height="22" alt="pair icon" />
+                  <img src={path.icon} width="22" height="22" alt={`${path.id} icon`} />
                 </div>
               </div>
               <Col className="main-dashboard-contents">{path.content}</Col>
