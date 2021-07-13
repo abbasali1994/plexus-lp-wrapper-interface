@@ -131,7 +131,7 @@ const MobileSideBarWrapper = ({
       <div className="bottom-header">
         <div className="display-header-text">
           {activeAction}{" "}
-          <span className="text-white">&nbsp;LP Tokens for&nbsp;</span>
+          <span className="text-theme">&nbsp;LP Tokens for&nbsp;</span>
           {dexes[selectedDex].name}
         </div>
         <div className="display-header-button">

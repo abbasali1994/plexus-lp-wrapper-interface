@@ -11,7 +11,7 @@
 
 .input-amount.btn-primary {
     background: var(--color-button-background);
-    color: var(--color-text-4) !important;
+    color: var(--color-text-9);
 }
 
 .input-amount.btn-primary:disabled {
@@ -22,7 +22,7 @@
 
 .input-amount.btn-primary.confirm-lp:hover {
     background: var(--color-gradient-background);
-    color: var(--color-text-4) !important;
+    color: var(--color-text-9) !important;
 }
 
 @media screen and (max-width: 1024px) {

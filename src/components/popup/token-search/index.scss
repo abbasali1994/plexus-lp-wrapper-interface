@@ -8,7 +8,7 @@
 }
 
 input.token-search-text{
-    border: 3px solid var(--color-border-background-3);
+    border: 3px solid var(--color-border-background-4);
     height: 56px;
     border-radius: 10px;
     background-color: var(--color-primary-background);
@@ -47,7 +47,7 @@ input.token-search-text:focus {
     line-height: 36px;
     letter-spacing: 0.05em;
     box-shadow: none;
-    border: 3px solid var(--color-border-background-3);
+    border: 3px solid var(--color-border-background-4);
     background-color: var(--color-primary-background);
 }
 

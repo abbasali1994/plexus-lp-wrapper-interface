@@ -5,6 +5,17 @@ import { constants } from "../../utils";
 import { assets } from "../../utils/images";
 import "./index.scss";
 
+const themes = {
+  dark: {
+    color: "#060818",
+    highlightColor: "#191E3A",
+  },
+  light: {
+    color: "#f9fafb",
+    highlightColor: "#f3f4f6",
+  },
+};
+
 export default function SkeletonWrapper({ checks, children }) {
   let images = [];
   checks.map((key) => {
@@ -12,9 +23,11 @@ export default function SkeletonWrapper({ checks, children }) {
     return 0;
   });
   const [loading, setloading] = useState(images.length);
-  const [fontsLoading, setFontsloading] = useState(!document.fonts.load("22px 'Azo Sans Regular'"));
+  const [fontsLoading, setFontsloading] = useState(
+    !document.fonts.load("22px 'Azo Sans Regular'")
+  );
   const [width, setWidth] = useState(window.innerWidth);
-
+  const [theme] = useState(document.body.className);
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -27,9 +40,9 @@ export default function SkeletonWrapper({ checks, children }) {
 
   let wrapper =
     width > constants.width.mobile ? (
-      <DesktopSkeletonContent />
+      <DesktopSkeletonContent theme={themes[theme]} />
     ) : (
-      <MobileSkeletonContent />
+      <MobileSkeletonContent theme={themes[theme]} />
     );
   return (
     <>
@@ -61,9 +74,9 @@ export default function SkeletonWrapper({ checks, children }) {
   );
 }
 
-function DesktopSkeletonContent() {
+function DesktopSkeletonContent({ theme }) {
   return (
-    <SkeletonTheme color="#060818" highlightColor="#191E3A">
+    <SkeletonTheme color={theme.color} highlightColor={theme.highlightColor}>
       <Row>
         <Col lg={3} className="desktop-sidebar-skeleton">
           <Skeleton height={40} width={"100%"} count={3} />
@@ -119,9 +132,9 @@ function DesktopSkeletonContent() {
   );
 }
 
-function MobileSkeletonContent() {
+function MobileSkeletonContent({ theme }) {
   return (
-    <SkeletonTheme color="#060818" highlightColor="#191E3A">
+    <SkeletonTheme color={theme.color} highlightColor={theme.highlightColor}>
       <Row>
         <Col className="mobile-main-skeleton" lg={12}>
           <Skeleton height={40} width={"100%"} />
