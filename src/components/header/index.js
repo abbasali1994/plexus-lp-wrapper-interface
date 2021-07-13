@@ -26,17 +26,25 @@ const Header = () => {
       </Col>
       <Col lg={6} xs={12}>
         <div className="user-info">
-          <img src={ msg } alt="notification" width="28" height="28"/>
-          <button className='header-btn'> {walletAddress?formatAddress(walletAddress):"Connect Wallet" } </button >
+          { walletAddress ? <img src={ msg } alt="notification" width="28" height="28"/> : null }
+          { walletAddress ? 
           <button 
-            onClick={()=> navigate("/dashboard")}
-            className='header-btn' 
-            onMouseEnter={() => setToggleIcon(true)}
-            onMouseLeave={() => setToggleIcon(false)}
-           >
-              <img src={ toggleIcon ? profileWhite : profileBlue } alt="profile-icon" width="13" height="13"/>
-              dashboard
-          </button>
+            className='header-btn'
+          > {formatAddress(walletAddress)  }</button >
+          : null }
+          { walletAddress ? 
+            <button 
+              onClick={()=> navigate("/dashboard")}
+              className='header-btn' 
+              onMouseEnter={() => setToggleIcon(true)}
+              onMouseLeave={() => setToggleIcon(false)}
+            >
+                <img src={ toggleIcon ? profileWhite : profileBlue } alt="profile-icon" width="13" height="13"/>
+                dashboard
+            </button>
+            :
+            null
+          }
         </div>
        
       </Col>
