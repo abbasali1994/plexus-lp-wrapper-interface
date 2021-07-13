@@ -6,7 +6,7 @@ import Remix from './views/remix';
 import SkeletonWrapper from './components/skeleton-wrapper';
 const routes = {
   "/": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<Home/>}/>,
-  "/success": () => <SkeletonWrapper checks={["icons","images","gifs"]} children={<TransactionSuccessful/>}/>,
+  "/success": () => <TransactionSuccessful/>,
   "/dashboard*": () => <Dashboard/>,
   "/unwrap": () => <Unwrap />,
   "/remix": () => <Remix />

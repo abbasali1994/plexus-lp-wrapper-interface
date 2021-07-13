@@ -104,7 +104,7 @@ input.input-token-text:focus {
     border: 3px solid var(--color-border-background-3);
     box-shadow: none;
     opacity: 1;
-    background-color: var(--color-primary-background);
+    background-color: var(--color-input-background);
 }
 
 .input-disabled{
@@ -126,7 +126,7 @@ input.input-token-text:focus {
     text-align: center;
     color: var(--color-text-7);
     border: none;
-    background-color: var(--color-primary-background);
+    background-color: var(--color-input-background);
 }
 
 input.input-token-text {
@@ -140,7 +140,7 @@ input.input-token-text {
     border: 3px solid var(--color-border-background-3);
     border-radius: 10px;
     color: var(--color-text-3);
-    background-color: var(--color-primary-background);
+    background-color: var(--color-input-background);
   }
 
 #max-token img {

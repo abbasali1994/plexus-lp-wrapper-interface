@@ -6,7 +6,7 @@ body {
   font-family: $global-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $black-russian !important;
+  background-color: var(--color-body-background) !important;
 }
 
 code {
@@ -19,6 +19,8 @@ code {
 }
 
 .dark {
+  --color-body-background: #{$black-russian};
+  --color-input-background: #{$black-russian};
   --color-primary-background: #{$black-russian};
   --color-secondary-background: #{$midnight-express};
   --color-tertiary-background: #{$black-pearl};
@@ -37,8 +39,39 @@ code {
   --color-text-6: #{$malibu};
   --color-text-7: #{$silver};
   --color-text-8: #{$matterhorn};
-
+  --color-text-9: #{$gainsboro};
+  
   --color-border-background-1: #{$black-russian};
   --color-border-background-2: #{$royal-blue};
   --color-border-background-3: #{$black-pearl};
+  --color-border-background-4: #{$black-pearl};
+}
+
+.light {
+  --color-body-background: #{$alabaster};
+  --color-input-background: #{$alabaster};
+  --color-primary-background: #{$titan-white};
+  --color-secondary-background: #{$catskill-white};
+  --color-tertiary-background: #{$white};
+
+  --color-icon-background: #{$whisper};
+  --color-button-background: #{$royal-blue};
+
+  --color-gradient-background: #{$sky-blue-linear-gradient};
+  --color-vertical-gradient-background: #{$sky-blue-vertical-gradient};
+
+  --color-text-1: #{$storm-grey};
+  --color-text-2: #{$royal-blue};
+  --color-text-3: #{$storm-grey};
+  --color-text-4: #{$storm-grey};
+  --color-text-5: #{$grey};
+  --color-text-6: #{$malibu};
+  --color-text-7: #{$silver};
+  --color-text-8: #{$matterhorn};
+  --color-text-9: #{$white-smoke};
+
+  --color-border-background-1: #{$titan-white};
+  --color-border-background-2: #{$royal-blue};
+  --color-border-background-3: #{$titan-white};
+  --color-border-background-4: #{$oslo-grey};
 }

@@ -4,7 +4,7 @@ import { Row, Col } from "react-bootstrap";
 // redux
 import { useSelector } from "react-redux";
 
-import glasses from "../../assets/images/glasses.svg";
+import glasses from "../../assets/gifs/empty.gif";
 const NothingToSee = () => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;

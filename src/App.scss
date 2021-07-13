@@ -1,3 +1,6 @@
+.text-theme {
+  color: var(--color-text-3)
+}
 /* Global Modal Styling*/
 .modal-content {
   border-radius: 10px !important;
@@ -20,7 +23,7 @@
   line-height: 36px;
   letter-spacing: 0.1em;
   text-align: left;
-  color: var(--color-text-4);
+  color: var(--color-text-9);
   text-transform: uppercase;
 }
 
@@ -66,7 +69,7 @@
 }
 
 .action-btns .btn#active-btn {
-  color: var(--color-text-3);
+  color: var(--color-text-9);
   background: var(--color-gradient-background);
   border-radius: 5px;
   box-shadow: none;
