@@ -243,3 +243,9 @@
     width: -webkit-fill-available;
   }
 }
+
+@media screen and (max-width: 310px) {
+  .text-theme {
+    font-size: var(--font-mobile-2);
+  }
+}

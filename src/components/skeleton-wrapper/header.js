@@ -4,6 +4,17 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { assets } from "../../utils/images";
 import "./index.scss";
 
+const themes = {
+  dark: {
+    color: "#060818",
+    highlightColor: "#191E3A",
+  },
+  light: {
+    color: "#f9fafb",
+    highlightColor: "#f3f4f6",
+  },
+};
+
 export default function HeaderWrapper({ checks, children }) {
   let images = [];
   checks.map((key) => {
@@ -12,8 +23,8 @@ export default function HeaderWrapper({ checks, children }) {
   });
   const [loading, setloading] = useState(images.length);
   const [fontsLoading,] = useState(!document.fonts.load("14px 'Nova Mono Regular'"));
-
-  let wrapper = <SkeletonContent />;
+  const [theme] = useState(document.body.className);
+  let wrapper = <SkeletonContent theme={themes[theme]}/>;
 
   return (
     <>
@@ -41,9 +52,9 @@ export default function HeaderWrapper({ checks, children }) {
   );
 }
 
-function SkeletonContent() {
+function SkeletonContent({theme}) {
   return (
-    <SkeletonTheme color="#060818" highlightColor="#191E3A">
+    <SkeletonTheme color={theme.color} highlightColor={theme.highlightColor}>
       <Row className="header">
         <Col lg={3} xs={8}>
           <Skeleton height={40} width={"100%"} />

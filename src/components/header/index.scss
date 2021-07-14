@@ -35,7 +35,7 @@ button.header-btn {
 }
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1024px) and (min-width: 360px) {
     .header {
         margin-top: 30px;
         margin-bottom: 70px;
@@ -53,8 +53,17 @@ button.header-btn {
   }
 
   @media screen and (max-width: 360px) {
+    .header {
+        margin-top: 30px;
+        margin-bottom: 70px;
+        width: 100%;
+    }
+
+    .user-info {
+        margin-top: 15px;
+    }
     .header-btn { 
-        font-size: var(--font-mobile-2);   
+        font-size: calc(3vw);   
         min-width: 20%;
         margin-left: 10px;
     }
