@@ -1,0 +1,18 @@
+.coming-soon {
+  justify-content: center;
+  text-align: center;
+}
+
+@media screen and (min-width: 1024px) {
+  .coming-soon {
+    padding-top: 20vh;
+    padding-bottom: 35vh;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .coming-soon {
+    padding-top: 10vh;
+    padding-bottom: 20vh;
+  }
+}

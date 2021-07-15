@@ -4,7 +4,7 @@ import { constants } from "../utils";
 export const dexSlice = createSlice({
     name: "dex",
     initialState: {
-    activeAction: null,
+    activeAction: "Generate",
         selectedDex: 0,
         newDex: 0,
         dexes: [{ id: 0, name: constants.dexSushi},

@@ -39,6 +39,8 @@ const SearchTokensModal = ({theme}) => {
     const searchCriteria = (token) => {
       return (
         token.tokenName.toLowerCase().includes(searchToken.toLowerCase()) ||
+        token.tokenAddress.toLowerCase().includes(searchToken.toLowerCase()) ||
+        token.tokenDisplayName.toLowerCase().includes(searchToken.toLowerCase()) ||
         token.tokenSymbol.toLowerCase().includes(searchToken.toLowerCase())
       );
     };

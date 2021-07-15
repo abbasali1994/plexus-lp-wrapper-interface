@@ -16,7 +16,7 @@ import ConfirmLPModal from "./components/popup/confirm-lp";
 import AwaitingTxnModal from "./components/popup/awaiting-txn";
 import HeaderWrapper from "./components/skeleton-wrapper/header";
 import ThemeToggle from "./components/theme-toggle";
-
+import SkeletonWrapper from './components/skeleton-wrapper';
 // Adds theme based on system settings on first render
 const mq = window.matchMedia("(prefers-color-scheme: dark)");
 if (mq.matches) {
@@ -60,7 +60,7 @@ const App = () => {
         <HeaderWrapper checks={["images"]} children={<Header />} />
         <div className="app-views">
           {/*Render all the routes */}
-          {routesResult}
+          <SkeletonWrapper checks={["icons","images","gifs"]} children={routesResult}/>  
         </div>
       </div>
     </Container>
