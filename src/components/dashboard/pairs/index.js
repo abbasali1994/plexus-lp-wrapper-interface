@@ -69,7 +69,7 @@ const DesktopDashboardPairs = () => {
         </Row>
         <div className="dashboard-table-body">
           {[...Array(5)].map((value, id) => (
-            <GeneratingLPTokenDesktopView lpTokens={lpTokens} />
+            <GeneratingLPTokenDesktopView key={id} lpTokens={lpTokens} />
           ))}
         </div>
       </div>
