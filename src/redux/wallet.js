@@ -133,7 +133,7 @@ export const walletSlice = createSlice({
         address: "0x584bc13c7d411c00c01a62e8019472de68768430",
         balance: null,
       },
-      k3pr: {
+      kp3r: {
         address: "0x33518A786e2D6a40a2c78f2431A9385a32ca36D5",
         balance: null,
       },
