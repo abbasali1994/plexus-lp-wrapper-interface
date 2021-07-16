@@ -224,10 +224,10 @@ let tokens = [
     tokenBal: 0,
   },
   {
-    tokenName: "K3PR",
-    tokenDisplayName: "K3PR",
+    tokenName: "KP3R",
+    tokenDisplayName: "Keep3rV1",
     tokenAddress: "0x33518A786e2D6a40a2c78f2431A9385a32ca36D5",
-    tokenSymbol: "k3pr",
+    tokenSymbol: "kp3r",
     tokenBal: 0,
   },
   {
