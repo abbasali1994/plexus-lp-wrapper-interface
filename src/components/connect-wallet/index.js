@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { setWalletAddress } from "../../redux/wallet";
 import wallet from "../../assets/images/wallet.svg";
-import { connectToWallet } from "../../utils/wallet";
+import { connectToWallet, fetchWalletTokenBalances } from "../../utils/wallet";
 
 const ConnectWallet = () => {
   const { activeAction, dexes, selectedDex } = useSelector((state) => state.dexes);
@@ -18,7 +18,7 @@ const ConnectWallet = () => {
     const web3 = await connectToWallet();
     const accounts = await web3.eth.getAccounts();
     const walletAddress = accounts[0];
-
+    await fetchWalletTokenBalances();
     dispatch(
       setWalletAddress({
         walletAddress,

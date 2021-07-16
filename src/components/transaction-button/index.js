@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showConfirmModal } from "../../redux/transactions";
+import { setTxnStatus, showConfirmModal } from "../../redux/transactions";
 import { resetState, setTokensValue } from "../../redux/tokens";
 
 // button view types
@@ -124,6 +124,7 @@ const GenerateMoreLPS = () => {
       onClick={() => {
         // clear the global state
         dispatch(resetState());
+        dispatch(setTxnStatus({txnStatus:null}));
         navigate("/");
       }}
     >

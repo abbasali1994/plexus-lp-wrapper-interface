@@ -10,8 +10,9 @@ import { tokenViewTypes } from "../../utils";
 import { setActiveAction } from "../../redux/dex";
 const HomeView = () => {
   const { walletAddress } = useSelector((state) => state.wallet);
+  const { activeAction } = useSelector((state) => state.dexes);
   const dispatch = useDispatch();
-  dispatch(setActiveAction({ activeAction: "Generate" }));
+  if(activeAction !== "Generate") dispatch(setActiveAction({ activeAction: "Generate" }));
   return (
     <div className="main-section">
       <Row>

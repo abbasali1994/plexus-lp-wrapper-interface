@@ -6,7 +6,7 @@ import { Modal, InputGroup, FormControl } from "react-bootstrap";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { hideSearchModal, setSelectedToken } from "../../../redux/tokens";
-
+import spinner from "../../../assets/gifs/confirmation.gif";
 // get token data
 import { getAllTokens } from "../../../utils/token";
 
@@ -15,6 +15,7 @@ const tokens = getAllTokens();
 
 const SearchTokensModal = ({theme}) => {
   const { showSearch } = useSelector((state) => state.tokens);
+  const { balances } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
   const [searchToken, setSearchToken] = useState("");
   const [cursor, setCursor] = useState(-1);
@@ -96,9 +97,13 @@ const SearchTokensModal = ({theme}) => {
                       {token.tokenSymbol.toUpperCase()}
                     </span>
                     <span className="token-bal">
-                      {token.tokenBal.toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                      })}
+                      {balances[token.tokenSymbol].balance == null ?<img
+                      className="token-icon"
+                      src={spinner}
+                      alt={"loading"}
+                      width="36"
+                      height="36"
+                    />:balances[token.tokenSymbol].balance}
                     </span>
                   </div>
                 );

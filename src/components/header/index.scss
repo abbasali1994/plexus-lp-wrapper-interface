@@ -34,6 +34,15 @@ button.header-btn {
     border-color: transparent;
 }
 
+.circle {
+    position: absolute;
+    top: 25%;
+    margin-left:-10px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-button-background);
+    border-radius: 50%;
+}
 
 @media screen and (max-width: 1024px) and (min-width: 360px) {
     .header {
