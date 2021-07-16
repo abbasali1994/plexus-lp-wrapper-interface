@@ -13,8 +13,9 @@ import { setActiveAction } from "../../redux/dex";
 
 const UnwrapView = () => {
   const { walletAddress } = useSelector((state) => state.wallet);
-  const dispatch = useDispatch()
-  dispatch(setActiveAction({activeAction: "Remix"}))
+  const { activeAction } = useSelector((state) => state.dexes);
+  const dispatch = useDispatch();
+  if(activeAction !== "Remix") dispatch(setActiveAction({ activeAction: "Remix" }));
   return (
     <div className="main-section">
       <Row>

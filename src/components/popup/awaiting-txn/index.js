@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showAwaitingTxnModal } from "../../../redux/transactions";
+import { setTxnStatus, showAwaitingTxnModal } from "../../../redux/transactions";
 
 // images
 import spinner from "../../../assets/gifs/confirmation.gif";
@@ -81,7 +81,14 @@ const GenerateAwaitingTxnsWrapper = () => {
     // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
     const timeoutId = setTimeout(() => {
       dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
-      navigate("/success");
+      // Mock success or failure randomly
+      if(Math.random() > 0.5){
+        dispatch(setTxnStatus({ txnStatus: "success" }));
+        navigate("/success")
+      } else{
+        dispatch(setTxnStatus({ txnStatus: "failure" })); 
+        navigate("/failure");
+      } 
       clearTimeout(timeoutId);
     }, 6000);
   }
