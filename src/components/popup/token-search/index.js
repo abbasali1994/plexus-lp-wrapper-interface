@@ -80,6 +80,7 @@ const SearchTokensModal = ({theme}) => {
             </InputGroup>
             <div className="token-list">
               {tokensList.map((token, i) => {
+                if(!balances[token.tokenSymbol]) return "";
                 return (
                   <div
                     key={token.tokenSymbol}
