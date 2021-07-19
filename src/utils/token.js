@@ -4,7 +4,7 @@ let tokens = [
     tokenDisplayName: "Ethereum",
     tokenAddress: "0xD76b5c2A23ef78368d8E34288B5b65D616B746aE",
     tokenSymbol: "eth",
-    tokenBal: 1.23,
+    tokenBal: 0,
   },
   {
     tokenName: "1INCH",
@@ -498,8 +498,8 @@ let tokens = [
   },
   {
     tokenName: "TBTC",
-    tokenDisplayName: "τBitcoin",
-    tokenAddress: "0x2cd1075682b0fccaadd0ca629e138e64015ba11c",
+    tokenDisplayName: "tBitcoin",
+    tokenAddress: "0x8dAEBADE922dF735c38C80C7eBD708Af50815fAa",
     tokenSymbol: "tbtc",
     tokenBal: 0,
   },
