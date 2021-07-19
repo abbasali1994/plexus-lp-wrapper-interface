@@ -21,6 +21,8 @@ const SearchTokensModal = ({theme}) => {
   const [cursor, setCursor] = useState(-1);
   const [tokensList, setTokensList] = useState(tokens);
   const modalRef = useRef(null);
+
+
   function handleKeyDown(e) {
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
@@ -51,6 +53,22 @@ const SearchTokensModal = ({theme}) => {
       setCursor(-1);
     } else setTokensList(tokens);
   }, [searchToken]);
+
+  const handleTokenClick = (token) => {
+    let clickedToken = {};
+    Object.assign(clickedToken, token);
+    clickedToken.tokenBal = balances[token.tokenSymbol].balance;
+
+    console.log(clickedToken);
+
+    // only update if the bal isn't null
+    if(clickedToken.tokenBal !== null) {
+      clickedToken.tokenBal = parseFloat(balances[token.tokenSymbol].balance.replace(',',''));
+      dispatch(setSelectedToken(clickedToken));
+    }
+  
+  }
+
   return (
     <>
       <Modal
@@ -85,7 +103,7 @@ const SearchTokensModal = ({theme}) => {
                   <div
                     key={token.tokenSymbol}
                     className={cursor === i ? "token-selected" : "token"}
-                    onClick={() => dispatch(setSelectedToken(token))}
+                    onClick={() => handleTokenClick(token)}
                   >
                     <img
                       className="token-icon"
@@ -98,13 +116,18 @@ const SearchTokensModal = ({theme}) => {
                       {token.tokenSymbol.toUpperCase()}
                     </span>
                     <span className="token-bal">
-                      {balances[token.tokenSymbol].balance == null ?<img
+                      {
+                      balances[token.tokenSymbol].balance == null ?
+                      <img
                       className="token-icon"
                       src={spinner}
                       alt={"loading"}
                       width="36"
                       height="36"
-                    />:balances[token.tokenSymbol].balance}
+                    />
+                    :
+                    ( Number(balances[token.tokenSymbol].balance) || parseInt(balances[token.tokenSymbol].balance) > 0 ? <span className="token-bal-bold">{balances[token.tokenSymbol].balance}</span> :  balances[token.tokenSymbol].balance)
+                    }
                     </span>
                   </div>
                 );
