@@ -1,6 +1,6 @@
 import "./index.scss";
 import { Row, Col, Badge } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // get the images
 import logo from "../../assets/images/logo.png";
@@ -13,11 +13,36 @@ import { formatAddress } from "../../utils";
 
 // navigate
 import { navigate } from "hookrouter";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { usePath } from "hookrouter";
+
+// token usd prices
+import { getTokenUSDPrices } from '../../redux/prices';
+import { getCoinGeckoTokenIDS,   getCoinGeckoTokenIDAndTokenSymbol } from "../../utils/token";
+import { setWalletUSDValue } from "../../redux/wallet";
+
 const Header = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const tokenIds = getCoinGeckoTokenIDS();
+
+    dispatch(getTokenUSDPrices(tokenIds))
+  },[dispatch])
+
+
   const { walletAddress } = useSelector((state) => state.wallet);
+  const { status, pricesUSD } = useSelector((state) => state.prices);
   const [toggleIcon, setToggleIcon] = useState(false);
+
+  const tokenDetails = getCoinGeckoTokenIDAndTokenSymbol();
+
+  // we set the USD values for each token we currently support
+  if(status ==="success") {
+    Object.keys(pricesUSD).forEach((key) => {
+      dispatch(setWalletUSDValue({ key: tokenDetails[key], usdValue: pricesUSD[key].usd }))
+    });
+  }
 
   return (
     <Row className="header">

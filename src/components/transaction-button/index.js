@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { setTxnStatus, showConfirmModal } from "../../redux/transactions";
-import { resetState, setTokensValue } from "../../redux/tokens";
+import { resetState, setMax } from "../../redux/tokens";
 
 // button view types
 import { tokenViewTypes } from "../../utils";
@@ -96,13 +96,8 @@ const RemixButton = () => {
       className="input-amount"
       disabled={disableBtn}
       onClick={() => {
-        //mocks the values
-        const tokens = {
-          input: "",
-          lp1: "103.5678 " + lpToken1.tokenSymbol.toUpperCase(),
-          lp2: "206.0873 " + lpToken2.tokenSymbol.toUpperCase(),
-        };
-        dispatch(setTokensValue(tokens));
+       
+        dispatch(setMax());
         dispatch(setUnwrapTokensValue({ outputToken: null }));
 
         dispatch(showConfirmModal({ showConfirm: true }));

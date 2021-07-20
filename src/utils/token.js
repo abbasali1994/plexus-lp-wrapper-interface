@@ -36,7 +36,7 @@ let tokens = [
   },
   {
     tokenName: "AMP",
-    tokenDisplayName: "Amp",
+    tokenDisplayName: "Amp Token",
     tokenAddress: "0xff20817765cb7f73d4bde2e66e067e58d11095c2",
     tokenSymbol: "amp",
     tokenBal: 0,
@@ -92,7 +92,7 @@ let tokens = [
   },
   {
     tokenName: "BNT",
-    tokenDisplayName: "Bancor Network Token",
+    tokenDisplayName: "Bancor",
     tokenAddress: "0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c",
     tokenSymbol: "bnt",
     tokenBal: 0,
@@ -113,7 +113,7 @@ let tokens = [
   },
   {
     tokenName: "COMP",
-    tokenDisplayName: "Compound",
+    tokenDisplayName: "Compound Governance Token",
     tokenAddress: "0xc00e94cb662c3520282e6f5717214004a7f26888",
     tokenSymbol: "comp",
     tokenBal: 0,
@@ -198,6 +198,7 @@ let tokens = [
   {
     tokenName: "MEME",
     tokenDisplayName: "Meme",
+    tokenCoingeckoID: "degenerator",
     tokenAddress: "0xd5525d397898e5502075ea5e830d8914f6f0affe",
     tokenSymbol: "meme",
     tokenBal: 0,
@@ -344,7 +345,7 @@ let tokens = [
   },
   {
     tokenName: "MLN",
-    tokenDisplayName: "Enzyme",
+    tokenDisplayName: "Melon",
     tokenAddress: "0xec67005c4e498ec7f55e092bd1d35cbc47c91892",
     tokenSymbol: "mln",
     tokenBal: 0,
@@ -359,6 +360,7 @@ let tokens = [
   {
     tokenName: "MTA",
     tokenDisplayName: "mStable Governance Token",
+    tokenCoingeckoID: "meta",
     tokenAddress: "0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2",
     tokenSymbol: "mta",
     tokenBal: 0,
@@ -421,7 +423,7 @@ let tokens = [
   },
   {
     tokenName: "REN",
-    tokenDisplayName: "REN",
+    tokenDisplayName: "Republic Protocol",
     tokenAddress: "0x408e41876cccdc0f92210600ef50372656052a38",
     tokenSymbol: "ren",
     tokenBal: 0,
@@ -443,6 +445,7 @@ let tokens = [
   {
     tokenName: "RUNE",
     tokenDisplayName: "THORChain",
+    tokenCoingeckoID: "thorchain",
     tokenAddress: "0x3155ba85d5f96b2d030a4966af206230e46849cb",
     tokenSymbol: "rune",
     tokenBal: 0,
@@ -450,6 +453,7 @@ let tokens = [
   {
     tokenName: "SNX",
     tokenDisplayName: "Synthetix Network Token",
+    tokenCoingeckoID: "havven",
     tokenAddress: "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f",
     tokenSymbol: "snx",
     tokenBal: 0,
@@ -478,6 +482,7 @@ let tokens = [
   {
     tokenName: "SUSD",
     tokenDisplayName: "sUSD",
+    tokenCoingeckoID: "nusd",
     tokenAddress: "0x57ab1ec28d129707052df4df418d58a2d46d5f51",
     tokenSymbol: "susd",
     tokenBal: 0,
@@ -498,7 +503,7 @@ let tokens = [
   },
   {
     tokenName: "TBTC",
-    tokenDisplayName: "tBitcoin",
+    tokenDisplayName: "TBTC",
     tokenAddress: "0x8dAEBADE922dF735c38C80C7eBD708Af50815fAa",
     tokenSymbol: "tbtc",
     tokenBal: 0,
@@ -512,7 +517,7 @@ let tokens = [
   },
   {
     tokenName: "TUSD",
-    tokenDisplayName: "TrueUSD",
+    tokenDisplayName: "True USD",
     tokenAddress: "0x0000000000085d4780b73119b644ae5ecd22b376",
     tokenSymbol: "tusd",
     tokenBal: 0,
@@ -645,3 +650,39 @@ export const getAllTokens = () => {
 
   return tokens;
 };
+
+const getPriceId = (token) => {
+  const tokenName = token.tokenDisplayName;
+  const tokenCoingeckoID = token.tokenCoingeckoID;
+  const id = tokenCoingeckoID !== undefined ? tokenCoingeckoID: tokenName.toLowerCase().replace(' ','-').replace(' ','-').replace(' ','-').replace('.','-');
+  return id;
+};
+
+export const getCoinGeckoTokenIDS = () => {
+  let coingeckoIDS = "";
+  tokens.forEach((token) => {
+    coingeckoIDS += getPriceId(token) + ","
+  });
+
+  coingeckoIDS = coingeckoIDS.slice(0, -1)
+  return coingeckoIDS;
+}
+
+export const getCoinGeckoTokenIDAndTokenSymbol = () => {
+
+  let tokenDetails = {};
+
+  tokens.forEach((token) => {
+   
+    const priceId = getPriceId(token);
+    const symbol = token.tokenSymbol;
+
+    tokenDetails[priceId] = symbol;
+  });
+
+
+  return tokenDetails;
+
+};
+
+export const getTokenCount = () => tokens.length;
