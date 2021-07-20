@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore,  getDefaultMiddleware } from '@reduxjs/toolkit';
 import { persistReducer } from "redux-persist";
 import localStorage from "redux-persist/lib/storage";
 
@@ -8,6 +8,7 @@ import transactionsReducer from "./redux/transactions";
 import walletReducer from "./redux/wallet";
 import dexReducer from "./redux/dex";
 import unwrapReducer from './redux/unwrap';
+import pricesReducer from './redux/prices';
 
 // middleware
 import logger from 'redux-logger';
@@ -22,10 +23,11 @@ const persistedWallet = persistReducer(config, walletReducer);
 export default configureStore({
   reducer: {
     wallet: persistedWallet,
-    unwrap:unwrapReducer,
+    unwrap: unwrapReducer,
     tokens: tokensReducer,
     transactions: transactionsReducer,
-    dexes: dexReducer
+    dexes: dexReducer,
+    prices: pricesReducer,
   },
-  middleware: [logger]
+  middleware: [ ...getDefaultMiddleware(), logger]
 })

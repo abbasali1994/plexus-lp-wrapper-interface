@@ -41,10 +41,10 @@ const GenerateLPContent = () => {
             <div className="main-wrapper-interface">
                 <div className="input-token-section">
                     <div className="token-label">Input Token Amount</div>
-          <TokenSelector viewType={tokenViewTypes.inputToken}/>
+                    <TokenSelector viewType={tokenViewTypes.inputToken}/>
                 </div>
                 <div className="select-token-pair-section">
-          <TokenSelector viewType={tokenViewTypes.selectLPPair}/>
+                     <TokenSelector viewType={tokenViewTypes.selectLPPair}/>
                 </div>
                 <div className="input-btn">
                     <TransactionButton viewType={tokenViewTypes.inputButton} />

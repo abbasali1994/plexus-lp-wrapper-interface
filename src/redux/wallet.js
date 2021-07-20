@@ -369,10 +369,14 @@ export const walletSlice = createSlice({
     setWalletBalance: (state, {payload}) => {
       const {key, balance} = payload
       state.balances[key].balance = balance;
+    },
+    setWalletUSDValue: (state, {payload}) => {
+      const {key, usdValue } = payload
+      state.balances[key].usdValue = usdValue;
     }
   },
 });
 
-export const { setWalletAddress, setWalletBalance } = walletSlice.actions;
+export const { setWalletAddress, setWalletBalance, setWalletUSDValue } = walletSlice.actions;
 
 export default walletSlice.reducer;

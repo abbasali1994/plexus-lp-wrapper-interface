@@ -10,7 +10,7 @@ import arrowUp from "../../assets/images/arrow-up.svg";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showSearchModal, setTokensValue } from "../../redux/tokens";
+import { showSearchModal, setMax, setNewInputAmount } from "../../redux/tokens";
 
 // utils
 import { constants, tokenViewTypes } from "../../utils";
@@ -171,8 +171,7 @@ const setInputPlaceholder = (inputToken) => {
 };
 
 const InputTokenView = () => {
-  const { inputToken, lpToken1, lpToken2, showMax, inputTokenValue } =
-    useSelector((state) => state.tokens);
+  const { inputToken, lpToken1Value, lpToken2Value, showMax, inputTokenValue } = useSelector((state) => state.tokens);
   const [inputAmount, setInputAmount] = useState(inputTokenValue);
   const inputRef = useRef(null);
   const dispatch = useDispatch();
@@ -197,12 +196,18 @@ const InputTokenView = () => {
   const handleInputBlur = useCallback(
     (value) => {
       if (value.trim().length) {
-        const newInputAmount =
-          value.trim() + " " + inputToken.tokenSymbol.toUpperCase();
+       
+        const newInputAmount = value.trim() + " " + inputToken.tokenSymbol.toUpperCase();
         setInputAmount(newInputAmount);
+
+             // we only do the re-calculation if the lp token values have been set
+        if(lpToken1Value !== '' && lpToken2Value !== '') {
+          dispatch(setNewInputAmount({inputTokenAmount: value}));
+        }
+    
       }
     },
-    [inputToken]
+    [inputToken, lpToken1Value, lpToken2Value, dispatch]
   );
 
   return (
@@ -235,19 +240,7 @@ const InputTokenView = () => {
         {showMax ? (
           inputToken.tokenBal > 0 ? (
             <InputGroup.Append
-              onClick={() => {
-                // for now we'll mock this and redo it later with real values
-                const tokens = {
-                  input:
-                    inputToken.tokenBal +
-                    " " +
-                    inputToken.tokenSymbol.toUpperCase(),
-                  lp1: "103.5678 " + lpToken1.tokenSymbol.toUpperCase(),
-                  lp2: "206.0873 " + lpToken2.tokenSymbol.toUpperCase(),
-                };
-
-                dispatch(setTokensValue(tokens));
-              }}
+              onClick={() => dispatch(setMax())}
             >
               <InputGroup.Text id="max-token">
                 max

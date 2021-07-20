@@ -31,6 +31,7 @@ const SearchTokensModal = ({theme}) => {
       setCursor(cursor + 1);
     } else if (e.key === "Enter" && cursor > -1) {
       dispatch(setSelectedToken(tokensList[cursor]));
+      setSearchToken("");
     }
   }
 
@@ -58,13 +59,13 @@ const SearchTokensModal = ({theme}) => {
     let clickedToken = {};
     Object.assign(clickedToken, token);
     clickedToken.tokenBal = balances[token.tokenSymbol].balance;
-
-    console.log(clickedToken);
+    clickedToken.tokenUSDValue = balances[token.tokenSymbol].usdValue;
 
     // only update if the bal isn't null
     if(clickedToken.tokenBal !== null) {
       clickedToken.tokenBal = parseFloat(balances[token.tokenSymbol].balance.replace(',',''));
       dispatch(setSelectedToken(clickedToken));
+      setSearchToken("");
     }
   
   }

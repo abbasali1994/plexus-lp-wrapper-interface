@@ -2,12 +2,11 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { setWalletAddress, setWalletBalance } from "../redux/wallet";
+import { resetState } from "../redux/tokens";
 import store from "../store";
 import { getAllTokens } from "./token";
 import WrapperUniABI from '../helpers/abis/wrapperUniswap.json';
 import { uniContractAddress } from "../helpers/contracts";
-
-
 
 let web3 = null;
 
@@ -33,6 +32,7 @@ const web3Modal = new Web3Modal({
     const provider = await web3Modal.connect();
     provider.on("accountsChanged", async (accounts) => {
       store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
+      store.dispatch(resetState());
       await fetchWalletTokenBalances();
     });
   }
@@ -54,6 +54,7 @@ export const connectToWallet = async () => {
 export const fetchWalletTokenBalances = async () => {
   //Add web3 logic to sent balnaces in payload (currently just mocks random value)
   if (web3Modal.cachedProvider) {
+
 
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.tokenSymbol;

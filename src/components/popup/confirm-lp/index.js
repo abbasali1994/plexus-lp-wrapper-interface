@@ -103,7 +103,7 @@ export const ConfirmLPContent = () => {
   const {
     inputToken,
     inputTokenValue,
-    inputTokenValueUSD,
+    inputTokenValueUSDFormatted,
     lpToken1,
     lpToken2,
     lpToken1Value,
@@ -116,8 +116,8 @@ export const ConfirmLPContent = () => {
   // the input token prop
   const token = {};
   Object.assign(token, inputToken);
-  token.tokenAmount = inputTokenValue;
-  token.tokenAmountUSD = inputTokenValueUSD;
+  token.tokenAmount = inputTokenValue + " " + token.tokenSymbol.toUpperCase();
+  token.tokenAmountUSD = "~" + inputTokenValueUSDFormatted;
 
   // the input token prop
   const token1 = {};
