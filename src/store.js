@@ -15,6 +15,7 @@ import logger from 'redux-logger';
 const config = {
   key: "wallet",
   storage: localStorage,
+  blacklist: ['balances']
 };
 const persistedWallet = persistReducer(config, walletReducer);
 
