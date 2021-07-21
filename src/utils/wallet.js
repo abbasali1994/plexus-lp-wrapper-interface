@@ -6,9 +6,18 @@ import { resetState } from "../redux/tokens";
 import store from "../store";
 import { getAllTokens } from "./token";
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
-import { uniContractAddress } from "../helpers/contracts";
+import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
+import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
+import { uniContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
+
+// sdks
+import { ChainId, Token, TokenAmount, Pair } from '@uniswap/sdk'
+
+
+
 
 let web3 = null;
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -73,6 +82,7 @@ export const fetchWalletTokenBalances = async () => {
   }
 };
 
+
 const getUserETHBalance = async () => {
   let ethBalance = 0;
 
@@ -117,6 +127,74 @@ const getTokenBalance = async (tokenAddress, tokenSymbol) => {
   
 	return tokenBalance;
 };
+
+export const checkIfUniPairExists = async(token1Address, token2Address) => {
+
+  let uniPairAddress = ZERO_ADDRESS;
+ 
+  if (web3 !== null) {
+
+    try {
+
+      const uniV2FactoryContract = new web3.eth.Contract(
+        UniswapV2FactoryABI,
+        uniV2FactoryContractAddress
+      );
+
+      const pairAddress = await uniV2FactoryContract.methods.getPair(token1Address, token2Address).call();
+      const uniPairExists = pairAddress === ZERO_ADDRESS ? false:true;
+
+      if(uniPairExists) {
+        uniPairAddress = pairAddress;
+      }
+      
+      
+    } catch (error) {
+      console.log(error);
+     
+    }
+
+  }
+  return uniPairAddress;
+}
+
+export const checkIfSushiPairExists = async(token1Address, token2Address) => {
+
+  let sushiPairAddress = ZERO_ADDRESS;
+ 
+  if (web3 !== null) {
+
+    try {
+      const sushiFactoryContract = new web3.eth.Contract(
+        SushiFactoryABI,
+        sushiFactoryContractAddress
+      );
+
+      const pairAddress = await sushiFactoryContract.methods.getPair(token1Address, token2Address).call();
+      const sushiPairExists = pairAddress === ZERO_ADDRESS ? false:true;
+
+      if(sushiPairExists) {
+        sushiPairAddress = pairAddress;
+      }
+      
+    } catch (error) {
+      console.log(error);
+     
+    }
+
+  }
+  return sushiPairAddress;
+}
+
+export const getUNILpTokens = async(lpToken1, lpToken2) => {
+
+  const token1 = new Token(ChainId.MAINNET, '0xc0FFee0000000000000000000000000000000000', 18, 'HOT', 'Caffeine')
+  const token2 = new Token(ChainId.MAINNET, '0xDeCAf00000000000000000000000000000000000', 18, 'NOT', 'Caffeine')
+
+  const pair = new Pair(new TokenAmount(token1, '2000000000000000000'), new TokenAmount(token2, '1000000000000000000'))
+
+}
+
 
 export const wrapTokens = async (dex) => {};
   

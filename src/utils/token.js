@@ -2,7 +2,7 @@ let tokens = [
   {
     tokenName: "ETH",
     tokenDisplayName: "Ethereum",
-    tokenAddress: "0xD76b5c2A23ef78368d8E34288B5b65D616B746aE",
+    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
     tokenSymbol: "eth",
     tokenBal: 0,
   },
