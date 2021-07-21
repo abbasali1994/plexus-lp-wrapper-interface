@@ -1,5 +1,7 @@
 import "./index.scss";
 
+import { useState, useEffect } from "react";
+
 import { Button } from "react-bootstrap";
 
 // redux
@@ -12,6 +14,12 @@ import { tokenViewTypes } from "../../utils";
 import { resetUnwrapState, setUnwrapTokensValue } from "../../redux/unwrap";
 import { navigate } from "hookrouter";
 
+//constants
+import { constants } from "../../utils";
+
+// contract calls
+import { checkIfUniPairExists, checkIfSushiPairExists } from "../../utils/wallet";
+
 // this component is responsible for handling all the blockchain txn's in the app
 const InputButton = () => {
   const {
@@ -22,29 +30,65 @@ const InputButton = () => {
     lpToken1Value,
     lpToken2Value,
   } = useSelector((state) => state.tokens);
-  const allTokensNotSelected =
-    inputToken === null || lpToken1 === null || lpToken2 === null;
-  const allTokenValuesNotSet =
-    inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
+  const { dexes, selectedDex } = useSelector((state) => state.dexes);
+  const dexName = dexes[selectedDex].name;
+  const allTokensNotSelected = inputToken === null || lpToken1 === null || lpToken2 === null;
+  const allTokenValuesNotSet = inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
   const disableBtn = allTokensNotSelected || allTokenValuesNotSet;
-
-  let btnText = disableBtn
+  const btnText = disableBtn
     ? allTokensNotSelected
       ? "Input Amount & Select Tokens"
       : "Input Amount"
     : "Review Transaction";
 
+  const [buttonDisabled, setButtonDisabled] = useState(disableBtn);
+  const [buttonText, setButtonText] = useState(btnText);
+
+  useEffect(() => {
+    setButtonDisabled(disableBtn);
+    setButtonText(btnText);
+  }, [btnText, disableBtn, inputToken, lpToken1, lpToken2, dexName]);
+
+
+
   const dispatch = useDispatch();
 
-  return disableBtn ? (
+
+ 
+  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+  const handleButtonClick = async() => {
+    let pairAddress = ZERO_ADDRESS;
+    if(dexName === constants.dexUni) {
+      pairAddress = await checkIfUniPairExists(lpToken1.tokenAddress, lpToken2.tokenAddress);
+    }
+
+    if(dexName === constants.dexSushi) {
+      pairAddress = await checkIfSushiPairExists(lpToken1.tokenAddress, lpToken2.tokenAddress)
+    }
+
+    console.log(pairAddress);
+    if (pairAddress === ZERO_ADDRESS) {
+      setButtonDisabled(true);
+      setButtonText("Invalid " + dexName + " LP Pair!");
+    } else {
+      setButtonDisabled(false);
+      setButtonText("Review Transaction");
+
+      dispatch(showConfirmModal({ showConfirm: true }));
+    }
+  };
+
+  return buttonDisabled ? (
     <Button
       variant="primary"
       size="lg"
       block
       className="input-amount"
-      disabled={disableBtn}
+      disabled={buttonDisabled}
     >
-      {btnText}
+      {buttonText}
+ 
     </Button>
   ) : (
     <Button
@@ -52,10 +96,11 @@ const InputButton = () => {
       size="lg"
       block
       className="input-amount confirm-lp"
-      disabled={disableBtn}
-      onClick={() => dispatch(showConfirmModal({ showConfirm: true }))}
+      disabled={buttonDisabled}
+      onClick={() => handleButtonClick()}
     >
-      {btnText}
+      {buttonText}
+
     </Button>
   );
 };
