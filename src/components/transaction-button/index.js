@@ -70,7 +70,11 @@ const InputButton = () => {
     console.log(pairAddress);
     if (pairAddress === ZERO_ADDRESS) {
       setButtonDisabled(true);
-      setButtonText("Invalid " + dexName + " LP Pair!");
+      const token1Symbol = lpToken1.tokenSymbol;
+      const token2Symbol = lpToken2.tokenSymbol;
+      const pairSymbol = token1Symbol + "-" + token2Symbol;
+
+      setButtonText(`Invalid ${dexName} (${pairSymbol}) LP Pair!`);
     } else {
       setButtonDisabled(false);
       setButtonText("Review Transaction");
