@@ -171,21 +171,19 @@ const setInputPlaceholder = (inputToken) => {
 };
 
 const InputTokenView = () => {
-  const { inputToken, lpToken1Value, lpToken2Value, showMax, inputTokenValue } = useSelector((state) => state.tokens);
+  const { inputToken, lpToken1Value, lpToken2Value, showMax, inputTokenValue } =
+    useSelector((state) => state.tokens);
   const [inputAmount, setInputAmount] = useState(inputTokenValue);
   const inputRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setInputAmount(inputTokenValue);
-  }, [inputTokenValue]);
-
-  useEffect(() => {
     inputRef.current.focus();
+    if (inputToken) setInputAmount(inputToken.tokenBal);
+    else setInputAmount("");
   }, [inputToken]);
-
   const handleInputChange = (value) => {
-    if (/^(|[1-9]\d*)(\.\d*)?$/.test(value)) {
+    if (/^(|[0-9]\d*)(\.\d*)?$/.test(value)) {
       setInputAmount(value);
     }
   };
@@ -195,16 +193,31 @@ const InputTokenView = () => {
   };
   const handleInputBlur = useCallback(
     (value) => {
-      if (value.trim().length) {
-       
-        const newInputAmount = value.trim() + " " + inputToken.tokenSymbol.toUpperCase();
-        setInputAmount(newInputAmount);
-
-             // we only do the re-calculation if the lp token values have been set
-        if(lpToken1Value !== '' && lpToken2Value !== '') {
-          dispatch(setNewInputAmount({inputTokenAmount: value}));
+      const validateValue = (value) => {
+        const userBalance = inputToken.tokenBal;
+        let validatedValue = value.trim();
+        if (validatedValue.length) {
+          if (validatedValue > userBalance) validatedValue = userBalance;
+          if (validatedValue <= 0) validatedValue = "";
         }
-    
+        return validatedValue;
+      };
+
+      const validValue = validateValue(value.toString());
+
+      if (validValue.toString().length) {
+        const newInputAmount =
+          validValue + " " + inputToken.tokenSymbol.toUpperCase();
+        setInputAmount(newInputAmount);
+        // we only do the re-calculation if the lp token values have been set
+        if (lpToken1Value !== "" && lpToken2Value !== "") {
+          dispatch(setNewInputAmount({ inputTokenAmount: validValue }));
+        }
+      } else {
+        setInputAmount(validValue); // we only do the re-calculation if the lp token values have been set
+        if (lpToken1Value !== "" && lpToken2Value !== "") {
+          dispatch(setNewInputAmount({ inputTokenAmount: 0 }));
+        }
       }
     },
     [inputToken, lpToken1Value, lpToken2Value, dispatch]
@@ -239,9 +252,7 @@ const InputTokenView = () => {
         />
         {showMax ? (
           inputToken.tokenBal > 0 ? (
-            <InputGroup.Append
-              onClick={() => dispatch(setMax())}
-            >
+            <InputGroup.Append onClick={() => dispatch(setMax())}>
               <InputGroup.Text id="max-token">
                 max
                 <img src={arrowUp} alt="up-arrow" width="13" height="13" />

@@ -651,7 +651,7 @@ export const getAllTokens = () => {
   return tokens;
 };
 
-const getPriceId = (token) => {
+export const getPriceId = (token) => {
   const tokenName = token.tokenDisplayName;
   const tokenCoingeckoID = token.tokenCoingeckoID;
   const id = tokenCoingeckoID !== undefined ? tokenCoingeckoID: tokenName.toLowerCase().replace(' ','-').replace(' ','-').replace(' ','-').replace('.','-');

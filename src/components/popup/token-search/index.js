@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hideSearchModal, setSelectedToken } from "../../../redux/tokens";
 import spinner from "../../../assets/gifs/confirmation.gif";
 // get token data
-import { getAllTokens } from "../../../utils/token";
+import { getAllTokens, getPriceId } from "../../../utils/token";
 
 // the tokens
 const tokens = getAllTokens();
@@ -16,6 +16,7 @@ const tokens = getAllTokens();
 const SearchTokensModal = ({theme}) => {
   const { showSearch } = useSelector((state) => state.tokens);
   const { balances } = useSelector((state) => state.wallet);
+  const { pricesUSD } = useSelector((state) => state.prices);
   const dispatch = useDispatch();
   const [searchToken, setSearchToken] = useState("");
   const [cursor, setCursor] = useState(-1);
@@ -30,7 +31,7 @@ const SearchTokensModal = ({theme}) => {
     } else if (e.keyCode === 40 && cursor < tokensList.length - 1) {
       setCursor(cursor + 1);
     } else if (e.key === "Enter" && cursor > -1) {
-      dispatch(setSelectedToken(tokensList[cursor]));
+      handleTokenClick(tokensList[cursor]);
       setSearchToken("");
     }
   }
@@ -59,7 +60,7 @@ const SearchTokensModal = ({theme}) => {
     let clickedToken = {};
     Object.assign(clickedToken, token);
     clickedToken.tokenBal = balances[token.tokenSymbol].balance;
-    clickedToken.tokenUSDValue = balances[token.tokenSymbol].usdValue;
+    clickedToken.tokenUSDValue = pricesUSD[getPriceId(token)].usd;
 
     // only update if the bal isn't null
     if(clickedToken.tokenBal !== null) {

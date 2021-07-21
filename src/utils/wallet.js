@@ -5,7 +5,7 @@ import { setWalletAddress, setWalletBalance } from "../redux/wallet";
 import { resetState } from "../redux/tokens";
 import store from "../store";
 import { getAllTokens } from "./token";
-import WrapperUniABI from '../helpers/abis/wrapperUniswap.json';
+import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import { uniContractAddress } from "../helpers/contracts";
 
 let web3 = null;
@@ -30,102 +30,100 @@ const web3Modal = new Web3Modal({
 (async () => {
   if (web3Modal.cachedProvider) {
     const provider = await web3Modal.connect();
-    provider.on("accountsChanged", async (accounts) => {
-      store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
-      store.dispatch(resetState());
-      await fetchWalletTokenBalances();
-    });
+    web3 = new Web3(provider);
+    const userAddress = (await web3.eth.getAccounts())[0];
+    store.dispatch(setWalletAddress({ walletAddress: userAddress }));
+    store.dispatch(resetState());
+    await fetchWalletTokenBalances();
+    setWalletListener(provider);
   }
 })();
 
 export const connectToWallet = async () => {
   const provider = await web3Modal.connect();
   web3 = new Web3(provider);
-
-
-  provider.on("accountsChanged", async (accounts) => {
-    store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
-    await fetchWalletTokenBalances();
-  });
-
+  setWalletListener(provider);
   return web3;
 };
 
 export const fetchWalletTokenBalances = async () => {
-  //Add web3 logic to sent balnaces in payload (currently just mocks random value)
   if (web3Modal.cachedProvider) {
-
-
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.tokenSymbol;
-      const tokenAddress = token.tokenAddress
+      const tokenAddress = token.tokenAddress;
       let tokenBalance = null;
-      
-      if(web3 !== null) {
-
-        if(tokenSymbol.toLowerCase() !== 'eth') {
+      if (web3 !== null) {
+        if (tokenSymbol.toLowerCase() !== "eth") {
           tokenBalance = await getTokenBalance(tokenAddress, tokenSymbol);
         } else {
           tokenBalance = await getUserETHBalance();
         }
-        if( tokenBalance !== null) {
-          tokenBalance =  tokenBalance > 0 ? tokenBalance.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : tokenBalance.toFixed(2);
+        if (tokenBalance !== null) {
+          tokenBalance =
+            tokenBalance > 0
+              ? tokenBalance.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+              : tokenBalance.toFixed(2);
         }
-
       }
 
-      store.dispatch(setWalletBalance({ key: tokenSymbol, balance: tokenBalance }));
-      
+      store.dispatch(
+        setWalletBalance({ key: tokenSymbol, balance: tokenBalance, address:tokenAddress })
+      );
     });
-
   }
-    
 };
 
-const getUserETHBalance = async() => {
-  
+const getUserETHBalance = async () => {
   let ethBalance = 0;
 
-  try{
+  try {
     const userAddress = (await web3.eth.getAccounts())[0];
-    const tokenBalanceInWei =  await web3.eth.getBalance(userAddress);
+    const tokenBalanceInWei = await web3.eth.getBalance(userAddress);
 
     ethBalance = Number(web3.utils.fromWei(tokenBalanceInWei, "ether"));
-  }
-  catch(error) {
+  } catch (error) {
     console.log(error);
     ethBalance = 0;
   }
 
   return ethBalance;
-}
+};
 
-const getTokenBalance = async(tokenAddress, tokenSymbol) => {
+const getTokenBalance = async (tokenAddress, tokenSymbol) => {
   let tokenBalance = 0;
 
   try {
-
-    const uniContract = new web3.eth.Contract(WrapperUniABI, uniContractAddress);
+    const uniContract = new web3.eth.Contract(
+      WrapperUniABI,
+      uniContractAddress
+    );
     const userAddress = (await web3.eth.getAccounts())[0];
-    const tokenBalanceInWei =  await uniContract.methods.getUserTokenBalance(userAddress, tokenAddress).call();
+    const tokenBalanceInWei = await uniContract.methods
+      .getUserTokenBalance(userAddress, tokenAddress)
+      .call();
 
-    if(tokenSymbol.toLowerCase() === 'usdt' || tokenSymbol.toLowerCase() === 'usdc') {
-      tokenBalance = Number(tokenBalanceInWei / 1000000)
-    } else{
+    if (
+      tokenSymbol.toLowerCase() === "usdt" ||
+      tokenSymbol.toLowerCase() === "usdc"
+    ) {
+      tokenBalance = Number(tokenBalanceInWei / 1000000);
+    } else {
       tokenBalance = Number(web3.utils.fromWei(tokenBalanceInWei));
     }
-  
-  }
-  catch(error){
+  } catch (error) {
     console.log(error);
     tokenBalance = 0;
   }
   
 	return tokenBalance;
-}
+};
 
-
-
-export const wrapTokens = async (dex) => {
+export const wrapTokens = async (dex) => {};
   
-}
+const setWalletListener = (provider) => {
+  provider.on("accountsChanged", async (accounts) => {
+    store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
+    store.dispatch(resetState());
+    await fetchWalletTokenBalances();
+  });
+};
