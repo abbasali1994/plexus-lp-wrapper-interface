@@ -193,6 +193,8 @@ export const getUNILpTokens = async(lpToken1, lpToken2) => {
 
   const pair = new Pair(new TokenAmount(token1, '2000000000000000000'), new TokenAmount(token2, '1000000000000000000'))
 
+  console.log(pair);
+
 }
 
 
