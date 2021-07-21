@@ -16,7 +16,7 @@ import ConfirmLPModal from "./components/popup/confirm-lp";
 import AwaitingTxnModal from "./components/popup/awaiting-txn";
 import HeaderWrapper from "./components/skeleton-wrapper/header";
 import ThemeToggle from "./components/theme-toggle";
-import SkeletonWrapper from './components/skeleton-wrapper';
+import SkeletonWrapper from "./components/skeleton-wrapper";
 // Adds theme based on system settings on first render
 const mq = window.matchMedia("(prefers-color-scheme: dark)");
 if (mq.matches) {
@@ -53,14 +53,15 @@ const App = () => {
       <SearchTokensModal theme={theme} />
       <ConfirmLPModal theme={theme} />
       <AwaitingTxnModal theme={theme} />
-      <div className="theme-toggle">
-        <ThemeToggle handleChange={handleChange} theme={theme} />
-      </div>
+      <ThemeToggle handleChange={handleChange} theme={theme} />
       <div className="app-wrapper">
         <HeaderWrapper checks={["images"]} children={<Header />} />
         <div className="app-views">
           {/*Render all the routes */}
-          <SkeletonWrapper checks={["icons","images","gifs"]} children={routesResult}/>  
+          <SkeletonWrapper
+            checks={["icons", "images", "gifs"]}
+            children={routesResult}
+          />
         </div>
       </div>
     </Container>

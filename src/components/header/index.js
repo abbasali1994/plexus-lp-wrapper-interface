@@ -18,8 +18,8 @@ import { usePath } from "hookrouter";
 
 // token usd prices
 import { getTokenUSDPrices } from '../../redux/prices';
-import { getCoinGeckoTokenIDS,   getCoinGeckoTokenIDAndTokenSymbol } from "../../utils/token";
-import { setWalletUSDValue } from "../../redux/wallet";
+import { getCoinGeckoTokenIDS } from "../../utils/token";
+// import { setWalletUSDValue } from "../../redux/wallet";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -32,17 +32,17 @@ const Header = () => {
 
 
   const { walletAddress } = useSelector((state) => state.wallet);
-  const { status, pricesUSD } = useSelector((state) => state.prices);
+  // const { status, pricesUSD } = useSelector((state) => state.prices);
   const [toggleIcon, setToggleIcon] = useState(false);
 
-  const tokenDetails = getCoinGeckoTokenIDAndTokenSymbol();
+  // const tokenDetails = getCoinGeckoTokenIDAndTokenSymbol();
 
   // we set the USD values for each token we currently support
-  if(status ==="success") {
-    Object.keys(pricesUSD).forEach((key) => {
-      dispatch(setWalletUSDValue({ key: tokenDetails[key], usdValue: pricesUSD[key].usd }))
-    });
-  }
+  // if(status ==="success") {
+  //   Object.keys(pricesUSD).forEach((key) => {
+  //     dispatch(setWalletUSDValue({ key: tokenDetails[key], usdValue: pricesUSD[key].usd }))
+  //   });
+  // }
 
   return (
     <Row className="header">

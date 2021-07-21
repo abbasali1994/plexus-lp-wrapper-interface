@@ -24,10 +24,9 @@ const ThemeToggle = ({ theme, handleChange }) => {
             hover: "rgb(95,96,98)",
           },
         }}
-        style={{ position: "fixed" }}
         thumbAnimateRange={[-10, 36]}
         thumbIcon={theme !== "dark"?<img src={day} width="20" height="20" alt="day"/>:<img src={night} width="20" height="20" alt="night"/>}
-        thumbStyle={{width:"30px",height:"30px",alignItems:"inherit",justifyContent:"center"}}
+        thumbStyle={{width:30,height:30,alignItems:"inherit",justifyContent:"center"}}
         value={theme !== "dark"}
         onToggle={(value) => handleChange(value)}
       />

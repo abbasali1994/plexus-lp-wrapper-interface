@@ -30,5 +30,7 @@ export default configureStore({
     dexes: dexReducer,
     prices: pricesReducer,
   },
-  middleware: [ ...getDefaultMiddleware(), logger]
+  middleware: [ ...getDefaultMiddleware({
+    serializableCheck: false,
+  }), logger]
 })
