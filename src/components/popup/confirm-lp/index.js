@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   showConfirmModal,
   showAwaitingTxnModal,
+  setTxnStatus,
 } from "../../../redux/transactions";
 
 // token selector component
@@ -19,6 +20,8 @@ import arrowDown from "../../../assets/images/arrow-down.svg";
 
 // Utils
 import { constants, tokenViewTypes } from "../../../utils";
+import { wrapTokens } from "../../../utils/wallet";
+import { navigate } from "hookrouter";
 
 const ConfirmLPModal = ({ theme }) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -37,9 +40,39 @@ const ConfirmLPModal = ({ theme }) => {
 };
 
 const DesktopWrapper = ({ theme }) => {
-  const { activeAction } = useSelector((state) => state.dexes);
+
   const { showConfirm } = useSelector((state) => state.transactions);
+  const { activeAction } = useSelector((state) => state.dexes);
+  const { inputToken, inputTokenValue, lpToken1, lpToken2,  } = useSelector((state) => state.tokens);
+  const { gasPrices } = useSelector((state) => state.prices);
+  const { dexes, selectedDex } = useSelector((state) => state.dexes);
+  const dexName = dexes[selectedDex].name;
+
   const dispatch = useDispatch();
+
+  const handleButtonClick = async() => {
+    
+
+    if (lpToken1 !== null && lpToken2 !== null && inputToken !== null && inputTokenValue !== '') {
+      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.standard);
+      console.log(res);
+
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      //  success or failure 
+      if(res){
+        dispatch(setTxnStatus({ txnStatus: "success" }));
+        navigate("/success")
+      } else{
+        dispatch(setTxnStatus({ txnStatus: "failure" })); 
+        navigate("/failure");
+      } 
+  
+    }
+
+    dispatch(showConfirmModal({ showConfirm: false }));
+    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
+  }
+
   let content = "";
   switch (activeAction) {
     case "Unwrap":
@@ -69,10 +102,7 @@ const DesktopWrapper = ({ theme }) => {
           size="lg"
           block
           className="confirm-tx"
-          onClick={() => {
-            dispatch(showConfirmModal({ showConfirm: false }));
-            dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
-          }}
+          onClick={() => handleButtonClick()}
         >
           Confirm
         </Button>
@@ -109,8 +139,7 @@ export const ConfirmLPContent = () => {
     lpToken1Value,
     lpToken2Value,
     lpToken1ValueUSD,
-    lpToken2ValueUSD,
-    totalLPTokens,
+    lpToken2ValueUSD
   } = useSelector((state) => state.tokens);
 
   // the input token prop
@@ -164,9 +193,6 @@ export const ConfirmLPContent = () => {
             />
           </div>
           <div className="lp-token-stats">
-            <div className="lp-token-amount">
-              {totalLPTokens} &nbsp; LP Tokens
-            </div>
             <div className="lp-token-value">{lpToken1Value}</div>
             <div className="lp-token-value">{lpToken2Value}</div>
           </div>
@@ -382,8 +408,17 @@ export const RemixLPContent = () => {
 
 export const MobileLPWrapper = () => {
   const { activeAction } = useSelector((state) => state.dexes);
+  const { inputToken, inputTokenValue, lpToken1, lpToken2,  } = useSelector((state) => state.tokens);
+  const { gasPrices } = useSelector((state) => state.prices);
+  const { dexes, selectedDex } = useSelector((state) => state.dexes);
+  const dexName = dexes[selectedDex].name;
+
+
   const dispatch = useDispatch();
+
   let content = "";
+
+
   switch (activeAction) {
     case "Unwrap":
       content = <UnwrapLPContent />;
@@ -395,6 +430,36 @@ export const MobileLPWrapper = () => {
     default:
       content = <ConfirmLPContent />;
   }
+
+
+  const handleButtonClick = async() => {
+    
+    console.log(lpToken1);
+    console.log(lpToken2);
+    console.log(inputToken);
+    console.log(inputTokenValue);
+    console.log(gasPrices.standard);
+
+    if (lpToken1 !== null && lpToken2 !== null && inputToken !== null && inputTokenValue !== '') {
+      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.standard);
+      console.log(res);
+
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      //  success or failure 
+      if(res){
+        dispatch(setTxnStatus({ txnStatus: "success" }));
+        navigate("/success")
+      } else{
+        dispatch(setTxnStatus({ txnStatus: "failure" })); 
+        navigate("/failure");
+      } 
+  
+    }
+
+    dispatch(showConfirmModal({ showConfirm: false }));
+    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
+  }
+
   return (
     <div className="confirm-lp-mobile-wrapper">
       {content}
@@ -403,10 +468,7 @@ export const MobileLPWrapper = () => {
           variant="primary"
           size="lg"
           className="confirm-tx"
-          onClick={() => {
-            dispatch(showConfirmModal({ showConfirm: false }));
-            dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
-          }}
+          onClick={() => handleButtonClick()}
         >
           Confirm
         </Button>

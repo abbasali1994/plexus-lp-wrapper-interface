@@ -15,31 +15,32 @@ export const getGasPrices = createAsyncThunk('prices/getGasPrices', async() => {
 const pricesSlice = createSlice({
   name: "prices",
   initialState: {
-    status: null,
+    coinGeckoApiStatus: null,
+    gasNowStatus: null,
     pricesUSD: {},
     gasPrices: {}
   },
   extraReducers: {
     [getTokenUSDPrices.pending]: (state, _action) => {
-        state.status = 'loading';
+        state.coinGeckoApiStatus = 'loading';
     },
     [getTokenUSDPrices.fulfilled]: (state, { payload }) => {
         state.pricesUSD = payload;
-        state.status = 'success';
+        state.coinGeckoApiStatus = 'success';
     },
     [getTokenUSDPrices.rejected]: (state, _action) => {
-        state.status = 'failed';
+        state.coinGeckoApiStatus = 'failed';
     },
 
     [getGasPrices.pending]: (state, _action) => {
-        state.status = 'loading';
+        state.gasNowStatus = 'loading';
     },
     [getGasPrices.fulfilled]: (state, { payload }) => {
         state.gasPrices = payload.data;
-        state.status = 'success';
+        state.gasNowStatus = 'success';
     },
     [getGasPrices.rejected]: (state, _action) => {
-        state.status = 'failed';
+        state.gasNowStatus = 'failed';
     },
   },
 });

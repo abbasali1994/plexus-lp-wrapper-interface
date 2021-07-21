@@ -5,13 +5,14 @@ import { Modal } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { setTxnStatus, showAwaitingTxnModal } from "../../../redux/transactions";
+import { showAwaitingTxnModal } from "../../../redux/transactions";
 
 // images
 import spinner from "../../../assets/gifs/confirmation.gif";
 
 // navigate
 import { navigate } from "hookrouter";
+
 
 const AwaitingTxnsModal = ({ theme }) => {
   const { activeAction } = useSelector((state) => state.dexes);
@@ -66,7 +67,7 @@ const AwaitingTxnsModal = ({ theme }) => {
 
 const GenerateAwaitingTxnsWrapper = () => {
   const { showAwaitingTxn } = useSelector((state) => state.transactions);
-  const { lpToken1, lpToken2, totalLPTokens } = useSelector(
+  const { lpToken1, lpToken2,  } = useSelector(
     (state) => state.tokens
   );
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
@@ -76,24 +77,10 @@ const GenerateAwaitingTxnsWrapper = () => {
 
   // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
   if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn) {
-    txnDescLine1 = `Generating ${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
-    txnDescLine2 = ` ${dexName} LP Tokens `;
-    // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
-    const timeoutId = setTimeout(() => {
-      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
-      // Mock success or failure randomly
-      if(Math.random() > 0.5){
-        dispatch(setTxnStatus({ txnStatus: "success" }));
-        navigate("/success")
-      } else{
-        dispatch(setTxnStatus({ txnStatus: "failure" })); 
-        navigate("/failure");
-      } 
-      clearTimeout(timeoutId);
-    }, 6000);
+    txnDescLine1 = `Generating ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+    txnDescLine2 = `${dexName} LP Tokens `;
   }
 
-  const dispatch = useDispatch();
 
   return (
     <div className="awaiting-txn-desc">

@@ -49,12 +49,7 @@ const InputButton = () => {
     setButtonText(btnText);
   }, [btnText, disableBtn, inputToken, lpToken1, lpToken2, dexName]);
 
-
-
   const dispatch = useDispatch();
-
-
- 
   const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
   const handleButtonClick = async() => {
@@ -67,7 +62,6 @@ const InputButton = () => {
       pairAddress = await checkIfSushiPairExists(lpToken1.tokenAddress, lpToken2.tokenAddress)
     }
 
-    console.log(pairAddress);
     if (pairAddress === ZERO_ADDRESS) {
       setButtonDisabled(true);
       const token1Symbol = lpToken1.tokenSymbol;
@@ -78,6 +72,7 @@ const InputButton = () => {
     } else {
       setButtonDisabled(false);
       setButtonText("Review Transaction");
+      
 
       dispatch(showConfirmModal({ showConfirm: true }));
     }

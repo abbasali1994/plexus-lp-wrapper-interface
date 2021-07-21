@@ -20,10 +20,36 @@ const SearchTokensModal = ({theme}) => {
   const dispatch = useDispatch();
   const [searchToken, setSearchToken] = useState("");
   const [cursor, setCursor] = useState(-1);
+  
   const [tokensList, setTokensList] = useState(tokens);
   const modalRef = useRef(null);
 
+  let sortedTokenList = [];
 
+  if(Object.keys(balances).length === tokens.length){
+
+    let nonZeroBals = [];
+    let zeroBals = [];
+
+    tokens.forEach((token)=>{
+    
+      const tokenSymbol = token.tokenSymbol;
+      
+      if(Number(balances[tokenSymbol].balance) > 0 
+      || parseInt(balances[tokenSymbol].balance) > 0 ){
+        nonZeroBals.push(token);
+      } else{
+        zeroBals.push(token);
+      }
+  
+    });
+
+    // update the new token list
+    sortedTokenList = nonZeroBals.concat(zeroBals);
+  }
+  
+ 
+  
   function handleKeyDown(e) {
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
@@ -99,7 +125,7 @@ const SearchTokensModal = ({theme}) => {
               />
             </InputGroup>
             <div className="token-list">
-              {tokensList.map((token, i) => {
+              {sortedTokenList.map((token, i) => {
                 if(!balances[token.tokenSymbol]) return "";
                 return (
                   <div
@@ -128,7 +154,7 @@ const SearchTokensModal = ({theme}) => {
                       height="36"
                     />
                     :
-                    ( Number(balances[token.tokenSymbol].balance) || parseInt(balances[token.tokenSymbol].balance) > 0 ? <span className="token-bal-bold">{balances[token.tokenSymbol].balance}</span> :  balances[token.tokenSymbol].balance)
+                    ( Number(balances[token.tokenSymbol].balance) > 0 || parseInt(balances[token.tokenSymbol].balance) > 0 ? <span className="token-bal-bold">{balances[token.tokenSymbol].balance}</span> :  balances[token.tokenSymbol].balance)
                     }
                     </span>
                   </div>

@@ -6,15 +6,11 @@ import { resetState } from "../redux/tokens";
 import store from "../store";
 import { getAllTokens } from "./token";
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
+import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
 import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
 import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
-import { uniContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
-
-// sdks
-import { ChainId, Token, TokenAmount, Pair } from '@uniswap/sdk'
-
-
-
+import { uniContractAddress,sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
+import { constants } from "./";
 
 let web3 = null;
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -186,19 +182,68 @@ export const checkIfSushiPairExists = async(token1Address, token2Address) => {
   return sushiPairAddress;
 }
 
-export const getUNILpTokens = async(lpToken1, lpToken2) => {
 
-  const token1 = new Token(ChainId.MAINNET, '0xc0FFee0000000000000000000000000000000000', 18, 'HOT', 'Caffeine')
-  const token2 = new Token(ChainId.MAINNET, '0xDeCAf00000000000000000000000000000000000', 18, 'NOT', 'Caffeine')
+export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lpToken2, gasPrice) => {
 
-  const pair = new Pair(new TokenAmount(token1, '2000000000000000000'), new TokenAmount(token2, '1000000000000000000'))
+  let res = null;
 
-  console.log(pair);
+  if(web3 !== null){
+    
+    let wrapperContract = null;
 
-}
+    try {
+     
+      if(dex === constants.dexUni) {
+        wrapperContract = new web3.eth.Contract(WrapperUniABI, uniContractAddress);
+      }
+      if(dex === constants.dexSushi) {
+        wrapperContract = new web3.eth.Contract(WrapperSushiABI, sushiContractAddress);
+      }
 
+      let sourceTokenAddress = ZERO_ADDRESS;
+      let destAddress1 = ZERO_ADDRESS;
+      let destAddress2 = ZERO_ADDRESS;
 
-export const wrapTokens = async (dex) => {};
+      if (inputToken.tokenSymbol.toLowerCase() !== "eth") {
+        sourceTokenAddress = inputToken.tokenAddress;
+      }
+
+      if (lpToken1.tokenSymbol.toLowerCase() !== "eth") {
+        destAddress1 = lpToken1.tokenAddress;
+      }
+
+      if (lpToken2.tokenSymbol.toLowerCase() !== "eth") {
+        destAddress2 = lpToken2.tokenAddress;
+      }
+
+      const destTokenAddresses = [Web3.utils.toChecksumAddress(destAddress1), Web3.utils.toChecksumAddress(destAddress2)];
+      const amountToWrap = web3.utils.toWei(inputTokenAmount);
+
+      const userAddress = (await web3.eth.getAccounts())[0];
+
+      console.log(sourceTokenAddress);
+      console.log(destTokenAddresses);
+      console.log(amountToWrap);
+      console.log(userAddress);
+
+      if(sourceTokenAddress === ZERO_ADDRESS){
+        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, value: amountToWrap});
+      } else {
+        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress});
+      }
+      
+
+      console.log(res);
+  
+    } catch (error) {
+      console.log(error);
+      res = null;
+    }
+
+  }
+
+  return res;
+};
   
 const setWalletListener = (provider) => {
   provider.on("accountsChanged", async (accounts) => {

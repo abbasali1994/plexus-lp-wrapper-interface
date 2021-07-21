@@ -14,6 +14,8 @@ export const tokensSlice = createSlice({
     inputTokenValue: '',
     lpToken1Value: '',
     lpToken2Value: '',
+    lpToken1Amount: '',
+    lpToken2Amount: '',
     inputTokenValueUSD: '',
     inputTokenValueUSDFormatted: '',
     totalLPTokens: '',
@@ -50,15 +52,15 @@ export const tokensSlice = createSlice({
         
         const tokenUSDValue = token.tokenUSDValue;
         const inputHalfUSDValue  = state.inputTokenValueUSD / 2;
-        const lpToken1Amount = inputHalfUSDValue / tokenUSDValue;
-        state.lpToken1Value = lpToken1Amount.toFixed(5) + " " +token.tokenSymbol.toUpperCase();
+        state.lpToken1Amount = inputHalfUSDValue / tokenUSDValue;
+        state.lpToken1Value = state.lpToken1Amount.toFixed(5) + " " +token.tokenSymbol.toUpperCase();
         state.lpToken1 = token;
       }
       if (state.searchCaller === constants.lpToken2) {
         const tokenUSDValue = token.tokenUSDValue;
         const inputHalfUSDValue  = state.inputTokenValueUSD / 2;
-        const lpToken2Amount = inputHalfUSDValue / tokenUSDValue;
-        state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +token.tokenSymbol.toUpperCase();
+        state.lpToken2Amount = inputHalfUSDValue / tokenUSDValue;
+        state.lpToken2Value = state.lpToken2Amount.toFixed(5) + " " +token.tokenSymbol.toUpperCase();
         state.lpToken2 = token;
       }
 
