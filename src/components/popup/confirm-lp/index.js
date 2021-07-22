@@ -25,7 +25,7 @@ import { navigate } from "hookrouter";
 
 const ConfirmLPModal = ({ theme }) => {
   const [width, setWidth] = useState(window.innerWidth);
-
+  const { showConfirm } = useSelector((state) => state.transactions);
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -34,14 +34,12 @@ const ConfirmLPModal = ({ theme }) => {
   });
 
   let element =
-    width > constants.width.mobile ? <DesktopWrapper theme={theme} /> : "";
+    width > constants.width.mobile && showConfirm ? <DesktopWrapper theme={theme} /> : "";
 
   return element;
 };
 
 const DesktopWrapper = ({ theme }) => {
-
-  const { showConfirm } = useSelector((state) => state.transactions);
   const { activeAction } = useSelector((state) => state.dexes);
   const { inputToken, inputTokenValue, lpToken1, lpToken2,  } = useSelector((state) => state.tokens);
   const { gasPrices } = useSelector((state) => state.prices);
@@ -89,7 +87,7 @@ const DesktopWrapper = ({ theme }) => {
   return (
     <Modal
       className={theme}
-      show={showConfirm}
+      show={true}
       onHide={() => dispatch(showConfirmModal({ showConfirm: false }))}
       backdrop="static"
       keyboard={false}
