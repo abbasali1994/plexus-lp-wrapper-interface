@@ -112,7 +112,10 @@ export const tokensSlice = createSlice({
        const lpToken2Amount = inputHalfUSDValue / token2USDValue;
        state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.tokenSymbol.toUpperCase();
  
-
+        //for max button
+        if(!state.showMax && state.inputToken !== null && state.lpToken1 !== null && state.lpToken2 !== null && state.inputToken.tokenBal > inputTokenAmount) {
+          state.showMax = true;
+        }
     },
     // set max values
     setMax(state) {
