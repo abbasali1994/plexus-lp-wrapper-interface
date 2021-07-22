@@ -13,7 +13,14 @@ import { getAllTokens, getPriceId } from "../../../utils/token";
 // the tokens
 const tokens = getAllTokens();
 
+const SearchTokenWrapper = (props) => {
+  const { showSearch } = useSelector((state) => state.tokens);
+  if (showSearch) return <SearchTokensModal {...props}/>;
+    else return "";
+}
+
 const SearchTokensModal = ({theme}) => {
+
   const { showSearch } = useSelector((state) => state.tokens);
   const { balances } = useSelector((state) => state.wallet);
   const { pricesUSD } = useSelector((state) => state.prices);
@@ -24,31 +31,11 @@ const SearchTokensModal = ({theme}) => {
   const [tokensList, setTokensList] = useState(tokens);
   const modalRef = useRef(null);
 
-  let sortedTokenList = [];
-
-  if(Object.keys(balances).length === tokens.length){
-
-    let nonZeroBals = [];
-    let zeroBals = [];
-
-    tokens.forEach((token)=>{
-    
-      const tokenSymbol = token.tokenSymbol;
-      
-      if(Number(balances[tokenSymbol].balance) > 0 
-      || parseInt(balances[tokenSymbol].balance) > 0 ){
-        nonZeroBals.push(token);
-      } else{
-        zeroBals.push(token);
-      }
-  
-    });
-
-    // update the new token list
-    sortedTokenList = nonZeroBals.concat(zeroBals);
-  }
-  
- 
+ function sortByBalance(a,b) {
+   if(balances[b.tokenSymbol] && balances[a.tokenSymbol])
+  return Number(balances[b.tokenSymbol].balance) - Number(balances[a.tokenSymbol].balance);
+  return false;
+ }
   
   function handleKeyDown(e) {
     // arrow up/down button should select next/previous list element
@@ -63,8 +50,8 @@ const SearchTokensModal = ({theme}) => {
   }
 
   useEffect(() => {
-    if (showSearch) modalRef.current.focus();
-  }, [showSearch]);
+    modalRef.current.focus();
+  },[showSearch]);
 
   useEffect(() => {
     const searchCriteria = (token) => {
@@ -94,14 +81,13 @@ const SearchTokensModal = ({theme}) => {
       dispatch(setSelectedToken(clickedToken));
       setSearchToken("");
     }
-  
   }
 
   return (
     <>
       <Modal
         className={theme}
-        show={showSearch}
+        show={true}
         onHide={() => dispatch(hideSearchModal(false))}
         backdrop="static"
         keyboard={true}
@@ -125,7 +111,7 @@ const SearchTokensModal = ({theme}) => {
               />
             </InputGroup>
             <div className="token-list">
-              {sortedTokenList.map((token, i) => {
+              {tokensList.sort((a, b) => sortByBalance(a, b)).map((token, i) => {
                 if(!balances[token.tokenSymbol]) return "";
                 return (
                   <div
@@ -168,4 +154,4 @@ const SearchTokensModal = ({theme}) => {
   );
 };
 
-export default SearchTokensModal;
+export default SearchTokenWrapper;
