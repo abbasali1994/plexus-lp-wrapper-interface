@@ -191,24 +191,30 @@ const InputTokenView = () => {
     const newInputAmount = value.split(" ")[0];
     if (newInputAmount) setInputAmount(newInputAmount.trim());
   };
+  const appendTokenName = useCallback(
+    (value) => {
+      return value + " " + inputToken.tokenSymbol.toUpperCase();
+    },
+    [inputToken]
+  );
+  const validateValue = useCallback(
+    (value) => {
+      const userBalance = inputToken.tokenBal;
+      let validatedValue = value.trim();
+      if (validatedValue.length) {
+        if (validatedValue > userBalance) validatedValue = userBalance;
+        if (validatedValue <= 0) validatedValue = "";
+      }
+      return validatedValue;
+    },
+    [inputToken]
+  );
   const handleInputBlur = useCallback(
     (value) => {
-      const validateValue = (value) => {
-        const userBalance = inputToken.tokenBal;
-        let validatedValue = value.trim();
-        if (validatedValue.length) {
-          if (validatedValue > userBalance) validatedValue = userBalance;
-          if (validatedValue <= 0) validatedValue = "";
-        }
-        return validatedValue;
-      };
-
       const validValue = validateValue(value.toString());
 
       if (validValue.toString().length) {
-        const newInputAmount =
-          validValue + " " + inputToken.tokenSymbol.toUpperCase();
-        setInputAmount(newInputAmount);
+        setInputAmount(appendTokenName(validValue));
         // we only do the re-calculation if the lp token values have been set
         if (lpToken1Value !== "" && lpToken2Value !== "") {
           dispatch(setNewInputAmount({ inputTokenAmount: validValue }));
@@ -220,7 +226,7 @@ const InputTokenView = () => {
         }
       }
     },
-    [inputToken, lpToken1Value, lpToken2Value, dispatch]
+    [lpToken1Value, lpToken2Value, validateValue, appendTokenName, dispatch]
   );
 
   return (
@@ -252,7 +258,12 @@ const InputTokenView = () => {
         />
         {showMax ? (
           inputToken.tokenBal > 0 ? (
-            <InputGroup.Append onClick={() => dispatch(setMax())}>
+            <InputGroup.Append
+              onClick={() => {
+                setInputAmount(appendTokenName(inputToken.tokenBal));
+                dispatch(setMax());
+              }}
+            >
               <InputGroup.Text id="max-token">
                 max
                 <img src={arrowUp} alt="up-arrow" width="13" height="13" />
