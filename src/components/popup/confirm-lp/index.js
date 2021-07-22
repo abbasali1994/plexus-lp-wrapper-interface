@@ -455,7 +455,7 @@ export const MobileLPWrapper = () => {
     }
 
     dispatch(showConfirmModal({ showConfirm: false }));
-    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
+    // dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
   }
 
   return (
