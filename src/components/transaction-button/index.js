@@ -8,6 +8,7 @@ import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setTxnStatus, showConfirmModal } from "../../redux/transactions";
 import { resetState, setMax } from "../../redux/tokens";
+import { getGasPrices } from "../../redux/prices";
 
 // button view types
 import { tokenViewTypes } from "../../utils";
@@ -72,8 +73,11 @@ const InputButton = () => {
     } else {
       setButtonDisabled(false);
       setButtonText("Review Transaction");
-      
 
+      // dispatch a gas request again so that we have the latest values
+      dispatch(getGasPrices());
+      
+      // then show the confirm modal
       dispatch(showConfirmModal({ showConfirm: true }));
     }
   };

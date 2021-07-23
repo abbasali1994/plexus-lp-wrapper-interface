@@ -12,6 +12,7 @@ import {
   setTxnStatus,
 } from "../../../redux/transactions";
 
+
 // token selector component
 import TokenSelector from "../../token-selector";
 
@@ -50,25 +51,34 @@ const DesktopWrapper = ({ theme }) => {
 
   const handleButtonClick = async() => {
 
-    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
+    dispatch(showConfirmModal({ showConfirm: false }));
+    
     if (lpToken1 !== null && lpToken2 !== null && inputToken !== null && inputTokenValue !== '') {
-      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.standard);
+    
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
+
+      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.fast);
       console.log(res);
 
-      // show txn processing icon atleast for a sec
-      setTimeout(()=>dispatch(showAwaitingTxnModal({ showAwaitingTxn: false })),1000);
-      //  success or failure 
-      if(res){
-        dispatch(setTxnStatus({ txnStatus: "success" }));
-        navigate("/success")
-      } else{
-        dispatch(setTxnStatus({ txnStatus: "failure" })); 
-        navigate("/failure");
-      } 
-  
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+
+      // user rejected txn
+      if(res.code === 4001){
+
+      } else {
+         console.log(res);
+          //  success or failure 
+          if(res.code === 200){
+          //  dispatch(setTxnStatus({ txnStatus: "success" }));
+            //navigate("/success")
+          } else{
+            //dispatch(setTxnStatus({ txnStatus: "failure" })); 
+            //navigate("/failure");
+          } 
+      }
+
     }
 
-    dispatch(showConfirmModal({ showConfirm: false }));
   }
 
   let content = "";
@@ -431,30 +441,34 @@ export const MobileLPWrapper = () => {
 
 
   const handleButtonClick = async() => {
-    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
-    console.log(lpToken1);
-    console.log(lpToken2);
-    console.log(inputToken);
-    console.log(inputTokenValue);
-    console.log(gasPrices.standard);
-
+    
+    dispatch(showConfirmModal({ showConfirm: false }));
+    
     if (lpToken1 !== null && lpToken2 !== null && inputToken !== null && inputTokenValue !== '') {
-      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.standard);
+    
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
+
+      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.fast);
       console.log(res);
 
-      setTimeout(()=>dispatch(showAwaitingTxnModal({ showAwaitingTxn: false })),1000);
-      //  success or failure 
-      if(res){
-        dispatch(setTxnStatus({ txnStatus: "success" }));
-        navigate("/success")
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+
+      // user rejected txn
+      if(res.code === 4001){
+
       } else{
-        dispatch(setTxnStatus({ txnStatus: "failure" })); 
-        navigate("/failure");
-      } 
-  
+          //  success or failure 
+          if(res.code === 200){
+            dispatch(setTxnStatus({ txnStatus: "success" }));
+            navigate("/success")
+          } else{
+            dispatch(setTxnStatus({ txnStatus: "failure" })); 
+            navigate("/failure");
+          } 
+      }
+
     }
 
-    dispatch(showConfirmModal({ showConfirm: false }));
   }
 
   return (
