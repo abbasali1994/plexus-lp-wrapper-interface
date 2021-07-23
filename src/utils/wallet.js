@@ -1,5 +1,6 @@
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+import BigNumber from "big-number";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { setWalletAddress, setWalletBalance } from "../redux/wallet";
 import { resetState } from "../redux/tokens";
@@ -8,9 +9,19 @@ import { getAllTokens } from "./token";
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
 import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
+import UniswapV2Router02ABI from "../helpers/abis/uniswapV2Router02.json";
 import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
-import { uniContractAddress, sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
+
+import { sushiRouterContractAddress, uniContractAddress,sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress, uniV2Router02ContractAddress } from "../helpers/contracts";
 import { constants } from "./";
+import {
+  ChainId,
+  Token,
+  Trade,
+  TokenAmount,
+  Pair,
+  WETH,
+} from "@uniswap/sdk";
 
 
 const  abi = require('human-standard-token-abi');
@@ -302,3 +313,96 @@ const setWalletListener = (provider) => {
     store.dispatch(resetState());
   }
 })();
+
+export const fetchBestTrades = async (dex,amount,lptoken1,lptoken2) => {
+  const token1 = new Token(ChainId.MAINNET, lptoken1.address, lptoken1.decimals, lptoken1.symbol, lptoken1.name)
+  const token2 = new Token(ChainId.MAINNET, lptoken2.address, lptoken2.decimals, lptoken2.symbol, lptoken2.name)
+  const inputTokenAmount = new TokenAmount(token2, (amount * (10**token1.decimals).toString()))
+  await checkBestPriceTrades(dex,token1,inputTokenAmount,token2)
+}
+
+// Generates Trade Array with est possible Trade using SDK
+export const checkBestPriceTrades = async (dex, outputToken, inputTokenAmount,inputToken ) => {
+  //check if pair exist
+  let isPair = null;
+  let pairs = null;
+  
+  switch(dex) {
+    case constants.dexUni: 
+      isPair =await checkIfUniPairExists(outputToken.address,inputToken.address);
+      break;
+    case constants.dexSushi: isPair = await checkIfSushiPairExists(outputToken.address,inputToken.address); break;
+    default: isPair = null;
+  } 
+  if(isPair) {
+    pairs = [new Pair(new TokenAmount(outputToken, '2000000000000000000'), new TokenAmount(inputToken, '2000000000000000000'))]
+  }
+  else {
+    let pair1 = new Pair(new TokenAmount(outputToken, '2000000000000000000'), new TokenAmount(WETH[ChainId.MAINNET], '2000000000000000000'))
+    let pair2 = new Pair(new TokenAmount(WETH[ChainId.MAINNET], '2000000000000000000'), new TokenAmount(inputToken, '2000000000000000000'))
+    pairs = [pair1,pair2]
+  };
+
+  const bestTrades = await Trade.bestTradeExactIn( 
+    pairs,
+    inputTokenAmount, 
+    outputToken, 
+    { maxNumResults:3, maxHops:3 })
+    console.log(bestTrades)
+}
+
+// Calculates maximum amount of output token possible to recieve on swap using router contract
+export const calcMaxAmountOuts = async (dex, amount,outputToken,inputToken ) => {
+  //check if pair exist
+  let isPair = null;
+  let pairs = null;
+  let router = null;
+  switch(dex) {
+    case constants.dexUni: 
+      isPair =await checkIfUniPairExists(outputToken.address,inputToken.address);
+      router = createContract(UniswapV2Router02ABI,uniV2Router02ContractAddress);
+      break;
+    case constants.dexSushi: 
+    isPair = await checkIfSushiPairExists(outputToken.address,inputToken.address);
+    router = createContract(UniswapV2Router02ABI,sushiRouterContractAddress); 
+    break;
+    default: isPair = null;
+  } 
+  if(!isPair) return;
+  if(isPair === constants.ZERO_ADDRESS) {
+    pairs = [inputToken.address, constants.WETH_ADDRESS, outputToken.address]
+    console.log(pairs)
+  }
+  else {
+        pairs = [inputToken.address,outputToken.address]
+  };
+  
+  let inputamount = convertAmountToString(amount,inputToken.decimals)
+  const amounts = await router.methods.getAmountsOut(inputamount,pairs).call()
+  const outputIndex = amounts.length -1;
+  console.log("Input Amount",parseFloat(amounts[0])/10**inputToken.decimals)
+  console.log("Output Amount",parseFloat(amounts[outputIndex])/10**outputToken.decimals)
+}
+
+// Other Helper Functions
+const createContract = (abi,address) => {
+  return new web3.eth.Contract(abi,address)
+}
+
+function convertAmountToString(amount,decimals) {
+  let amountString = amount.toString()
+  let amountDecimals = 0;
+  if(amountString.split(".")[1])
+    amountDecimals = amountString.split(".")[1].length
+  amount = BigNumber(parseInt(amount*(10**Math.min(amountDecimals,decimals))))
+  amountString = pad(amount,Math.max(0,decimals-amountDecimals))
+  return amountString
+}
+
+function pad(number, length) {
+  var str = '' + number;
+  for (let i=1;i <= length;i++) {
+      str = str+'0';
+  } 
+  return str;
+}
