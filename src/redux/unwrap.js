@@ -4,8 +4,8 @@ import { getAllTokens } from "../utils/token";
 
 // mock data
 const tokens = getAllTokens();
-const token1 = tokens.find((token) => token.tokenSymbol === "eth");
-const token2 = tokens.find((token) => token.tokenSymbol === "usdc");
+const token1 = tokens.find((token) => token.symbol === "eth");
+const token2 = tokens.find((token) => token.symbol === "usdc");
 
 export const unwrapSlice = createSlice({
   name: "unwrap",
@@ -67,12 +67,12 @@ export const unwrapSlice = createSlice({
       const { outputToken } = payload;
       if (outputToken)
         state.outputTokenValue =
-          "0.123645 " + outputToken.tokenSymbol.toUpperCase();
+          "0.123645 " + outputToken.symbol.toUpperCase();
       state.outputTokenValueUSD = "~$4,623.45";
       state.lpToken1Value =
-        "1.72806 " + state.lpToken1.tokenSymbol.toUpperCase();
+        "1.72806 " + state.lpToken1.symbol.toUpperCase();
       state.lpToken2Value =
-        "3,659.99 " + state.lpToken2.tokenSymbol.toUpperCase();
+        "3,659.99 " + state.lpToken2.symbol.toUpperCase();
       state.totalLPTokens = "4.5324";
       state.newTotalLPTokens = "0.04324";
       state.networkFeeETH = "0.008654 ETH";

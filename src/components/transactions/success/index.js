@@ -54,7 +54,7 @@ const GenerateSuccessWrapper = () => {
 
   if (lpToken1 !== null && lpToken2 !== null) {
     dexName = dexes[selectedDex].name;
-    txnDesc1 = `${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+    txnDesc1 = `${totalLPTokens} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDesc2 = `${dexName} LP Tokens`;
   } else {
     navigate("/");
@@ -142,7 +142,7 @@ const UnwrapSuccessWrapper = () => {
     Object.assign(newDexes, dexes);
     dexName = newDexes[selectedDex].name;
 
-    txnDesc1 = `${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+    txnDesc1 = `${totalLPTokens} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDesc2 = `${dexName} LP Tokens`;
   } else {
     navigate("/");
@@ -227,11 +227,11 @@ const RemixSuccessWrapper = () => {
     newDexName = dexes[newDex].name;
     txnDesc1 = `${
       unwrap.totalLPTokens
-    } ${unwrap.lpToken1.tokenSymbol.toUpperCase()}/${unwrap.lpToken2.tokenSymbol.toUpperCase()}`;
+    } ${unwrap.lpToken1.symbol.toUpperCase()}/${unwrap.lpToken2.symbol.toUpperCase()}`;
     txnDesc2 = `${dexName} LP Tokens`;
     txnDesc3 = `${
       unwrap.newTotalLPTokens
-    } ${tokens.lpToken1.tokenSymbol.toUpperCase()}/${tokens.lpToken2.tokenSymbol.toUpperCase()}`;
+    } ${tokens.lpToken1.symbol.toUpperCase()}/${tokens.lpToken2.symbol.toUpperCase()}`;
     txnDesc4 = `${newDexName} LP Tokens`;
   } else {
     navigate("/");

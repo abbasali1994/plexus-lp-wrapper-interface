@@ -30,7 +30,7 @@ const DesktopWrapper = () => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
-  const lpPairName = lpToken1.tokenSymbol + "/" + lpToken2.tokenSymbol;
+  const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
 
   return (
     <>
@@ -85,7 +85,7 @@ const MobileWrapper = () => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
-  const lpPairName = lpToken1.tokenSymbol + "/" + lpToken2.tokenSymbol;
+  const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
 
   return (
     <div className="main-wrapper-interface">

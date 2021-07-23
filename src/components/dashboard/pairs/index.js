@@ -11,8 +11,8 @@ import { constants } from "../../../utils";
 import { MobileDexes } from "../../dex-buttons";
 
 const tokens = getAllTokens();
-const token1 = tokens.find((token) => token.tokenSymbol === "eth");
-const token2 = tokens.find((token) => token.tokenSymbol === "usdc");
+const token1 = tokens.find((token) => token.symbol === "eth");
+const token2 = tokens.find((token) => token.symbol === "usdc");
 
 const DashboardPairsComponent = () => {
   let element = null;
@@ -79,7 +79,7 @@ const DesktopDashboardPairs = () => {
 
 const GeneratingLPTokenMobileView = ({ lpTokens }) => {
   const { token1, token2 } = lpTokens;
-  const lpPair = token1.tokenSymbol + "/" + token2.tokenSymbol;
+  const lpPair = token1.symbol + "/" + token2.symbol;
 
   return (
     <div className="dashboard-lp-view">
@@ -109,7 +109,7 @@ const GeneratingLPTokenMobileView = ({ lpTokens }) => {
 
 const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
   const { token1, token2 } = lpTokens;
-  const lpPair = token1.tokenSymbol + "/" + token2.tokenSymbol;
+  const lpPair = token1.symbol + "/" + token2.symbol;
 
   return (
     <Row className="dashboard-table-row">

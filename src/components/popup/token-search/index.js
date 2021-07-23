@@ -32,8 +32,8 @@ const SearchTokensModal = ({theme}) => {
   const modalRef = useRef(null);
 
  function sortByBalance(a,b) {
-  if(balances[b.tokenSymbol] && balances[a.tokenSymbol])
-  return parseFloat(balances[b.tokenSymbol].balance) - parseFloat(balances[a.tokenSymbol].balance);
+  if(balances[b.symbol] && balances[a.symbol])
+    return parseFloat(balances[b.symbol].balance) - parseFloat(balances[a.symbol].balance);
   return false;
  }
   
@@ -56,10 +56,10 @@ const SearchTokensModal = ({theme}) => {
   useEffect(() => {
     const searchCriteria = (token) => {
       return (
-        token.tokenName.toLowerCase().includes(searchToken.toLowerCase()) ||
-        token.tokenAddress.toLowerCase().includes(searchToken.toLowerCase()) ||
-        token.tokenDisplayName.toLowerCase().includes(searchToken.toLowerCase()) ||
-        token.tokenSymbol.toLowerCase().includes(searchToken.toLowerCase())
+        token.name.toLowerCase().includes(searchToken.toLowerCase()) ||
+        token.address.toLowerCase().includes(searchToken.toLowerCase()) ||
+        token.displayName.toLowerCase().includes(searchToken.toLowerCase()) ||
+        token.symbol.toLowerCase().includes(searchToken.toLowerCase())
       );
     };
     const filteredList = tokens.filter((token) => searchCriteria(token));
@@ -72,12 +72,12 @@ const SearchTokensModal = ({theme}) => {
   const handleTokenClick = (token) => {
     let clickedToken = {};
     Object.assign(clickedToken, token);
-    clickedToken.tokenBal = balances[token.tokenSymbol].balance;
+    clickedToken.balance = balances[token.symbol].balance;
     clickedToken.tokenUSDValue = pricesUSD[getPriceId(token)].usd;
 
     // only update if the bal isn't null
-    if(clickedToken.tokenBal !== null) {
-      clickedToken.tokenBal = parseFloat(balances[token.tokenSymbol].balance.replace(',',''));
+    if(clickedToken.balance !== null) {
+      clickedToken.balance = parseFloat(balances[token.symbol].balance.replace(',',''));
       dispatch(setSelectedToken(clickedToken));
       setSearchToken("");
     }
@@ -112,26 +112,26 @@ const SearchTokensModal = ({theme}) => {
             </InputGroup>
             <div className="token-list">
               {tokensList.sort((a, b) => sortByBalance(a, b)).map((token, i) => {
-                if(!balances[token.tokenSymbol]) return "";
+                if(!balances[token.symbol]) return "";
                 return (
                   <div
-                    key={token.tokenSymbol}
+                    key={token.symbol}
                     className={cursor === i ? "token-selected" : "token"}
                     onClick={() => handleTokenClick(token)}
                   >
                     <img
                       className="token-icon"
                       src={token.tokenIcon}
-                      alt={token.tokenSymbol}
+                      alt={token.symbol}
                       width="36"
                       height="36"
                     />
                     <span className="token-name">
-                      {token.tokenSymbol.toUpperCase()}
+                      {token.symbol.toUpperCase()}
                     </span>
                     <span className="token-bal">
                       {
-                      balances[token.tokenSymbol].balance == null ?
+                      balances[token.symbol].balance == null ?
                       <img
                       className="token-icon"
                       src={spinner}
@@ -140,7 +140,7 @@ const SearchTokensModal = ({theme}) => {
                       height="36"
                     />
                     :
-                    ( Number(balances[token.tokenSymbol].balance) > 0 || parseInt(balances[token.tokenSymbol].balance) > 0 ? <span className="token-bal-bold">{balances[token.tokenSymbol].balance}</span> :  balances[token.tokenSymbol].balance)
+                    ( Number(balances[token.symbol].balance) > 0 || parseInt(balances[token.symbol].balance) > 0 ? <span className="token-bal-bold">{balances[token.symbol].balance}</span> :  balances[token.symbol].balance)
                     }
                     </span>
                   </div>

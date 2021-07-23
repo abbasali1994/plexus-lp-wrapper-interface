@@ -73,7 +73,7 @@ const SupplyingLPTokenView = ({ token }) => {
 // Pair token view shown in the confirm popup
 const GeneratingLPTokenView = ({ lpTokens }) => {
   const { token1, token2, dexName } = lpTokens;
-  const lpPair = token1.tokenSymbol + "/" + token2.tokenSymbol;
+  const lpPair = token1.symbol + "/" + token2.symbol;
 
   return (
     <div className="horizontal-lp-view">
@@ -114,16 +114,16 @@ const SelectTokenView = () => {
 };
 
 const SelectedTokenView = (props) => {
-  const { tokenDisplayName, tokenSymbol, tokenIcon } = props.token;
+  const { displayName, symbol, tokenIcon } = props.token;
 
   return (
     <div className="select-token">
       <TokenIconView tokenIcon={tokenIcon} tokenIconSize={52} />
       <div className="selected-token">
-        <span className="selected-token-name">{tokenDisplayName}</span>
+        <span className="selected-token-name">{displayName}</span>
         <br />
         <span className="selected-token-symbol">
-          {tokenSymbol}
+          {symbol}
           <img src={selectorIcon} alt="select icon" width="15" height="15" />
         </span>
       </div>
@@ -161,9 +161,9 @@ const setInputPlaceholder = (inputToken) => {
   let placeholder = "0.00";
 
   if (inputToken !== null) {
-    if (inputToken.tokenBal > 0) {
+    if (inputToken.balance > 0) {
       placeholder =
-        inputToken.tokenBal + " " + inputToken.tokenSymbol.toUpperCase();
+        inputToken.balance + " " + inputToken.symbol.toUpperCase();
     }
   }
 
@@ -179,7 +179,7 @@ const InputTokenView = () => {
 
   useEffect(() => {
     inputRef.current.focus();
-    if (inputToken) setInputAmount(inputToken.tokenBal);
+    if (inputToken) setInputAmount(inputToken.balance);
     else setInputAmount("");
   }, [inputToken]);
   const handleInputChange = (value) => {
@@ -193,13 +193,13 @@ const InputTokenView = () => {
   };
   const appendTokenName = useCallback(
     (value) => {
-      return value + " " + inputToken.tokenSymbol.toUpperCase();
+      return value + " " + inputToken.symbol.toUpperCase();
     },
     [inputToken]
   );
   const validateValue = useCallback(
     (value) => {
-      const userBalance = inputToken.tokenBal;
+      const userBalance = inputToken.balance;
       let validatedValue = value.trim();
       if (validatedValue.length) {
         if (validatedValue > userBalance) validatedValue = userBalance;
@@ -257,10 +257,10 @@ const InputTokenView = () => {
           onChange={(evt) => handleInputChange(evt.target.value)}
         />
         {showMax ? (
-          inputToken.tokenBal > 0 ? (
+          inputToken.balance > 0 ? (
             <InputGroup.Append
               onClick={() => {
-                setInputAmount(appendTokenName(inputToken.tokenBal));
+                setInputAmount(appendTokenName(inputToken.balance));
                 dispatch(setMax());
               }}
             >
