@@ -9,8 +9,9 @@ import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
 import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
 import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
-import { uniContractAddress,sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
+import { uniContractAddress, sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
 import { constants } from "./";
+
 
 const  abi = require('human-standard-token-abi');
 
@@ -59,6 +60,7 @@ export const fetchWalletTokenBalances = async () => {
       const tokenSymbol = token.symbol;
       const tokenAddress = token.address;
       let tokenBalance = null;
+
       if (web3 !== null) {
         if (tokenSymbol.toLowerCase() !== "eth") {
           tokenBalance = await getTokenBalance(tokenAddress, tokenSymbol);
@@ -71,11 +73,15 @@ export const fetchWalletTokenBalances = async () => {
               ? tokenBalance.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, "$&,")
               : tokenBalance.toFixed(2);
         }
+
       }
-      if(tokenBalance !== "0.00")
-      store.dispatch(
-        setWalletBalance({ key: tokenSymbol, balance: tokenBalance, address:tokenAddress })
-      );
+
+      if(tokenBalance !== "0.00") {
+        store.dispatch(
+          setWalletBalance({ key: tokenSymbol, balance: tokenBalance, address:tokenAddress })
+        );
+      }
+     
     });
   }
 };
@@ -131,7 +137,6 @@ export const checkIfUniPairExists = async(token1Address, token2Address) => {
   let uniPairAddress = constants.ZERO_ADDRESS;
  
   if (web3 !== null) {
-
     try {
 
       const uniV2FactoryContract = new web3.eth.Contract(
@@ -145,7 +150,6 @@ export const checkIfUniPairExists = async(token1Address, token2Address) => {
       if(uniPairExists) {
         uniPairAddress = pairAddress;
       }
-      
       
     } catch (error) {
       console.log(error);
@@ -185,14 +189,13 @@ export const checkIfSushiPairExists = async(token1Address, token2Address) => {
 }
 
 
-export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lpToken2, gasPrice) => {
+export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lpToken2, gasPrice, ethUSDPrice) => {
 
   let res = null;
 
-  if(web3 !== null){
+  if(web3 !== null) {
     
     let wrapperContract = null;
-
     try {
      
       if(dex === constants.dexUni) {
@@ -208,51 +211,83 @@ export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lp
       let destAddress2 = constants.ZERO_ADDRESS;
 
       const userAddress = (await web3.eth.getAccounts())[0];
+      const block = await web3.eth.getBlock("latest");
+      const gasLimit = parseInt(block.gasLimit/block.transactions.length);
+      const gasLimitIncrease = gasLimit * 15;
+
       let amountToWrap = 0;
 
-      if(inputToken.tokenDecimals === 18) {
+      if(inputToken.decimals === 18) {
         amountToWrap = web3.utils.toWei(inputTokenAmount);
       }
-      if(inputToken.tokenDecimals === 6) {
+      if(inputToken.decimals === 6) {
         amountToWrap = String(inputTokenAmount * 1000000);
       }
 
       if (inputToken.symbol.toLowerCase() !== "eth") {
-        sourceTokenAddress = inputToken.tokenAddress;
+        sourceTokenAddress = inputToken.address;
         const wrapperContractAddress = constants.dexUni ? uniContractAddress : sushiContractAddress;
         const tokenContract = new web3.eth.Contract(abi, sourceTokenAddress);
 
         // check allowance for the wrapper contract for this token
         const allowance = await tokenContract.methods.allowance(userAddress, wrapperContractAddress).call();
+  
         if(allowance < amountToWrap) {
-          const approved = await tokenContract.methods.approve(wrapperContractAddress, amountToWrap).send({ from: userAddress });
+          const approved = await tokenContract.methods.approve(wrapperContractAddress, amountToWrap).send({ from: userAddress, gasPrice, gas: gasLimit });
           console.log(approved);
         }
+
+      /*   
+       TODO: revist and see why this is failing
+       
+        if(allowance > 0 && allowance < amountToWrap) {
+          let addedValue = 0;
+
+          if(inputToken.decimals === 18){
+            addedValue = web3.utils.toWei(Number(web3.utils.fromWei(amountToWrap)) - Number(web3.utils.fromWei(allowance)));
+          }
+          if(inputToken.decimals === 6) {
+            addedValue = Number(amountToWrap) - Number(allowance);
+          }
+          
+          console.log(addedValue);
+          const allowanceIncreased = await tokenContract.methods.increaseAllowance(wrapperContractAddress, addedValue).send({ from: userAddress, gasPrice, gas: gasLimit});
+          console.log(allowanceIncreased);
+        } */
       }
 
-      if (lpToken1.tokenSymbol.toLowerCase() !== "eth") {
-        destAddress1 = lpToken1.tokenAddress;
+      if (lpToken1.symbol.toLowerCase() !== "eth") {
+        destAddress1 = lpToken1.address;
       } else {
         destAddress1 = WETH_ADDRESS;
       }
 
-      if (lpToken2.tokenSymbol.toLowerCase() !== "eth") {
-        destAddress2 = lpToken2.tokenAddress;
+      if (lpToken2.symbol.toLowerCase() !== "eth") {
+        destAddress2 = lpToken2.address;
       } else {
         destAddress2 = WETH_ADDRESS;
       }
 
       const destTokenAddresses = [Web3.utils.toChecksumAddress(destAddress1), Web3.utils.toChecksumAddress(destAddress2)];
-      const block = await web3.eth.getBlock("latest");
-      const gasLimit = parseInt(block.gasLimit/block.transactions.length);
-      const gasLimitIncrease = gasLimit * 15;
     
       if(sourceTokenAddress === constants.ZERO_ADDRESS){
         res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, value: amountToWrap, gas: gasLimitIncrease, gasPrice});
       } else {
         res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, gas: gasLimitIncrease, gasPrice});
       }
-      
+
+      const txnHash = res.transactionHash;
+      const txnGasPrice = (await web3.eth.getTransaction(txnHash)).gasPrice;
+      const gasUsed = res.gasUsed;
+      const networkFee = Number(txnGasPrice) * Number(gasUsed);
+      let networkFeeETH = web3.utils.fromWei(String(networkFee)) ;
+      let networkFeeUSD = (Number(ethUSDPrice) * Number(networkFeeETH)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      networkFeeETH = networkFeeETH + " ETH"
+      networkFeeUSD = "~$" + networkFeeUSD;
+
+      // return the txn results
+      res = { networkFeeETH, networkFeeUSD, txnHash };
+
     } catch (error) {
       console.log(error);
       res = error;

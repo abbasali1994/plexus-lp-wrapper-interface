@@ -20,7 +20,8 @@ export const tokensSlice = createSlice({
     inputTokenValueUSDFormatted: '',
     totalLPTokens: '',
     networkFeeETH: '',
-    networkFeeUSD: ''
+    networkFeeUSD: '',
+    txnHash: ''
   },
   reducers: {
     showSearchModal: (state, action) => {
@@ -75,29 +76,42 @@ export const tokensSlice = createSlice({
       state.showSearch = false;
       state.searchCaller = "";
       state.inputToken = null;
+      state.outputToken = null;
       state.lpToken1 = null;
-      state.lpToken2 = null;
+      state.lpToken2 =  null;
       state.showMax = false;
-      state.inputTokenAmount = "";
-      state.lpToken1Value = "";
-      state.lpToken2Value = "";
-      state.inputTokenValueUSD = "";
-      state.inputTokenValueUSDFormatted = 0;
-      state.totalLPTokens = "";
-      state.networkFeeETH = "";
-      state.networkFeeUSD = "";
+      state.inputTokenValue = '';
+      state.lpToken1Value = '';
+      state.lpToken2Value = '';
+      state.lpToken1Amount = '';
+      state.lpToken2Amount = '';
+      state.inputTokenValueUSD = '';
+      state.inputTokenValueUSDFormatted = '';
+      state.totalLPTokens = '';
+      state.networkFeeETH = '';
+      state.networkFeeUSD = '';
+      state.txnHash = '';
+    },
+    updateInputTokenAmount(state, { payload}){
+
+      const { inputTokenAmount } = payload;
+      const inputToken = state.inputToken
+      
+      state.inputTokenValue = inputTokenAmount;
+      state.inputTokenValueUSD = inputToken.tokenUSDValue * inputTokenAmount;
+      state.inputTokenValueUSDFormatted = "~$" + state.inputTokenValueUSD.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
     },
     setNewInputAmount(state, { payload }){
 
       const { inputTokenAmount } = payload;
-
       const inputToken = state.inputToken
       const lpToken1 =  state.lpToken1;
       const lpToken2 =  state.lpToken2;
 
       state.inputTokenValue = inputTokenAmount;
       state.inputTokenValueUSD = inputToken.tokenUSDValue * inputTokenAmount;
-      state.inputTokenValueUSDFormatted = "$" + state.inputTokenValueUSD.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      state.inputTokenValueUSDFormatted = "~$" + state.inputTokenValueUSD.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
       const inputHalfUSDValue  = state.inputTokenValueUSD / 2;
 
@@ -107,15 +121,15 @@ export const tokensSlice = createSlice({
       const lpToken1Amount = inputHalfUSDValue / token1USDValue;
       state.lpToken1Value = lpToken1Amount.toFixed(5) + " " +lpToken1.symbol.toUpperCase();
 
-       // for lp 2
-       const token2USDValue = lpToken2.tokenUSDValue;
-       const lpToken2Amount = inputHalfUSDValue / token2USDValue;
-       state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.symbol.toUpperCase();
- 
-        //for max button
-        if(!state.showMax && state.inputToken !== null && state.lpToken1 !== null && state.lpToken2 !== null && state.inputToken.balance > inputTokenAmount) {
-          state.showMax = true;
-        }
+      // for lp 2
+      const token2USDValue = lpToken2.tokenUSDValue;
+      const lpToken2Amount = inputHalfUSDValue / token2USDValue;
+      state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.symbol.toUpperCase();
+
+      //for max button
+      if(!state.showMax && state.inputToken !== null && state.lpToken1 !== null && state.lpToken2 !== null && state.inputToken.balance > inputTokenAmount) {
+        state.showMax = true;
+      }
     },
     // set max values
     setMax(state) {
@@ -144,20 +158,21 @@ export const tokensSlice = createSlice({
       // hide the max button
       state.showMax = false;
     },
-
     setNetworkValues(state, { payload}) {
-      const { networkFeeETH, networkFeeUSD } = payload;
+      const { networkFeeETH, networkFeeUSD, txnHash } = payload;
     
       state.networkFeeETH = networkFeeETH;
       state.networkFeeUSD = networkFeeUSD;
-
-    },
-    
+      state.txnHash = txnHash;
+    }, 
 
   }
 });
 
 // Action creators are generated for each case reducer function
-export const {  showSearchModal, hideSearchModal, setSelectedToken, clearTokens,  setMax, setNetworkValues, setNewInputAmount, resetState } = tokensSlice.actions;
+export const {  showSearchModal, hideSearchModal, 
+  setSelectedToken, clearTokens,  setMax, 
+  setNetworkValues, setNewInputAmount,  updateInputTokenAmount, resetState,
+ } = tokensSlice.actions;
 
 export default tokensSlice.reducer;

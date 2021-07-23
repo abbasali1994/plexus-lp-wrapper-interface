@@ -41,6 +41,7 @@ const GenerateFailedWrapper = () => {
     totalLPTokens,
     networkFeeETH,
     networkFeeUSD,
+    txnHash
   } = useSelector((state) => state.tokens);
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -71,7 +72,7 @@ const GenerateFailedWrapper = () => {
       <div className="txn-submitted-txt">
         Your transaction has failed
       </div>
-      <div className="txn-submitted-etherscan">View on Etherscan</div>
+      <div className="txn-submitted-etherscan" onClick={() => window.open(`https://etherscan.io/tx/${txnHash}`, "_blank")}>View on Etherscan</div>
       <div className="txn-details">
         <div className="txn-details-line">
           <span className="txn-details-label1">
