@@ -421,7 +421,7 @@ export const RemixLPContent = () => {
 export const MobileLPWrapper = () => {
   const { activeAction } = useSelector((state) => state.dexes);
   const { inputToken, inputTokenValue, lpToken1, lpToken2,  } = useSelector((state) => state.tokens);
-  const { gasPrices } = useSelector((state) => state.prices);
+  const { gasPrices, pricesUSD } = useSelector((state) => state.prices);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
 
@@ -443,36 +443,38 @@ export const MobileLPWrapper = () => {
       content = <ConfirmLPContent />;
   }
 
-
   const handleButtonClick = async() => {
-    
+
     dispatch(showConfirmModal({ showConfirm: false }));
     
     if (lpToken1 !== null && lpToken2 !== null && inputToken !== null && inputTokenValue !== '') {
     
       dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
 
-      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.fast);
-      console.log(res);
-
-      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      const res = await wrapTokens(dexName, inputToken, inputTokenValue, lpToken1, lpToken2, gasPrices.fast, pricesUSD["ethereum"].usd);
 
       // user rejected txn
       if(res.code === 4001){
+          dispatch(setTxnStatus({ txnStatus: "rejected" })); 
+      } else {
+       
+        if(res.txnHash !== undefined && res.txnHash !== null) {
+        
+          dispatch(setTxnStatus({ txnStatus: "success" }));
+          dispatch(setNetworkValues(res));
+          navigate("/success")
 
-      } else{
-          //  success or failure 
-          if(res.code === 200){
-            dispatch(setTxnStatus({ txnStatus: "success" }));
-            navigate("/success")
-          } else{
-            dispatch(setTxnStatus({ txnStatus: "failure" })); 
-            navigate("/failure");
-          } 
+        } else {
+          dispatch(setTxnStatus({ txnStatus: "failure" })); 
+          navigate("/failure");
+        }
       }
+
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+
     }
 
-  };
+  }
 
 
   return (
