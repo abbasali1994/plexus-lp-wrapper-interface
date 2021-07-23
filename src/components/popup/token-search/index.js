@@ -32,8 +32,8 @@ const SearchTokensModal = ({theme}) => {
   const modalRef = useRef(null);
 
  function sortByBalance(a,b) {
-   if(balances[b.tokenSymbol] && balances[a.tokenSymbol])
-  return Number(balances[b.tokenSymbol].balance) - Number(balances[a.tokenSymbol].balance);
+  if(balances[b.tokenSymbol] && balances[a.tokenSymbol])
+  return parseFloat(balances[b.tokenSymbol].balance) - parseFloat(balances[a.tokenSymbol].balance);
   return false;
  }
   
