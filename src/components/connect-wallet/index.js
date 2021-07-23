@@ -2,28 +2,16 @@ import "./index.scss";
 import { Row, Col } from "react-bootstrap";
 
 // redux
-import { useDispatch, useSelector } from "react-redux";
-
-import { setWalletAddress } from "../../redux/wallet";
+import { useSelector } from "react-redux";
 import wallet from "../../assets/images/wallet.svg";
-import { connectToWallet, fetchWalletTokenBalances } from "../../utils/wallet";
+import { connectToWallet } from "../../utils/wallet";
 
 const ConnectWallet = () => {
   const { activeAction, dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
-  const dispatch = useDispatch();
 
   const handleConnectWalletClick = async() => {
-    
-    const web3 = await connectToWallet();
-    const accounts = await web3.eth.getAccounts();
-    const walletAddress = accounts[0];
-    await fetchWalletTokenBalances();
-    dispatch(
-      setWalletAddress({
-        walletAddress,
-      })
-    );
+     await connectToWallet();
   };
   return (
     <Col lg="9" className="main-wrapper">

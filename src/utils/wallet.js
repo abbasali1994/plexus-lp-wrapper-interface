@@ -33,22 +33,12 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
 });
 
-//web3modal if provider preexist add listener
-(async () => {
-  if (web3Modal.cachedProvider) {
-    const provider = await web3Modal.connect();
-    web3 = new Web3(provider);
-    const userAddress = (await web3.eth.getAccounts())[0];
-    store.dispatch(setWalletAddress({ walletAddress: userAddress }));
-    store.dispatch(resetState());
-    await fetchWalletTokenBalances();
-    setWalletListener(provider);
-  }
-})();
-
 export const connectToWallet = async () => {
   const provider = await web3Modal.connect();
   web3 = new Web3(provider);
+  const userAddress = (await web3.eth.getAccounts())[0];
+  store.dispatch(setWalletAddress({ walletAddress: userAddress }));
+  await fetchWalletTokenBalances();
   setWalletListener(provider);
   return web3;
 };
@@ -79,7 +69,6 @@ export const fetchWalletTokenBalances = async () => {
     });
   }
 };
-
 
 const getUserETHBalance = async () => {
   let ethBalance = 0;
@@ -270,3 +259,11 @@ const setWalletListener = (provider) => {
     await fetchWalletTokenBalances();
   });
 };
+
+//web3modal if provider preexist add listener
+(async () => {
+  if (web3Modal.cachedProvider) {
+    await connectToWallet();
+    store.dispatch(resetState());
+  }
+})();
