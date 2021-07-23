@@ -14,14 +14,9 @@ import spinner from "../../../assets/gifs/confirmation.gif";
 import { navigate } from "hookrouter";
 
 
-const AwaitingTxnsModalWrapper = (props) => {
-  const { showAwaitingTxn } = useSelector((state) => state.transactions);
-  if (showAwaitingTxn) return <AwaitingTxnsModal {...props}/>;
-    else return "";
-}
-
 const AwaitingTxnsModal = ({ theme }) => {
   const { activeAction } = useSelector((state) => state.dexes);
+  const { showAwaitingTxn } = useSelector((state) => state.transactions);
   let content = "";
   switch (activeAction) {
     case "Unwrap":
@@ -35,7 +30,7 @@ const AwaitingTxnsModal = ({ theme }) => {
   }
   return (
     <Modal
-      show={true}
+      show={showAwaitingTxn}
       backdrop="static"
       keyboard={false}
       animation={true}
@@ -173,4 +168,4 @@ const RemixAwaitingTxnsWrapper = () => {
   );
 };
 
-export default AwaitingTxnsModalWrapper;
+export default AwaitingTxnsModal;

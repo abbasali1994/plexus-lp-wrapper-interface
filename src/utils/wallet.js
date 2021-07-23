@@ -12,8 +12,10 @@ import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
 import { uniContractAddress,sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
 import { constants } from "./";
 
+const  abi = require('human-standard-token-abi');
+
 let web3 = null;
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -126,7 +128,7 @@ const getTokenBalance = async (tokenAddress, tokenSymbol) => {
 
 export const checkIfUniPairExists = async(token1Address, token2Address) => {
 
-  let uniPairAddress = ZERO_ADDRESS;
+  let uniPairAddress = constants.ZERO_ADDRESS;
  
   if (web3 !== null) {
 
@@ -138,7 +140,7 @@ export const checkIfUniPairExists = async(token1Address, token2Address) => {
       );
 
       const pairAddress = await uniV2FactoryContract.methods.getPair(token1Address, token2Address).call();
-      const uniPairExists = pairAddress === ZERO_ADDRESS ? false:true;
+      const uniPairExists = pairAddress === constants.ZERO_ADDRESS ? false:true;
 
       if(uniPairExists) {
         uniPairAddress = pairAddress;
@@ -156,7 +158,7 @@ export const checkIfUniPairExists = async(token1Address, token2Address) => {
 
 export const checkIfSushiPairExists = async(token1Address, token2Address) => {
 
-  let sushiPairAddress = ZERO_ADDRESS;
+  let sushiPairAddress = constants.ZERO_ADDRESS;
  
   if (web3 !== null) {
 
@@ -167,7 +169,7 @@ export const checkIfSushiPairExists = async(token1Address, token2Address) => {
       );
 
       const pairAddress = await sushiFactoryContract.methods.getPair(token1Address, token2Address).call();
-      const sushiPairExists = pairAddress === ZERO_ADDRESS ? false:true;
+      const sushiPairExists = pairAddress === constants.ZERO_ADDRESS ? false:true;
 
       if(sushiPairExists) {
         sushiPairAddress = pairAddress;
@@ -200,44 +202,60 @@ export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lp
         wrapperContract = new web3.eth.Contract(WrapperSushiABI, sushiContractAddress);
       }
 
-      let sourceTokenAddress = ZERO_ADDRESS;
-      let destAddress1 = ZERO_ADDRESS;
-      let destAddress2 = ZERO_ADDRESS;
+      let sourceTokenAddress = constants.ZERO_ADDRESS;
+      const WETH_ADDRESS = constants.WETH_ADDRESS;
+      let destAddress1 = constants.ZERO_ADDRESS;
+      let destAddress2 = constants.ZERO_ADDRESS;
+
+      const userAddress = (await web3.eth.getAccounts())[0];
+      let amountToWrap = 0;
+
+      if(inputToken.tokenDecimals === 18) {
+        amountToWrap = web3.utils.toWei(inputTokenAmount);
+      }
+      if(inputToken.tokenDecimals === 6) {
+        amountToWrap = String(inputTokenAmount * 1000000);
+      }
 
       if (inputToken.symbol.toLowerCase() !== "eth") {
         sourceTokenAddress = inputToken.tokenAddress;
+        const wrapperContractAddress = constants.dexUni ? uniContractAddress : sushiContractAddress;
+        const tokenContract = new web3.eth.Contract(abi, sourceTokenAddress);
+
+        // check allowance for the wrapper contract for this token
+        const allowance = await tokenContract.methods.allowance(userAddress, wrapperContractAddress).call();
+        if(allowance < amountToWrap) {
+          const approved = await tokenContract.methods.approve(wrapperContractAddress, amountToWrap).send({ from: userAddress });
+          console.log(approved);
+        }
       }
 
-      if (lpToken1.symbol.toLowerCase() !== "eth") {
-        destAddress1 = lpToken1.address;
+      if (lpToken1.tokenSymbol.toLowerCase() !== "eth") {
+        destAddress1 = lpToken1.tokenAddress;
+      } else {
+        destAddress1 = WETH_ADDRESS;
       }
 
-      if (lpToken2.symbol.toLowerCase() !== "eth") {
-        destAddress2 = lpToken2.address;
+      if (lpToken2.tokenSymbol.toLowerCase() !== "eth") {
+        destAddress2 = lpToken2.tokenAddress;
+      } else {
+        destAddress2 = WETH_ADDRESS;
       }
 
       const destTokenAddresses = [Web3.utils.toChecksumAddress(destAddress1), Web3.utils.toChecksumAddress(destAddress2)];
-      const amountToWrap = web3.utils.toWei(inputTokenAmount);
-
-      const userAddress = (await web3.eth.getAccounts())[0];
-
-      console.log(sourceTokenAddress);
-      console.log(destTokenAddresses);
-      console.log(amountToWrap);
-      console.log(userAddress);
-
-      if(sourceTokenAddress === ZERO_ADDRESS){
-        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, value: amountToWrap});
+      const block = await web3.eth.getBlock("latest");
+      const gasLimit = parseInt(block.gasLimit/block.transactions.length);
+      const gasLimitIncrease = gasLimit * 15;
+    
+      if(sourceTokenAddress === constants.ZERO_ADDRESS){
+        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, value: amountToWrap, gas: gasLimitIncrease, gasPrice});
       } else {
-        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress});
+        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, gas: gasLimitIncrease, gasPrice});
       }
       
-
-      console.log(res);
-  
     } catch (error) {
       console.log(error);
-      res = null;
+      res = error;
     }
 
   }

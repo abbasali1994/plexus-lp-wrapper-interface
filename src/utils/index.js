@@ -12,7 +12,9 @@ export const constants = {
     dexSushi: 'Sushiswap',
     width: {
         mobile: 1024
-    }
+    },
+    ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
+    WETH_ADDRESS: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
 }
 
 export const tokenViewTypes = {

@@ -312,8 +312,7 @@ const OutputTokenView = () => {
 };
 
 const LPTokenView = () => {
-  const { inputToken, lpToken1, lpToken2, lpToken1Value, lpToken2Value } =
-    useSelector((state) => state.tokens);
+  const { inputToken, lpToken1, lpToken2, lpToken1Value, lpToken2Value } = useSelector((state) => state.tokens);
   const dispatch = useDispatch();
 
   return (
