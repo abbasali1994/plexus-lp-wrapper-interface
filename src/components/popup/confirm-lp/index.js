@@ -9,9 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   showConfirmModal,
   showAwaitingTxnModal,
-  setTxnStatus,
+  setTxnStatus
 } from "../../../redux/transactions";
-
+import {
+  setNetworkValues
+} from "../../../redux/tokens";
 
 // token selector component
 import TokenSelector from "../../token-selector";
@@ -44,6 +46,7 @@ const DesktopWrapper = ({ theme }) => {
   const { activeAction } = useSelector((state) => state.dexes);
   const { inputToken, inputTokenValue, lpToken1, lpToken2,  } = useSelector((state) => state.tokens);
   const { gasPrices } = useSelector((state) => state.prices);
+  const { pricesUSD } = useSelector((state) => state.prices);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
 
@@ -57,25 +60,26 @@ const DesktopWrapper = ({ theme }) => {
     
       dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
 
-      const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.fast);
-      console.log(res);
-
-      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      const res = await wrapTokens(dexName, inputToken, inputTokenValue, lpToken1, lpToken2, gasPrices.fast, pricesUSD["ethereum"].usd);
 
       // user rejected txn
       if(res.code === 4001){
-
+          dispatch(setTxnStatus({ txnStatus: "rejected" })); 
       } else {
-         console.log(res);
-          //  success or failure 
-          if(res.code === 200){
-          //  dispatch(setTxnStatus({ txnStatus: "success" }));
-            //navigate("/success")
-          } else{
-            //dispatch(setTxnStatus({ txnStatus: "failure" })); 
-            //navigate("/failure");
-          } 
+       
+        if(res.txnHash !== undefined && res.txnHash !== null) {
+        
+          dispatch(setTxnStatus({ txnStatus: "success" }));
+          dispatch(setNetworkValues(res));
+          navigate("/success")
+
+        } else {
+          dispatch(setTxnStatus({ txnStatus: "failure" })); 
+          navigate("/failure");
+        }
       }
+
+      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
 
     }
 
@@ -154,7 +158,7 @@ export const ConfirmLPContent = () => {
   const token = {};
   Object.assign(token, inputToken);
   token.tokenAmount = inputTokenValue + " " + token.symbol.toUpperCase();
-  token.tokenAmountUSD = "~" + inputTokenValueUSDFormatted;
+  token.tokenAmountUSD = inputTokenValueUSDFormatted;
 
   // the input token prop
   const token1 = {};
@@ -466,10 +470,10 @@ export const MobileLPWrapper = () => {
             navigate("/failure");
           } 
       }
-
     }
 
-  }
+  };
+
 
   return (
     <div className="confirm-lp-mobile-wrapper">

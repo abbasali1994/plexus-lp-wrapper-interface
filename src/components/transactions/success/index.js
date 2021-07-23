@@ -37,10 +37,11 @@ const GenerateSuccessWrapper = () => {
     lpToken1,
     lpToken2,
     inputTokenValue,
-    inputTokenValueUSD,
+    inputTokenValueUSDFormatted,
     totalLPTokens,
     networkFeeETH,
     networkFeeUSD,
+    txnHash
   } = useSelector((state) => state.tokens);
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -72,17 +73,17 @@ const GenerateSuccessWrapper = () => {
       <div className="txn-submitted-txt">
         Your transaction has been submitted
       </div>
-      <div className="txn-submitted-etherscan">View on Etherscan</div>
+      <div className="txn-submitted-etherscan" onClick={() => window.open(`https://etherscan.io/tx/${txnHash}`, "_blank")}>View on Etherscan</div>
       <div className="txn-details">
         <div className="txn-details-line">
           <span className="txn-details-label1">
             Supplied: {ReactHtmlParser(space1)}
           </span>
           <br className="txn-details-line-break" />
-          <span className="txn-details-label2">{inputTokenValue}</span>
+          <span className="txn-details-label2">{inputTokenValue} ETH</span>
           <span className="txn-details-label3">
             {ReactHtmlParser(space4)}
-            {inputTokenValueUSD}
+            {inputTokenValueUSDFormatted}
           </span>
         </div>
         <div className="txn-details-line">

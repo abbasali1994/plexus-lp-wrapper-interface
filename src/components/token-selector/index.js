@@ -10,7 +10,7 @@ import arrowUp from "../../assets/images/arrow-up.svg";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showSearchModal, setMax, setNewInputAmount } from "../../redux/tokens";
+import { showSearchModal, setMax, setNewInputAmount, updateInputTokenAmount } from "../../redux/tokens";
 
 // utils
 import { constants, tokenViewTypes } from "../../utils";
@@ -218,11 +218,15 @@ const InputTokenView = () => {
         // we only do the re-calculation if the lp token values have been set
         if (lpToken1Value !== "" && lpToken2Value !== "") {
           dispatch(setNewInputAmount({ inputTokenAmount: validValue }));
+        } else{
+          dispatch(updateInputTokenAmount({ inputTokenAmount: validValue }));
         }
       } else {
         setInputAmount(validValue); // we only do the re-calculation if the lp token values have been set
         if (lpToken1Value !== "" && lpToken2Value !== "") {
           dispatch(setNewInputAmount({ inputTokenAmount: 0 }));
+        } else{
+          dispatch(updateInputTokenAmount({ inputTokenAmount: validValue }));
         }
       }
     },
