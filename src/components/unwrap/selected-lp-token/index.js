@@ -35,7 +35,7 @@ const DesktopWrapper = () => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
-  const lpPairName = lpToken1.tokenSymbol + "/" + lpToken2.tokenSymbol;
+  const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
   const space3 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -101,7 +101,7 @@ const DesktopWrapper = () => {
             <br />
             <span className="unwrap-txn-details-label3">
               {ReactHtmlParser(space1)}
-              {`${lpToken1Value} ${lpToken1.tokenSymbol} // ${lpToken2Value} ${lpToken2.tokenSymbol}`}
+              {`${lpToken1Value} ${lpToken1.symbol} // ${lpToken2Value} ${lpToken2.symbol}`}
             </span>
           </div>
           <div className="unwrap-txn-details-line">
@@ -135,7 +135,7 @@ const MobileWrapper = () => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
-  const lpPairName = lpToken1.tokenSymbol + "/" + lpToken2.tokenSymbol;
+  const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
 
   return (
     <div className="main-wrapper-interface">

@@ -54,8 +54,8 @@ export const connectToWallet = async () => {
 export const fetchWalletTokenBalances = async () => {
   if (web3Modal.cachedProvider) {
     getAllTokens().forEach(async (token) => {
-      const tokenSymbol = token.tokenSymbol;
-      const tokenAddress = token.tokenAddress;
+      const tokenSymbol = token.symbol;
+      const tokenAddress = token.address;
       let tokenBalance = null;
       if (web3 !== null) {
         if (tokenSymbol.toLowerCase() !== "eth") {
@@ -70,7 +70,7 @@ export const fetchWalletTokenBalances = async () => {
               : tokenBalance.toFixed(2);
         }
       }
-
+      if(tokenBalance !== "0.00")
       store.dispatch(
         setWalletBalance({ key: tokenSymbol, balance: tokenBalance, address:tokenAddress })
       );
@@ -204,16 +204,16 @@ export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lp
       let destAddress1 = ZERO_ADDRESS;
       let destAddress2 = ZERO_ADDRESS;
 
-      if (inputToken.tokenSymbol.toLowerCase() !== "eth") {
+      if (inputToken.symbol.toLowerCase() !== "eth") {
         sourceTokenAddress = inputToken.tokenAddress;
       }
 
-      if (lpToken1.tokenSymbol.toLowerCase() !== "eth") {
-        destAddress1 = lpToken1.tokenAddress;
+      if (lpToken1.symbol.toLowerCase() !== "eth") {
+        destAddress1 = lpToken1.address;
       }
 
-      if (lpToken2.tokenSymbol.toLowerCase() !== "eth") {
-        destAddress2 = lpToken2.tokenAddress;
+      if (lpToken2.symbol.toLowerCase() !== "eth") {
+        destAddress2 = lpToken2.address;
       }
 
       const destTokenAddresses = [Web3.utils.toChecksumAddress(destAddress1), Web3.utils.toChecksumAddress(destAddress2)];

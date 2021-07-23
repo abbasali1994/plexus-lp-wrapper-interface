@@ -49,13 +49,14 @@ const DesktopWrapper = ({ theme }) => {
   const dispatch = useDispatch();
 
   const handleButtonClick = async() => {
-    
 
+    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
     if (lpToken1 !== null && lpToken2 !== null && inputToken !== null && inputTokenValue !== '') {
       const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.standard);
       console.log(res);
 
-      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      // show txn processing icon atleast for a sec
+      setTimeout(()=>dispatch(showAwaitingTxnModal({ showAwaitingTxn: false })),1000);
       //  success or failure 
       if(res){
         dispatch(setTxnStatus({ txnStatus: "success" }));
@@ -68,7 +69,6 @@ const DesktopWrapper = ({ theme }) => {
     }
 
     dispatch(showConfirmModal({ showConfirm: false }));
-    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
   }
 
   let content = "";
@@ -143,7 +143,7 @@ export const ConfirmLPContent = () => {
   // the input token prop
   const token = {};
   Object.assign(token, inputToken);
-  token.tokenAmount = inputTokenValue + " " + token.tokenSymbol.toUpperCase();
+  token.tokenAmount = inputTokenValue + " " + token.symbol.toUpperCase();
   token.tokenAmountUSD = "~" + inputTokenValueUSDFormatted;
 
   // the input token prop
@@ -271,10 +271,10 @@ export const UnwrapLPContent = () => {
               {totalLPTokens} &nbsp; LP Tokens
             </div>
             <div className="lp-token-value">
-              {lpToken1Value} {token1.tokenSymbol.toUpperCase()}
+              {lpToken1Value} {token1.symbol.toUpperCase()}
             </div>
             <div className="lp-token-value">
-              {lpToken2Value} {token2.tokenSymbol.toUpperCase()}
+              {lpToken2Value} {token2.symbol.toUpperCase()}
             </div>
           </div>
         </div>
@@ -431,7 +431,7 @@ export const MobileLPWrapper = () => {
 
 
   const handleButtonClick = async() => {
-    
+    dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
     console.log(lpToken1);
     console.log(lpToken2);
     console.log(inputToken);
@@ -442,7 +442,7 @@ export const MobileLPWrapper = () => {
       const res = await wrapTokens(dexName, inputToken, inputTokenValue,  lpToken1, lpToken2, gasPrices.standard);
       console.log(res);
 
-      dispatch(showAwaitingTxnModal({ showAwaitingTxn: false }));
+      setTimeout(()=>dispatch(showAwaitingTxnModal({ showAwaitingTxn: false })),1000);
       //  success or failure 
       if(res){
         dispatch(setTxnStatus({ txnStatus: "success" }));
@@ -455,7 +455,6 @@ export const MobileLPWrapper = () => {
     }
 
     dispatch(showConfirmModal({ showConfirm: false }));
-    // dispatch(showAwaitingTxnModal({ showAwaitingTxn: true }));
   }
 
   return (

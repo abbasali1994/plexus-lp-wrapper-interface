@@ -69,7 +69,7 @@ const MobileWrapper = ({ lpTokenPairs }) => {
 const DesktopLpTokens = ({ lpPair, idx }) => {
   const dispatch = useDispatch();
   const { lpToken1, lpToken2 } = lpPair;
-  const lpPairName = lpToken1.tokenSymbol + "/" + lpToken2.tokenSymbol;
+  const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   return (
@@ -107,7 +107,7 @@ const DesktopLpTokens = ({ lpPair, idx }) => {
 const MobileLpTokens = ({ lpPair, idx }) => {
   const dispatch = useDispatch();
   const { lpToken1, lpToken2 } = lpPair;
-  const lpPairName = lpToken1.tokenSymbol + "/" + lpToken2.tokenSymbol;
+  const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   return (

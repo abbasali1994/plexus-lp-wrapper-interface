@@ -8,7 +8,7 @@ import { getAllTokens } from "../../../utils/token";
 import { constants } from "../../../utils";
 
 const tokens = getAllTokens();
-const token1 = tokens.find((token) => token.tokenSymbol === "eth");
+const token1 = tokens.find((token) => token.symbol === "eth");
 
 const DashboardTokensComponent = () => {
   let element = null;
@@ -81,7 +81,7 @@ const GeneratingLPTokenMobileView = ({ lpTokens }) => {
         <LpTokenIconView tokenIcon={token1.tokenIcon} tokenIconSize={51} />
       </div>
       <div className="lp-pair-info">
-        <div className="dashboard-pair-text">{token1.tokenSymbol}</div>
+        <div className="dashboard-pair-text">{token1.symbol}</div>
         <div className="lp-pair-desc">
           <div className="dashboard-pair-dex">4.5324 LP Tokens</div>
           <div className="dashboard-pair-amount">$4,623.42</div>
@@ -102,15 +102,15 @@ const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
             <LpTokenIconView tokenIcon={token1.tokenIcon} tokenIconSize={34} />
           </Col>
           <Col>
-            <div className="dashboard-table-token-name">{token1.tokenName}</div>
+            <div className="dashboard-table-token-name">{token1.name}</div>
             <div className="dashboard-table-token-symbol">
-              {token1.tokenSymbol}
+              {token1.symbol}
             </div>
           </Col>
         </Row>
       </Col>
       <Col className="dashboard-table-token-balance">
-        {token1.tokenBal}&nbsp;{token1.tokenSymbol}
+        {token1.balance}&nbsp;{token1.symbol}
       </Col>
       <Col className="dashboard-table-pair-amount">$4,623.42</Col>
       <Col lg="4">

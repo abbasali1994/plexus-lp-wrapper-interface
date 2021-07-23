@@ -37,7 +37,7 @@ export const tokensSlice = createSlice({
 
       if (state.searchCaller === constants.inputToken) {
 
-        const tokenBal = token.tokenBal;
+        const tokenBal = token.balance;
         const tokenUSDValue = token.tokenUSDValue;
         state.inputTokenValue = tokenBal;
         state.inputTokenValueUSD = tokenBal * tokenUSDValue;
@@ -53,14 +53,14 @@ export const tokensSlice = createSlice({
         const tokenUSDValue = token.tokenUSDValue;
         const inputHalfUSDValue  = state.inputTokenValueUSD / 2;
         state.lpToken1Amount = inputHalfUSDValue / tokenUSDValue;
-        state.lpToken1Value = state.lpToken1Amount.toFixed(5) + " " +token.tokenSymbol.toUpperCase();
+        state.lpToken1Value = state.lpToken1Amount.toFixed(5) + " " +token.symbol.toUpperCase();
         state.lpToken1 = token;
       }
       if (state.searchCaller === constants.lpToken2) {
         const tokenUSDValue = token.tokenUSDValue;
         const inputHalfUSDValue  = state.inputTokenValueUSD / 2;
         state.lpToken2Amount = inputHalfUSDValue / tokenUSDValue;
-        state.lpToken2Value = state.lpToken2Amount.toFixed(5) + " " +token.tokenSymbol.toUpperCase();
+        state.lpToken2Value = state.lpToken2Amount.toFixed(5) + " " +token.symbol.toUpperCase();
         state.lpToken2 = token;
       }
 
@@ -105,15 +105,15 @@ export const tokensSlice = createSlice({
       // for lp 1
       const token1USDValue = lpToken1.tokenUSDValue;
       const lpToken1Amount = inputHalfUSDValue / token1USDValue;
-      state.lpToken1Value = lpToken1Amount.toFixed(5) + " " +lpToken1.tokenSymbol.toUpperCase();
+      state.lpToken1Value = lpToken1Amount.toFixed(5) + " " +lpToken1.symbol.toUpperCase();
 
        // for lp 2
        const token2USDValue = lpToken2.tokenUSDValue;
        const lpToken2Amount = inputHalfUSDValue / token2USDValue;
-       state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.tokenSymbol.toUpperCase();
+       state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.symbol.toUpperCase();
  
         //for max button
-        if(!state.showMax && state.inputToken !== null && state.lpToken1 !== null && state.lpToken2 !== null && state.inputToken.tokenBal > inputTokenAmount) {
+        if(!state.showMax && state.inputToken !== null && state.lpToken1 !== null && state.lpToken2 !== null && state.inputToken.balance > inputTokenAmount) {
           state.showMax = true;
         }
     },
@@ -123,7 +123,7 @@ export const tokensSlice = createSlice({
       const lpToken1 =  state.lpToken1;
       const lpToken2 =  state.lpToken2;
 
-      state.inputTokenValue = inputToken.tokenBal;
+      state.inputTokenValue = inputToken.balance;
       state.inputTokenValueUSD = inputToken.tokenUSDValue * state.inputTokenValue;
       state.inputTokenValueUSDFormatted = "$" + state.inputTokenValueUSD.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
@@ -133,12 +133,12 @@ export const tokensSlice = createSlice({
       // for lp 1
       const token1USDValue = lpToken1.tokenUSDValue;
       const lpToken1Amount = inputHalfUSDValue / token1USDValue;
-      state.lpToken1Value = lpToken1Amount.toFixed(5) + " " +lpToken1.tokenSymbol.toUpperCase();
+      state.lpToken1Value = lpToken1Amount.toFixed(5) + " " +lpToken1.symbol.toUpperCase();
 
        // for lp 2
        const token2USDValue = lpToken2.tokenUSDValue;
        const lpToken2Amount = inputHalfUSDValue / token2USDValue;
-       state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.tokenSymbol.toUpperCase();
+       state.lpToken2Value = lpToken2Amount.toFixed(5) + " " +lpToken2.symbol.toUpperCase();
  
 
       // hide the max button

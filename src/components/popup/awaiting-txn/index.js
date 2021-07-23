@@ -82,7 +82,7 @@ const GenerateAwaitingTxnsWrapper = () => {
 
   // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
   if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn) {
-    txnDescLine1 = `Generating ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+    txnDescLine1 = `Generating ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDescLine2 = `${dexName} LP Tokens `;
   }
 
@@ -109,7 +109,7 @@ const UnwrapAwaitingTxnsWrapper = () => {
   let txnDescLine3 = "";
   // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
   if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn) {
-    txnDescLine1 = `Unwrapping ${totalLPTokens} ${lpToken1.tokenSymbol.toUpperCase()}/${lpToken2.tokenSymbol.toUpperCase()}`;
+    txnDescLine1 = `Unwrapping ${totalLPTokens} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDescLine2 = ` ${dexName} LP Tokens to`;
     txnDescLine3 = ` ${outputTokenValue}`;
     // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
@@ -145,11 +145,11 @@ const RemixAwaitingTxnsWrapper = () => {
   if (unwrap.lpToken1 !== null && unwrap.lpToken2 !== null && showAwaitingTxn) {
     txnDesc[0] = `Remixing ${
       unwrap.totalLPTokens
-    } ${unwrap.lpToken1.tokenSymbol.toUpperCase()}/${unwrap.lpToken2.tokenSymbol.toUpperCase()}`;
+    } ${unwrap.lpToken1.symbol.toUpperCase()}/${unwrap.lpToken2.symbol.toUpperCase()}`;
     txnDesc[1] = ` ${dexName} LP Tokens to `;
     txnDesc[2] = `${
       unwrap.newTotalLPTokens
-    } ${tokens.lpToken1.tokenSymbol.toUpperCase()}/${tokens.lpToken2.tokenSymbol.toUpperCase()} `;
+    } ${tokens.lpToken1.symbol.toUpperCase()}/${tokens.lpToken2.symbol.toUpperCase()} `;
     txnDesc[3] = `${newDexName} LP Tokens`;
     // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
     const timeoutId = setTimeout(() => {

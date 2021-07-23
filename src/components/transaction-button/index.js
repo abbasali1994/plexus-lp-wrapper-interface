@@ -55,17 +55,17 @@ const InputButton = () => {
   const handleButtonClick = async() => {
     let pairAddress = ZERO_ADDRESS;
     if(dexName === constants.dexUni) {
-      pairAddress = await checkIfUniPairExists(lpToken1.tokenAddress, lpToken2.tokenAddress);
+      pairAddress = await checkIfUniPairExists(lpToken1.address, lpToken2.address);
     }
 
     if(dexName === constants.dexSushi) {
-      pairAddress = await checkIfSushiPairExists(lpToken1.tokenAddress, lpToken2.tokenAddress)
+      pairAddress = await checkIfSushiPairExists(lpToken1.address, lpToken2.address)
     }
 
     if (pairAddress === ZERO_ADDRESS) {
       setButtonDisabled(true);
-      const token1Symbol = lpToken1.tokenSymbol;
-      const token2Symbol = lpToken2.tokenSymbol;
+      const token1Symbol = lpToken1.symbol;
+      const token2Symbol = lpToken2.symbol;
       const pairSymbol = token1Symbol + "-" + token2Symbol;
 
       setButtonText(`Invalid ${dexName} (${pairSymbol}) LP Pair!`);
