@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
 import Dexes, { MobileDexes } from "../../dex-buttons";
+import Loading from "../../loading";
 import NothingToSee from "../../nothing-to-see";
 
-export const DesktopLpTokensUnavailable = () => {
+export const DesktopLpTokensUnavailable = ({lpTokenPairs}) => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   return (
@@ -17,19 +18,19 @@ export const DesktopLpTokensUnavailable = () => {
         </span>
       </div>
       <div className="main-wrapper-interface">
-        <NothingToSee />
+      {lpTokenPairs ? <NothingToSee /> : <Loading />}
       </div>
     </>
   );
 };
 
-export const MobileLpTokensUnavailable = () => {
+export const MobileLpTokensUnavailable = ({lpTokenPairs}) => {
   return (
     <div className="main-wrapper-interface">
       <div className="input-token-section">
         <div className="token-label">Select LP Tokens to Remix</div>
         <MobileDexes />
-        <NothingToSee />
+        {lpTokenPairs ? <NothingToSee /> : <Loading />}
       </div>
     </div>
   );

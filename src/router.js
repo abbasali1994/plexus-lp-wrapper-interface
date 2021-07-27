@@ -4,15 +4,15 @@ import TransactionFailed from './views/transaction/failure';
 import Dashboard from './views/dashboard';
 import Unwrap from './views/unwrap';
 import Remix from './views/remix';
-import ComingSoon from './components/coming-soon';
+// import ComingSoon from './components/coming-soon';
 
 const routes = {
   "/": () => <Home />,
   "/success": () => <TransactionSuccessful/>,
   "/failure": () => <TransactionFailed/>,
-  "/dashboard*": () => (false ? <Dashboard/> : <ComingSoon/>),
-  "/unwrap": () => (false ? <Unwrap /> : <ComingSoon/>),
-  "/remix": () => (false ? <Remix /> : <ComingSoon/>)
+  "/dashboard*": () => <Dashboard/>,
+  "/unwrap": () => <Unwrap />,
+  "/remix": () => <Remix />
 };
 
 export default routes;

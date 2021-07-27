@@ -19,22 +19,27 @@ const RemixLPComponent = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const { selectedDex } = useSelector((state) => state.dexes);
   const { showConfirm } = useSelector((state) => state.transactions);
-  const { lpTokenPairs } = useSelector((state) => state.unwrap);
+  const { lpTokens } = useSelector((state) => state.wallet);
+  const { selectedLpTokenPair } = useSelector((state) => state.tokens);
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
     }
     window.addEventListener("resize", handleResize);
   });
-  let children = <RemixLPContent />;
-  if (width < constants.width.mobile) {
-    if (lpTokenPairs[selectedDex].length === 0)
-      children = <MobileLpTokensUnavailable />;
-    if (showConfirm) children = <MobileLPWrapper />;
-  } else if (lpTokenPairs[selectedDex].length === 0) {
-    children = <DesktopLpTokensUnavailable />;
-  }
 
+  let children = <RemixLPContent lpTokenPairs={lpTokens[selectedDex]} selectedLpTokenPair={selectedLpTokenPair}/>;
+  if (!lpTokens[selectedDex] || lpTokens[selectedDex].length === 0)
+    children =
+      width < constants.width.mobile ? (
+        <MobileLpTokensUnavailable lpTokenPairs={lpTokens[selectedDex]} />
+      ) : (
+        <DesktopLpTokensUnavailable lpTokenPairs={lpTokens[selectedDex]} />
+      );
+
+  if (width < constants.width.mobile) {
+    if (showConfirm) children = <MobileLPWrapper />;
+  }
   return (
     <Col lg="9" className="main-wrapper">
       {children}
@@ -42,14 +47,9 @@ const RemixLPComponent = () => {
   );
 };
 
-const RemixLPContent = () => {
-  const { selectedDex } = useSelector((state) => state.dexes);
-  const { selectedLpTokenPair, lpTokenPairs } = useSelector(
-    (state) => state.unwrap
-  );
-
+const RemixLPContent = ({ lpTokenPairs, selectedLpTokenPair }) => {
   if (selectedLpTokenPair !== null) return <SelectedLpToken />;
-  else return <SelectLpToken lpTokenPairs={lpTokenPairs[selectedDex]} />;
+  else return <SelectLpToken lpTokenPairs={lpTokenPairs} />;
 };
 
 export default RemixLPComponent;

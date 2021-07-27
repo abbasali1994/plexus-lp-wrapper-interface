@@ -10,12 +10,11 @@ import arrowUp from "../../assets/images/arrow-up.svg";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { showSearchModal, setMax, setNewInputAmount, updateInputTokenAmount } from "../../redux/tokens";
+import { showSearchModal, setMax, setNewInputAmount, updateInputTokenAmount, setUnwrapValues } from "../../redux/tokens";
 
 // utils
 import { constants, tokenViewTypes } from "../../utils";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { setUnwrapTokensValue } from "../../redux/unwrap";
 
 // The single token icon view
 const TokenIconView = ({ tokenIcon, tokenIconSize }) => {
@@ -140,9 +139,7 @@ const SetOutputToken = () => {
   const { outputToken } = useSelector((state) => state.tokens);
   const dispatch = useDispatch();
   dispatch(
-    setUnwrapTokensValue({
-      outputToken,
-    })
+    setUnwrapValues()
   );
   return <SelectedTokenView token={outputToken} />;
 };
@@ -281,8 +278,7 @@ const InputTokenView = () => {
 };
 
 const OutputTokenView = () => {
-  const { outputToken } = useSelector((state) => state.tokens);
-  const { outputTokenValue } = useSelector((state) => state.unwrap);
+  const { outputToken, outputTokenValue } = useSelector((state) => state.tokens);
   const dispatch = useDispatch();
 
   return (

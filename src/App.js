@@ -59,7 +59,7 @@ const App = () => {
         <div className="app-views">
           {/*Render all the routes */}
           <SkeletonWrapper
-            checks={["icons", "images", "gifs"]}
+            checks={["icons", "images"]}
             children={routesResult}
           />
         </div>

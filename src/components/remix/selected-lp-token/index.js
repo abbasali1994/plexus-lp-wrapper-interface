@@ -8,6 +8,7 @@ import { constants, tokenViewTypes } from "../../../utils";
 import TokenSelector from "../../token-selector";
 import TransactionButton from "../../transaction-button";
 import { RemixDexes } from "../../dex-buttons";
+import { displayAmountWithDecimals } from "../../../utils/wallet";
 
 const SelectedLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -24,12 +25,10 @@ const SelectedLpToken = (props) => {
 };
 
 const DesktopWrapper = () => {
-  const { selectedLpTokenPair, lpTokenPairs } = useSelector(
-    (state) => state.unwrap
-  );
+  const { selectedLpTokenPair } = useSelector((state) => state.tokens);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
-  const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
+  const { lpToken1, lpToken2, liquidityTokenBalance } = selectedLpTokenPair;
   const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
 
   return (
@@ -60,7 +59,9 @@ const DesktopWrapper = () => {
           </Col>
           <Col>
             <div className="remix-pair-text">{lpPairName}</div>
-            <div className="remix-pair-dex">4.5324 {dexName} LP Tokens</div>
+            <div className="remix-pair-dex">
+              {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+            </div>
           </Col>
         </Row>
         <div className="remix-select-dex">
@@ -79,12 +80,12 @@ const DesktopWrapper = () => {
 };
 
 const MobileWrapper = () => {
-  const { selectedLpTokenPair, lpTokenPairs } = useSelector(
-    (state) => state.unwrap
-  );
+  const { selectedLpTokenPair } = useSelector((state) => state.tokens);
+  const { lpToken1, lpToken2, lpTokenPrice, liquidityTokenBalance } =
+    selectedLpTokenPair;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
-  const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
+
   const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
 
   return (
@@ -103,9 +104,13 @@ const MobileWrapper = () => {
         </Col>
         <Col>
           <div className="remix-pair-text">{lpPairName}</div>
-          <div className="remix-pair-amount">$4,623.42</div>
+          <div className="remix-pair-amount">
+            ${displayAmountWithDecimals(liquidityTokenBalance*lpTokenPrice)}
+          </div>
         </Col>
-        <Col className="remix-pair-dex">4.5324 {dexName} LP Tokens</Col>
+        <Col className="remix-pair-dex">
+          {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+        </Col>
       </Row>
 
       <div className="remix-select-dex-header">Select Dex</div>
