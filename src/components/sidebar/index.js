@@ -27,7 +27,7 @@ import { usePath } from "hookrouter";
 
 import { setActiveAction } from "../../redux/dex";
 import { resetState } from "../../redux/tokens";
-import { showConfirmModal } from "../../redux/transactions";
+import { resetTxnState } from "../../redux/transactions";
 
 const dexStats = [
   {
@@ -193,6 +193,8 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
               id={btn === activeAction ? "active-btn" : ""}
               onClick={() => {
                 dispatch(setActiveAction({ activeAction: btn }));
+                dispatch(resetState());
+                dispatch(resetTxnState());
                 switch(btn) {
                   case "Unwrap": navigate("/unwrap"); break;
                   case "Remix": navigate("/remix"); break;
@@ -231,7 +233,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
               // clear the global state
               showSideMenu(false)
               dispatch(resetState());
-              dispatch(showConfirmModal({ showConfirm: false }));
+              dispatch(resetTxnState());
               navigate("/");
             }}
           >

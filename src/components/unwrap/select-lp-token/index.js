@@ -4,10 +4,11 @@ import { Row, Col } from "react-bootstrap";
 import pair from "../../../assets/images/pair.svg";
 import { LpTokenIconView } from "../../token-selector";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedLpTokenPair } from "../../../redux/unwrap";
+import { setSelectedLpTokenPair } from "../../../redux/tokens";
 import Dexes, { MobileDexes } from "../../dex-buttons";
 
 import { constants } from "../../../utils";
+import { displayAmountWithDecimals } from "../../../utils/wallet";
 
 const SelectLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -41,8 +42,8 @@ const DesktopWrapper = ({ lpTokenPairs }) => {
         <div className="input-token-section">
           <div className="token-label">Select LP Tokens to Unwrap</div>
           <div>
-            {lpTokenPairs.map((pair, idx) => (
-              <DesktopLpTokens lpPair={pair} idx={idx} />
+            {lpTokenPairs && lpTokenPairs.map((pair, idx) => (
+              <DesktopLpTokens lpPair={pair} idx={idx} key={idx}/>
             ))}
           </div>
         </div>
@@ -58,8 +59,8 @@ const MobileWrapper = ({ lpTokenPairs }) => {
         <div className="token-label">Select LP Tokens to Unwrap</div>
         <MobileDexes />
         <div>
-          {lpTokenPairs.map((pair, idx) => (
-            <MobileLpTokens lpPair={pair} idx={idx} />
+          {lpTokenPairs && lpTokenPairs.map((pair, idx) => (
+            <MobileLpTokens lpPair={pair} idx={idx} key={idx}/>
           ))}
         </div>
       </div>
@@ -69,7 +70,7 @@ const MobileWrapper = ({ lpTokenPairs }) => {
 
 const DesktopLpTokens = ({ lpPair, idx }) => {
   const dispatch = useDispatch();
-  const { lpToken1, lpToken2 } = lpPair;
+  const { lpToken1, lpToken2, lpTokenPrice, liquidityTokenBalance } = lpPair;
   const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -79,8 +80,7 @@ const DesktopLpTokens = ({ lpPair, idx }) => {
       onClick={() => {
         dispatch(
           setSelectedLpTokenPair({
-            selectedLpTokenPair: idx,
-            selectedDex: selectedDex,
+            selectedLpTokenPair: lpPair
           })
         );
       }}
@@ -98,16 +98,16 @@ const DesktopLpTokens = ({ lpPair, idx }) => {
       </Col>
       <Col>
         <div className="unwrap-pair-text">{lpPairName}</div>
-        <div className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</div>
+        <div className="unwrap-pair-dex">{displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens</div>
       </Col>
-      <Col className="unwrap-pair-amount">$4,623.42</Col>
+      <Col className="unwrap-pair-amount">${displayAmountWithDecimals(liquidityTokenBalance*lpTokenPrice)}</Col>
     </Row>
   );
 };
 
 const MobileLpTokens = ({ lpPair, idx }) => {
   const dispatch = useDispatch();
-  const { lpToken1, lpToken2 } = lpPair;
+  const { lpToken1, lpToken2, lpTokenPrice, liquidityTokenBalance } = lpPair;
   const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -117,8 +117,7 @@ const MobileLpTokens = ({ lpPair, idx }) => {
       onClick={() => {
         dispatch(
           setSelectedLpTokenPair({
-            selectedLpTokenPair: idx,
-            selectedDex: selectedDex,
+            selectedLpTokenPair: lpPair
           })
         );
       }}
@@ -136,9 +135,9 @@ const MobileLpTokens = ({ lpPair, idx }) => {
       </Col>
       <Col>
         <div className="unwrap-pair-text">{lpPairName}</div>
-        <div className="unwrap-pair-amount">$4,623.42</div>
+        <div className="unwrap-pair-amount">${displayAmountWithDecimals(liquidityTokenBalance*lpTokenPrice)}</div>
       </Col>
-      <Col className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</Col>
+      <Col className="unwrap-pair-dex">{displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens</Col>
     </Row>
   );
 };

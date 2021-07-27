@@ -13,10 +13,14 @@ import spinner from "../../../assets/gifs/confirmation.gif";
 // navigate
 import { navigate } from "hookrouter";
 
+const AwaitingTxnsWrapper = (props) => {
+  const { showAwaitingTxn } = useSelector((state) => state.transactions);
+  if (showAwaitingTxn) return <AwaitingTxnsModal {...props}/>;
+    else return "";
+}
 
 const AwaitingTxnsModal = ({ theme }) => {
   const { activeAction } = useSelector((state) => state.dexes);
-  const { showAwaitingTxn } = useSelector((state) => state.transactions);
   let content = "";
   switch (activeAction) {
     case "Unwrap":
@@ -30,7 +34,7 @@ const AwaitingTxnsModal = ({ theme }) => {
   }
   return (
     <Modal
-      show={showAwaitingTxn}
+      show={true}
       backdrop="static"
       keyboard={false}
       animation={true}
@@ -93,9 +97,10 @@ const GenerateAwaitingTxnsWrapper = () => {
 
 const UnwrapAwaitingTxnsWrapper = () => {
   const { showAwaitingTxn } = useSelector((state) => state.transactions);
-  const { lpToken1, lpToken2, totalLPTokens, outputTokenValue } = useSelector(
-    (state) => state.unwrap
+  const { selectedLpTokenPair, outputTokenValue } = useSelector(
+    (state) => state.tokens
   );
+  const { liquidityTokenBalance, lpToken1, lpToken2 } = selectedLpTokenPair;
 
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -104,7 +109,7 @@ const UnwrapAwaitingTxnsWrapper = () => {
   let txnDescLine3 = "";
   // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
   if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn) {
-    txnDescLine1 = `Unwrapping ${totalLPTokens} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
+    txnDescLine1 = `Unwrapping ${liquidityTokenBalance} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDescLine2 = ` ${dexName} LP Tokens to`;
     txnDescLine3 = ` ${outputTokenValue}`;
     // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
@@ -130,21 +135,21 @@ const UnwrapAwaitingTxnsWrapper = () => {
 
 const RemixAwaitingTxnsWrapper = () => {
   const { showAwaitingTxn } = useSelector((state) => state.transactions);
-  const unwrap = useSelector((state) => state.unwrap);
+  const { selectedLpTokenPair, newLPTokens } = useSelector(
+    (state) => state.tokens
+  );
+  const { liquidityTokenBalance, lpToken1, lpToken2 } = selectedLpTokenPair;
+
   const tokens = useSelector((state) => state.tokens);
   const { dexes, selectedDex, newDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
   const newDexName = dexes[newDex].name;
   let txnDesc = [];
   // if none of the LP Tokens is selected and the modal is supposed to be visible, then simulate a blockchain txn
-  if (unwrap.lpToken1 !== null && unwrap.lpToken2 !== null && showAwaitingTxn) {
-    txnDesc[0] = `Remixing ${
-      unwrap.totalLPTokens
-    } ${unwrap.lpToken1.symbol.toUpperCase()}/${unwrap.lpToken2.symbol.toUpperCase()}`;
+  if (lpToken1 !== null && lpToken2 !== null && showAwaitingTxn) {
+    txnDesc[0] = `Remixing ${liquidityTokenBalance} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDesc[1] = ` ${dexName} LP Tokens to `;
-    txnDesc[2] = `${
-      unwrap.newTotalLPTokens
-    } ${tokens.lpToken1.symbol.toUpperCase()}/${tokens.lpToken2.symbol.toUpperCase()} `;
+    txnDesc[2] = `${newLPTokens} ${tokens.lpToken1.symbol.toUpperCase()}/${tokens.lpToken2.symbol.toUpperCase()} `;
     txnDesc[3] = `${newDexName} LP Tokens`;
     // TODO: this is just a placeholdeer action for now, it should be replaced with a real web3 txn
     const timeoutId = setTimeout(() => {
@@ -158,14 +163,14 @@ const RemixAwaitingTxnsWrapper = () => {
 
   return (
     <div className="awaiting-txn-desc">
-      {txnDesc.map((line) => (
-        <>
+      {txnDesc.map((line,id) => (
+        <div key={id}>
           {line}
           <br className="awaiting-txn-desc-line-break" />
-        </>
+        </div>
       ))}
     </div>
   );
 };
 
-export default AwaitingTxnsModal;
+export default AwaitingTxnsWrapper;

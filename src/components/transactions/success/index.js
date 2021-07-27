@@ -41,7 +41,7 @@ const GenerateSuccessWrapper = () => {
     totalLPTokens,
     networkFeeETH,
     networkFeeUSD,
-    txnHash
+    txnHash,
   } = useSelector((state) => state.tokens);
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -73,7 +73,14 @@ const GenerateSuccessWrapper = () => {
       <div className="txn-submitted-txt">
         Your transaction has been submitted
       </div>
-      <div className="txn-submitted-etherscan" onClick={() => window.open(`https://etherscan.io/tx/${txnHash}`, "_blank")}>View on Etherscan</div>
+      <div
+        className="txn-submitted-etherscan"
+        onClick={() =>
+          window.open(`https://etherscan.io/tx/${txnHash}`, "_blank")
+        }
+      >
+        View on Etherscan
+      </div>
       <div className="txn-details">
         <div className="txn-details-line">
           <span className="txn-details-label1">
@@ -120,14 +127,13 @@ const GenerateSuccessWrapper = () => {
 const UnwrapSuccessWrapper = () => {
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const {
-    lpToken1,
-    lpToken2,
+    selectedLpTokenPair,
     outputTokenValue,
     outputTokenValueUSD,
-    totalLPTokens,
     networkFeeETH,
     networkFeeUSD,
-  } = useSelector((state) => state.unwrap);
+  } = useSelector((state) => state.tokens);
+  const { lpToken1, lpToken2, liquidityTokenBalance } = selectedLpTokenPair;
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
   const space2 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -143,7 +149,7 @@ const UnwrapSuccessWrapper = () => {
     Object.assign(newDexes, dexes);
     dexName = newDexes[selectedDex].name;
 
-    txnDesc1 = `${totalLPTokens} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
+    txnDesc1 = `${liquidityTokenBalance} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDesc2 = `${dexName} LP Tokens`;
   } else {
     navigate("/");
@@ -183,7 +189,7 @@ const UnwrapSuccessWrapper = () => {
           <span className="txn-details-label2">{outputTokenValue}</span>
           <span className="txn-details-label3">
             {ReactHtmlParser(space4)}
-            {outputTokenValueUSD}
+            ~${outputTokenValueUSD}
           </span>
         </div>
 
@@ -208,7 +214,9 @@ const UnwrapSuccessWrapper = () => {
 
 const RemixSuccessWrapper = () => {
   const { dexes, selectedDex, newDex } = useSelector((state) => state.dexes);
-  const unwrap = useSelector((state) => state.unwrap);
+  const { selectedLpTokenPair, newLPTokens, networkFeeETH, networkFeeUSD } =
+    useSelector((state) => state.tokens);
+  const { lpToken1, lpToken2, liquidityTokenBalance } = selectedLpTokenPair;
   const tokens = useSelector((state) => state.tokens);
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -216,23 +224,19 @@ const RemixSuccessWrapper = () => {
   const space3 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
   const space4 = "&nbsp;&nbsp;";
 
-  let dexName = "",newDexName = "",
+  let dexName = "",
+    newDexName = "",
     txnDesc1 = "",
     txnDesc2 = "",
     txnDesc3 = "",
     txnDesc4 = "";
 
-  if (unwrap.lpToken1 !== null && unwrap.lpToken2 !== null) {
-
+  if (lpToken1 !== null && lpToken2 !== null) {
     dexName = dexes[selectedDex].name;
     newDexName = dexes[newDex].name;
-    txnDesc1 = `${
-      unwrap.totalLPTokens
-    } ${unwrap.lpToken1.symbol.toUpperCase()}/${unwrap.lpToken2.symbol.toUpperCase()}`;
+    txnDesc1 = `${liquidityTokenBalance} ${lpToken1.symbol.toUpperCase()}/${lpToken2.symbol.toUpperCase()}`;
     txnDesc2 = `${dexName} LP Tokens`;
-    txnDesc3 = `${
-      unwrap.newTotalLPTokens
-    } ${tokens.lpToken1.symbol.toUpperCase()}/${tokens.lpToken2.symbol.toUpperCase()}`;
+    txnDesc3 = `${newLPTokens} ${tokens.lpToken1.symbol.toUpperCase()}/${tokens.lpToken2.symbol.toUpperCase()}`;
     txnDesc4 = `${newDexName} LP Tokens`;
   } else {
     navigate("/");
@@ -266,7 +270,8 @@ const RemixSuccessWrapper = () => {
         </div>
         <div className="txn-details-line">
           <span className="txn-details-label1">
-            Into: {ReactHtmlParser(space1)}{ReactHtmlParser(space2)}
+            Into: {ReactHtmlParser(space1)}
+            {ReactHtmlParser(space2)}
           </span>
           <br className="txn-details-line-break" />
           <span className="txn-details-label2">
@@ -283,10 +288,10 @@ const RemixSuccessWrapper = () => {
           </span>
           <br className="txn-details-line-break" />
           <span className="txn-details-label2">
-            {unwrap.networkFeeETH}
+            {networkFeeETH}
             {ReactHtmlParser(space4)}
           </span>
-          <span className="txn-details-label3">{unwrap.networkFeeUSD}</span>
+          <span className="txn-details-label3">{networkFeeUSD}</span>
         </div>
       </div>
       <div className="generate-more-btn">

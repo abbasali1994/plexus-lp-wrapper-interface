@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@ethersproject/address": "^5.4.0",
     "@ethersproject/contracts": "^5.4.0",
     "@ethersproject/providers": "^5.4.1",
@@ -18,6 +19,8 @@
     "bootstrap": "^4.6.0",
     "cryptocurrency-icons": "^0.17.1",
     "cypress": "^7.5.0",
+    "graph-results-pager": "^1.0.3",
+    "graphql": "^15.5.1",
     "hookrouter": "^1.2.5",
     "human-standard-token-abi": "^2.0.0",
     "node-sass": "^6.0.0",

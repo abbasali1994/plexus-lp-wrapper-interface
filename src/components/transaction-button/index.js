@@ -6,13 +6,12 @@ import { Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { setTxnStatus, showConfirmModal } from "../../redux/transactions";
-import { resetState, setMax } from "../../redux/tokens";
+import { resetTxnState, showConfirmModal } from "../../redux/transactions";
+import { resetState, setRemixValues } from "../../redux/tokens";
 import { getGasPrices } from "../../redux/prices";
 
 // button view types
 import { tokenViewTypes } from "../../utils";
-import { resetUnwrapState, setUnwrapTokensValue } from "../../redux/unwrap";
 import { navigate } from "hookrouter";
 
 //constants
@@ -144,10 +143,7 @@ const RemixButton = () => {
       className="input-amount"
       disabled={disableBtn}
       onClick={() => {
-       
-        dispatch(setMax());
-        dispatch(setUnwrapTokensValue({ outputToken: null }));
-
+        dispatch(setRemixValues());
         dispatch(showConfirmModal({ showConfirm: true }));
       }}
     >
@@ -167,7 +163,7 @@ const GenerateMoreLPS = () => {
       onClick={() => {
         // clear the global state
         dispatch(resetState());
-        dispatch(setTxnStatus({txnStatus:null}));
+        dispatch(resetTxnState());
         navigate("/");
       }}
     >
@@ -186,7 +182,8 @@ const UnwrapMoreLPS = () => {
       className="input-amount confirm-lp"
       onClick={() => {
         // clear the global state
-        dispatch(resetUnwrapState());
+        dispatch(resetState());
+        dispatch(resetTxnState());
         navigate("/unwrap");
       }}
     >
@@ -206,7 +203,7 @@ const RemixMoreLPS = () => {
       onClick={() => {
         // clear the global state
         dispatch(resetState());
-        dispatch(resetUnwrapState());
+        dispatch(resetTxnState());
         navigate("/remix");
       }}
     >

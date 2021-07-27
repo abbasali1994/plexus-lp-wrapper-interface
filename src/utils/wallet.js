@@ -2,32 +2,26 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import BigNumber from "big-number";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { setWalletAddress, setWalletBalance } from "../redux/wallet";
-import { resetState } from "../redux/tokens";
+
 import store from "../store";
-import { getAllTokens } from "./token";
+import { resetState } from "../redux/tokens";
+import { resetTxnState } from "../redux/transactions";
+import { setWalletAddress, setWalletBalance, setLpTokens } from "../redux/wallet";
+
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
 import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
-import UniswapV2Router02ABI from "../helpers/abis/uniswapV2Router02.json";
 import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
 
-import { sushiRouterContractAddress, uniContractAddress,sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress, uniV2Router02ContractAddress } from "../helpers/contracts";
+import { uniContractAddress, sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
 import { constants } from "./";
-import {
-  ChainId,
-  Token,
-  Trade,
-  TokenAmount,
-  Pair,
-  WETH,
-} from "@uniswap/sdk";
+import { getAllTokens } from "./token";
 
+import { fetchLpTokens } from "../gql";
 
 const  abi = require('human-standard-token-abi');
 
 let web3 = null;
-
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -50,12 +44,13 @@ export const connectToWallet = async () => {
   web3 = new Web3(provider);
   const userAddress = (await web3.eth.getAccounts())[0];
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
-  await fetchWalletTokenBalances();
+  await fetchWalletTokenBalances(userAddress);
+  await fetchLpTokenBalances(userAddress);
   setWalletListener(provider);
   return web3;
 };
 
-export const fetchWalletTokenBalances = async () => {
+export const fetchWalletTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.symbol;
@@ -64,9 +59,9 @@ export const fetchWalletTokenBalances = async () => {
 
       if (web3 !== null) {
         if (tokenSymbol.toLowerCase() !== "eth") {
-          tokenBalance = await getTokenBalance(tokenAddress, tokenSymbol);
+          tokenBalance = await getTokenBalance(userAddress, tokenAddress, tokenSymbol);
         } else {
-          tokenBalance = await getUserETHBalance();
+          tokenBalance = await getUserETHBalance(userAddress);
         }
         if (tokenBalance !== null) {
           tokenBalance =
@@ -87,11 +82,18 @@ export const fetchWalletTokenBalances = async () => {
   }
 };
 
-const getUserETHBalance = async () => {
+export const fetchLpTokenBalances = async (userAddress) => {
+  if (web3Modal.cachedProvider) {
+    let lpTokens = await fetchLpTokens(userAddress);
+    console.log(lpTokens);
+    store.dispatch(setLpTokens({lpTokens}));
+  }
+};
+
+const getUserETHBalance = async (userAddress) => {
   let ethBalance = 0;
 
   try {
-    const userAddress = (await web3.eth.getAccounts())[0];
     const tokenBalanceInWei = await web3.eth.getBalance(userAddress);
 
     ethBalance = Number(web3.utils.fromWei(tokenBalanceInWei, "ether"));
@@ -103,7 +105,7 @@ const getUserETHBalance = async () => {
   return ethBalance;
 };
 
-const getTokenBalance = async (tokenAddress, tokenSymbol) => {
+const getTokenBalance = async (userAddress, tokenAddress, tokenSymbol) => {
   let tokenBalance = 0;
 
   try {
@@ -111,7 +113,6 @@ const getTokenBalance = async (tokenAddress, tokenSymbol) => {
       WrapperUniABI,
       uniContractAddress
     );
-    const userAddress = (await web3.eth.getAccounts())[0];
     const tokenBalanceInWei = await uniContract.methods
       .getUserTokenBalance(userAddress, tokenAddress)
       .call();
@@ -187,7 +188,6 @@ export const checkIfSushiPairExists = async(token1Address, token2Address) => {
   }
   return sushiPairAddress;
 }
-
 
 export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lpToken2, gasPrice, ethUSDPrice) => {
 
@@ -302,7 +302,9 @@ const setWalletListener = (provider) => {
   provider.on("accountsChanged", async (accounts) => {
     store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
     store.dispatch(resetState());
-    await fetchWalletTokenBalances();
+    store.dispatch(resetTxnState());
+    await fetchWalletTokenBalances(accounts[0]);
+    await fetchLpTokenBalances(accounts[0]);
   });
 };
 
@@ -311,85 +313,16 @@ const setWalletListener = (provider) => {
   if (web3Modal.cachedProvider) {
     await connectToWallet();
     store.dispatch(resetState());
+    store.dispatch(resetTxnState());
   }
 })();
 
-export const fetchBestTrades = async (dex,amount,lptoken1,lptoken2) => {
-  const token1 = new Token(ChainId.MAINNET, lptoken1.address, lptoken1.decimals, lptoken1.symbol, lptoken1.name)
-  const token2 = new Token(ChainId.MAINNET, lptoken2.address, lptoken2.decimals, lptoken2.symbol, lptoken2.name)
-  const inputTokenAmount = new TokenAmount(token2, (amount * (10**token1.decimals).toString()))
-  await checkBestPriceTrades(dex,token1,inputTokenAmount,token2)
-}
-
-// Generates Trade Array with est possible Trade using SDK
-export const checkBestPriceTrades = async (dex, outputToken, inputTokenAmount,inputToken ) => {
-  //check if pair exist
-  let isPair = null;
-  let pairs = null;
-  
-  switch(dex) {
-    case constants.dexUni: 
-      isPair =await checkIfUniPairExists(outputToken.address,inputToken.address);
-      break;
-    case constants.dexSushi: isPair = await checkIfSushiPairExists(outputToken.address,inputToken.address); break;
-    default: isPair = null;
-  } 
-  if(isPair) {
-    pairs = [new Pair(new TokenAmount(outputToken, '2000000000000000000'), new TokenAmount(inputToken, '2000000000000000000'))]
-  }
-  else {
-    let pair1 = new Pair(new TokenAmount(outputToken, '2000000000000000000'), new TokenAmount(WETH[ChainId.MAINNET], '2000000000000000000'))
-    let pair2 = new Pair(new TokenAmount(WETH[ChainId.MAINNET], '2000000000000000000'), new TokenAmount(inputToken, '2000000000000000000'))
-    pairs = [pair1,pair2]
-  };
-
-  const bestTrades = await Trade.bestTradeExactIn( 
-    pairs,
-    inputTokenAmount, 
-    outputToken, 
-    { maxNumResults:3, maxHops:3 })
-    console.log(bestTrades)
-}
-
-// Calculates maximum amount of output token possible to recieve on swap using router contract
-export const calcMaxAmountOuts = async (dex, amount,outputToken,inputToken ) => {
-  //check if pair exist
-  let isPair = null;
-  let pairs = null;
-  let router = null;
-  switch(dex) {
-    case constants.dexUni: 
-      isPair =await checkIfUniPairExists(outputToken.address,inputToken.address);
-      router = createContract(UniswapV2Router02ABI,uniV2Router02ContractAddress);
-      break;
-    case constants.dexSushi: 
-    isPair = await checkIfSushiPairExists(outputToken.address,inputToken.address);
-    router = createContract(UniswapV2Router02ABI,sushiRouterContractAddress); 
-    break;
-    default: isPair = null;
-  } 
-  if(!isPair) return;
-  if(isPair === constants.ZERO_ADDRESS) {
-    pairs = [inputToken.address, constants.WETH_ADDRESS, outputToken.address]
-    console.log(pairs)
-  }
-  else {
-        pairs = [inputToken.address,outputToken.address]
-  };
-  
-  let inputamount = convertAmountToString(amount,inputToken.decimals)
-  const amounts = await router.methods.getAmountsOut(inputamount,pairs).call()
-  const outputIndex = amounts.length -1;
-  console.log("Input Amount",parseFloat(amounts[0])/10**inputToken.decimals)
-  console.log("Output Amount",parseFloat(amounts[outputIndex])/10**outputToken.decimals)
-}
-
 // Other Helper Functions
-const createContract = (abi,address) => {
+export const createContract = (abi,address) => {
   return new web3.eth.Contract(abi,address)
 }
 
-function convertAmountToString(amount,decimals) {
+export function convertAmountToString(amount,decimals) {
   let amountString = amount.toString()
   let amountDecimals = 0;
   if(amountString.split(".")[1])
@@ -405,4 +338,10 @@ function pad(number, length) {
       str = str+'0';
   } 
   return str;
+}
+
+export function displayAmountWithDecimals(amount, decimals = 4) {
+  amount = parseFloat(amount)
+  if(amount > 10**(-1*decimals)) return amount.toFixed(decimals)
+  else return amount.toExponential(decimals)
 }

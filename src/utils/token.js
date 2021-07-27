@@ -8,6 +8,14 @@ let tokens = [
     decimals: 18,
   },
   {
+    name: "WETH",
+    displayName: "WETH",
+    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    symbol: "weth",
+    balance: "0.00",
+    decimals: 18,
+  },
+  {
     name: "1INCH",
     displayName: "1inch",
     address: "0x111111111117dc0aa78b770fa6a738034120c302",

@@ -8,6 +8,7 @@ import ReactHtmlParser from "react-html-parser";
 import { constants, tokenViewTypes } from "../../../utils";
 import TokenSelector from "../../token-selector";
 import TransactionButton from "../../transaction-button";
+import { displayAmountWithDecimals } from "../../../utils/wallet";
 
 const SelectedLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -24,17 +25,11 @@ const SelectedLpToken = (props) => {
 };
 
 const DesktopWrapper = () => {
-  const {
-    selectedLpTokenPair,
-    lpTokenPairs,
-    outputTokenValue,
-    outputTokenValueUSD,
-    lpToken1Value,
-    lpToken2Value,
-  } = useSelector((state) => state.unwrap);
+  const { selectedLpTokenPair, outputTokenValue, outputTokenValueUSD } =
+    useSelector((state) => state.tokens);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
-  const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
+  const { lpToken1, lpToken2, liquidityTokenBalance } = selectedLpTokenPair;
   const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
   const space1 =
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -68,7 +63,9 @@ const DesktopWrapper = () => {
           </Col>
           <Col>
             <div className="unwrap-pair-text">{lpPairName}</div>
-            <div className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</div>
+            <div className="unwrap-pair-dex">
+              {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+            </div>
           </Col>
         </Row>
         <div className="input-token-section">
@@ -91,7 +88,7 @@ const DesktopWrapper = () => {
             </span>
             <br className="txn-details-line-break" />
             <span className="unwrap-txn-details-label2">
-              4.5324 {lpPairName}
+              {displayAmountWithDecimals(liquidityTokenBalance)} {lpPairName}
               {ReactHtmlParser(space4)}
             </span>
             <span className="unwrap-txn-details-label4">
@@ -101,7 +98,9 @@ const DesktopWrapper = () => {
             <br />
             <span className="unwrap-txn-details-label3">
               {ReactHtmlParser(space1)}
-              {`${lpToken1Value} ${lpToken1.symbol} // ${lpToken2Value} ${lpToken2.symbol}`}
+              {`${displayAmountWithDecimals(lpToken1.tokenAmount)} ${
+                lpToken1.symbol
+              } // ${displayAmountWithDecimals(lpToken2.tokenAmount)} ${lpToken2.symbol}`}
             </span>
           </div>
           <div className="unwrap-txn-details-line">
@@ -116,7 +115,7 @@ const DesktopWrapper = () => {
             </span>
             <span className="unwrap-txn-details-label3">
               {ReactHtmlParser(space4)}
-              {outputTokenValueUSD}
+              ~${outputTokenValueUSD}
             </span>
           </div>
         </div>
@@ -129,12 +128,11 @@ const DesktopWrapper = () => {
 };
 
 const MobileWrapper = () => {
-  const { selectedLpTokenPair, lpTokenPairs } = useSelector(
-    (state) => state.unwrap
-  );
+  const { selectedLpTokenPair, outputTokenValueUSD } =
+    useSelector((state) => state.tokens);
+  const { lpToken1, lpToken2, liquidityTokenBalance } = selectedLpTokenPair;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
-  const { lpToken1, lpToken2 } = lpTokenPairs[selectedDex][selectedLpTokenPair];
   const lpPairName = lpToken1.symbol + "/" + lpToken2.symbol;
 
   return (
@@ -153,9 +151,11 @@ const MobileWrapper = () => {
         </Col>
         <Col>
           <div className="unwrap-pair-text">{lpPairName}</div>
-          <div className="unwrap-pair-amount">$4,623.42</div>
+          <div className="unwrap-pair-amount">~${outputTokenValueUSD}</div>
         </Col>
-        <Col className="unwrap-pair-dex">4.5324 {dexName} LP Tokens</Col>
+        <Col className="unwrap-pair-dex">
+          {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+        </Col>
       </Row>
       <div className="input-token-section">
         <div className="unwrap-token-label">Output Token</div>

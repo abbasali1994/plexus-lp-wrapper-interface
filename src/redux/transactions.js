@@ -19,10 +19,15 @@ export const transactionsSlice = createSlice({
         setTxnStatus: (state, { payload }) => {
             const { txnStatus } = payload;
             state.txnStatus = txnStatus;
+        },
+        resetTxnState: (state) => {   
+            state.txnStatus = null;
+            state.showConfirm = false;
+            state.showAwaitingTxn = false;
         }
     }
 });
 
-export const { showConfirmModal, showAwaitingTxnModal, setTxnStatus } = transactionsSlice.actions;
+export const { showConfirmModal, showAwaitingTxnModal, setTxnStatus, resetTxnState } = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

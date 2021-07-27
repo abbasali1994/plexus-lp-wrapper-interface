@@ -6,13 +6,14 @@ import { Col, Row } from "react-bootstrap";
 // Dashboard Header
 import { LpTokenIconView } from "../../token-selector";
 import pair from "../../../assets/images/pair.svg";
-import { getAllTokens } from "../../../utils/token";
 import { constants } from "../../../utils";
 import { MobileDexes } from "../../dex-buttons";
-
-const tokens = getAllTokens();
-const token1 = tokens.find((token) => token.symbol === "eth");
-const token2 = tokens.find((token) => token.symbol === "usdc");
+import { useSelector, useDispatch } from "react-redux";
+import NothingToSee from "../../nothing-to-see";
+import Loading from "../../loading";
+import { resetState, setSelectedLpTokenPair } from "../../../redux/tokens";
+import { navigate } from "hookrouter";
+import { displayAmountWithDecimals } from "../../../utils/wallet";
 
 const DashboardPairsComponent = () => {
   let element = null;
@@ -35,31 +36,31 @@ const DashboardPairsComponent = () => {
 };
 
 const MobileDashboardPairs = () => {
-  let lpTokens = { token1, token2 };
+  const { lpTokens } = useSelector((state) => state.wallet);
+  const { selectedDex } = useSelector((state) => state.dexes);
+
+  let children = <NothingToSee />;
+  if (!lpTokens[selectedDex]) children = <Loading />;
+  else if (lpTokens[selectedDex].length > 0)
+    children = lpTokens[selectedDex].map((lpTokenPair, id) => (
+      <GeneratingLPTokenMobileView lpTokens={lpTokenPair} key={id} />
+    ));
   return (
     <div className="main-wrapper-interface">
       <MobileDexes />
-      {[...Array(5)].map((value, id) => (
-        <div key={id} className="dashboard-pair">
-          <GeneratingLPTokenMobileView lpTokens={lpTokens} />
-          <Row>
-            <Col>
-              <button className="dashboard-pair-btn">Unwrap</button>
-            </Col>
-            <Col>
-              <button className="dashboard-pair-btn">Remix</button>
-            </Col>
-          </Row>
-        </div>
-      ))}
+      {children}
     </div>
   );
 };
 
 const DesktopDashboardPairs = () => {
-  let lpTokens = { token1, token2 };
-  return (
-    <div className="dashboard-wrapper-interface">
+  const { lpTokens } = useSelector((state) => state.wallet);
+  const { selectedDex } = useSelector((state) => state.dexes);
+
+  let children = <NothingToSee />;
+  if (!lpTokens[selectedDex]) children = <Loading />;
+  else if (lpTokens[selectedDex].length > 0)
+    children = (
       <div className="dashboard-table">
         <Row className="dashboard-table-header">
           <Col>Tokens</Col>
@@ -68,53 +69,100 @@ const DesktopDashboardPairs = () => {
           <Col lg="4">Actions</Col>
         </Row>
         <div className="dashboard-table-body">
-          {[...Array(5)].map((value, id) => (
-            <GeneratingLPTokenDesktopView key={id} lpTokens={lpTokens} />
+          {lpTokens[selectedDex].map((lpTokenPair, id) => (
+            <GeneratingLPTokenDesktopView key={id} lpTokens={lpTokenPair} />
           ))}
         </div>
       </div>
-    </div>
-  );
+    );
+
+  return <div className="dashboard-wrapper-interface">{children}</div>;
 };
 
 const GeneratingLPTokenMobileView = ({ lpTokens }) => {
-  const { token1, token2 } = lpTokens;
-  const lpPair = token1.symbol + "/" + token2.symbol;
+  const { lpToken1, lpToken2, liquidityTokenBalance, lpTokenPrice } = lpTokens;
+  const lpPair = lpToken1.symbol + "/" + lpToken2.symbol;
+  const dispatch = useDispatch();
+  const handleRemixClick = () => {
+    dispatch(resetState())
+    dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
+    navigate("/remix");
+  };
 
+  const handleUnwrapClick = () => {
+    dispatch(resetState())
+    dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
+    navigate("/unwrap");
+  };
   return (
-    <div className="dashboard-lp-view">
-      <div className="select-token">
-        <LpTokenIconView tokenIcon={token1.tokenIcon} tokenIconSize={51} />
-      </div>
-      <img
-        className="dashboard-pair-icon"
-        src={pair}
-        width="16"
-        height="46"
-        alt="pair"
-      />
-      <div className="select-token">
-        <LpTokenIconView tokenIcon={token2.tokenIcon} tokenIconSize={51} />
-      </div>
-      <div className="lp-pair-info">
-        <div className="dashboard-pair-text">{lpPair}</div>
-        <div className="lp-pair-desc">
-          <div className="dashboard-pair-dex">4.5324 LP Tokens</div>
-          <div className="dashboard-pair-amount">$4,623.42</div>
+    <div className="dashboard-pair">
+      <div className="dashboard-lp-view">
+        <div className="select-token">
+          <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={51} />
+        </div>
+        <img
+          className="dashboard-pair-icon"
+          src={pair}
+          width="16"
+          height="46"
+          alt="pair"
+        />
+        <div className="select-token">
+          <LpTokenIconView tokenIcon={lpToken2.tokenIcon} tokenIconSize={51} />
+        </div>
+        <div className="lp-pair-info">
+          <div className="dashboard-pair-text">{lpPair}</div>
+          <div className="lp-pair-desc">
+            <div className="dashboard-pair-dex">
+              {displayAmountWithDecimals(liquidityTokenBalance)} LP Tokens
+            </div>
+            <div className="dashboard-pair-amount">
+              ${displayAmountWithDecimals(liquidityTokenBalance * lpTokenPrice)}
+            </div>
+          </div>
         </div>
       </div>
+      <Row>
+        <Col>
+          <button
+            className="dashboard-pair-btn"
+            onClick={() => handleUnwrapClick()}
+          >
+            Unwrap
+          </button>
+        </Col>
+        <Col>
+          <button
+            className="dashboard-pair-btn"
+            onClick={() => handleRemixClick()}
+          >
+            Remix
+          </button>
+        </Col>
+      </Row>
     </div>
   );
 };
 
 const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
-  const { token1, token2 } = lpTokens;
-  const lpPair = token1.symbol + "/" + token2.symbol;
+  const { lpToken1, lpToken2, liquidityTokenBalance, lpTokenPrice } = lpTokens;
+  const lpPair = lpToken1.symbol + "/" + lpToken2.symbol;
+  const dispatch = useDispatch();
+  const handleRemixClick = () => {
+    dispatch(resetState())
+    dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
+    navigate("/remix");
+  };
 
+  const handleUnwrapClick = () => {
+    dispatch(resetState())
+    dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
+    navigate("/unwrap");
+  };
   return (
     <Row className="dashboard-table-row">
       <Col className="dashboard-table-tokens">
-        <LpTokenIconView tokenIcon={token1.tokenIcon} tokenIconSize={45} />
+        <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
         <img
           className="dashboard-table-pair-icon"
           src={pair}
@@ -122,22 +170,36 @@ const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
           height="16"
           alt="pair"
         />
-        <LpTokenIconView tokenIcon={token2.tokenIcon} tokenIconSize={45} />
+        <LpTokenIconView tokenIcon={lpToken2.tokenIcon} tokenIconSize={45} />
       </Col>
       <Col>
         <div className="dashboard-table-pair-text">{lpPair}</div>
-        <div className="dashboard-table-pair-dex">4.5324 LP Tokens</div>
+        <div className="dashboard-table-pair-dex">
+          {displayAmountWithDecimals(liquidityTokenBalance)} LP Tokens
+        </div>
       </Col>
       <Col>
-        <div className="dashboard-table-pair-amount">$4,623.42</div>
+        <div className="dashboard-table-pair-amount">
+          ${displayAmountWithDecimals(liquidityTokenBalance * lpTokenPrice)}
+        </div>
       </Col>
       <Col lg="4">
         <Row>
           <Col>
-            <button className="dashboard-pair-btn">Unwrap</button>
+            <button
+              className="dashboard-pair-btn"
+              onClick={() => handleUnwrapClick()}
+            >
+              Unwrap
+            </button>
           </Col>
           <Col>
-            <button className="dashboard-pair-btn">Remix</button>
+            <button
+              className="dashboard-pair-btn"
+              onClick={() => handleRemixClick()}
+            >
+              Remix
+            </button>
           </Col>
         </Row>
       </Col>
