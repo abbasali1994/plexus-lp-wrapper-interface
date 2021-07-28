@@ -1,4 +1,4 @@
-import { graphAPIEndpoints } from "./queries";
+import { graphAPIEndpoints, UserPositions, UserSwaps } from "./queries";
 
 const pageResults = require("graph-results-pager");
 
@@ -19,7 +19,6 @@ export async function fetchLpTokens({
         where: {
           user: `\\"${user_address.toLowerCase()}\\"`,
         },
-        block: undefined,
       },
       properties: UserPositions.properties,
     },
@@ -28,34 +27,34 @@ export async function fetchLpTokens({
   else return [];
 }
 
-const UserPositions = {
-  properties: [
-    "id",
-    "pair { id, reserve0, reserve1, reserveUSD, token0 { id, symbol, derivedETH },token0Price,token1Price, token1 { id, symbol, derivedETH }, totalSupply }",
-    "liquidityTokenBalance",
-  ],
+export async function fetchUserSwaps({
+  minTimestamp = undefined,
+  maxTimestamp = undefined,
+  minBlock = undefined,
+  maxBlock = undefined,
+  user_address = undefined,
+  max = undefined,
+} = {}) {
+  if (!user_address) {
+    throw new Error("sushi-data: User address undefined");
+  }
 
-  callback(results) {
-    return results.map((entry) => ({
-      id: entry.id,
-      pair: {
-        id: entry.pair.id,
-        reserve0: Number(entry.pair.reserve0),
-        reserve1: Number(entry.pair.reserve1),
-        reserveUSD: Number(entry.pair.reserveUSD),
-        token0: {
-          id: entry.pair.token0.id,
-          symbol: entry.pair.token0.symbol,
-          derivedETH: Number(entry.pair.token0.derivedETH),
+  const result = await pageResults({
+    api: graphAPIEndpoints.exchange_v1,
+    query: {
+      entity: "swaps",
+      selection: {
+        where: {
+          sender: `\\"${user_address.toLowerCase()}\\"`,
+          block_gte: minBlock || undefined,
+          block_lte: maxBlock || undefined,
+          timestamp_gte: minTimestamp || undefined,
+          timestamp_lte: maxTimestamp || undefined,
         },
-        token1: {
-          id: entry.pair.token1.id,
-          symbol: entry.pair.token1.symbol,
-          derivedETH: Number(entry.pair.token1.derivedETH),
-        },
-        totalSupply: Number(entry.pair.totalSupply),
       },
-      liquidityTokenBalance: Number(entry.liquidityTokenBalance),
-    }));
-  },
-};
+      properties: UserSwaps.properties,
+    },
+    max,
+  });
+  return result;
+}

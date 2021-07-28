@@ -16,12 +16,20 @@ export const walletSlice = createSlice({
     lpTokens:{
       Uniswap:null,
       Sushiswap:null,
+    },
+    userSwaps: {
+      Uniswap:null,
+      Sushiswap:null,
     }
   },
   reducers: {
     setLpTokens: (state, { payload }) => {
       const { lpTokens } = payload;
       state.lpTokens = lpTokens;
+    },
+    setUserSwaps: (state, { payload }) => {
+      const { userSwaps } = payload;
+      state.userSwaps = userSwaps;
     },
     setWalletAddress: (state, { payload }) => {
       const { walletAddress } = payload;
@@ -39,7 +47,7 @@ export const walletSlice = createSlice({
   },
 });
 
-export const { setWalletAddress, setWalletBalance, setLpTokens, setWalletUSDValue } =
+export const { setWalletAddress, setWalletBalance, setLpTokens, setUserSwaps, setWalletUSDValue } =
   walletSlice.actions;
 
 export default walletSlice.reducer;

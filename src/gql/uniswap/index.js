@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { LP_POSITION_QUERY } from "./queries";
+import { LP_POSITION_QUERY, LP_TRANSACTION_RECEIVE } from "./queries";
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -14,5 +14,17 @@ export const fetchLpTokens = async (userAddress) => {
   });
   if (data.user && data.user.liquidityPositions)
     return data.user.liquidityPositions;
+  return [];
+};
+
+export const fetchUserSwaps = async (userAddress) => {
+  const { data } = await client.query({
+    query: gql(LP_TRANSACTION_RECEIVE),
+    variables: {
+      user: userAddress.toLowerCase(),
+    },
+  });
+  if (data.swaps)
+    return data.swaps;
   return [];
 };

@@ -6,7 +6,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import store from "../store";
 import { resetState } from "../redux/tokens";
 import { resetTxnState } from "../redux/transactions";
-import { setWalletAddress, setWalletBalance, setLpTokens } from "../redux/wallet";
+import { setWalletAddress, setWalletBalance, setLpTokens, setUserSwaps } from "../redux/wallet";
 
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
@@ -17,7 +17,7 @@ import { uniContractAddress, sushiContractAddress, uniV2FactoryContractAddress, 
 import { constants } from "./";
 import { getAllTokens } from "./token";
 
-import { fetchLpTokens } from "../gql";
+import { fetchLpTokens, fetchUserSwaps } from "../gql";
 
 const  abi = require('human-standard-token-abi');
 
@@ -46,6 +46,7 @@ export const connectToWallet = async () => {
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
+  await fetchTokenSwaps(userAddress);
   setWalletListener(provider);
   return web3;
 };
@@ -85,8 +86,14 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 export const fetchLpTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     let lpTokens = await fetchLpTokens(userAddress);
-    console.log(lpTokens);
     store.dispatch(setLpTokens({lpTokens}));
+  }
+};
+
+export const fetchTokenSwaps = async (userAddress) => {
+  if (web3Modal.cachedProvider) {
+    let userSwaps = await fetchUserSwaps("0x0887e769D8B1C79DB1312Ed4535B0CDa1dd43991")
+    store.dispatch(setUserSwaps({userSwaps}));
   }
 };
 
@@ -305,6 +312,7 @@ const setWalletListener = (provider) => {
     store.dispatch(resetTxnState());
     await fetchWalletTokenBalances(accounts[0]);
     await fetchLpTokenBalances(accounts[0]);
+    await fetchTokenSwaps(accounts[0]);
   });
 };
 
@@ -344,4 +352,30 @@ export function displayAmountWithDecimals(amount, decimals = 4) {
   amount = parseFloat(amount)
   if(amount > 10**(-1*decimals)) return amount.toFixed(decimals)
   else return amount.toExponential(decimals)
+}
+
+export function formatTimestamp(timestamp) {
+  var d = new Date(parseFloat(timestamp)*1000),
+		yyyy = d.getFullYear(),
+		mm = ('0' + (d.getMonth() + 1)).slice(-2),
+		dd = ('0' + d.getDate()).slice(-2),
+		hh = d.getHours(),
+		h = hh,
+		min = ('0' + d.getMinutes()).slice(-2),
+		ampm = 'AM',
+		time;
+			
+	if (hh > 12) {
+		h = hh - 12;
+		ampm = 'PM';
+	} else if (hh === 12) {
+		h = 12;
+		ampm = 'PM';
+	} else if (hh === 0) {
+		h = 12;
+	}
+	
+	time = mm + '-' + dd + '-' + yyyy + ' ' + h + ':' + min + ' ' + ampm;
+		
+	return time;
 }
