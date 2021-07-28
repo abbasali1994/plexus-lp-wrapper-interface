@@ -26,6 +26,10 @@ export const tokensSlice = createSlice({
     txnHash: "",
   },
   reducers: {
+    setSearchCaller: (state, action) => {
+      const { searchCaller } = action.payload;
+      state.searchCaller = searchCaller;
+    },
     showSearchModal: (state, action) => {
       const { showSearch, searchCaller } = action.payload;
       state.showSearch = showSearch;
@@ -222,6 +226,7 @@ export const {
   setSelectedToken,
   clearTokens,
   setMax,
+  setSearchCaller,
   setRemixValues,
   setUnwrapValues,
   setNetworkValues,
