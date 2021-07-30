@@ -13,7 +13,9 @@ import NothingToSee from "../../nothing-to-see";
 import Loading from "../../loading";
 import { resetState, setSelectedLpTokenPair } from "../../../redux/tokens";
 import { navigate } from "hookrouter";
-import { displayAmountWithDecimals } from "../../../utils/wallet";
+import {
+  formatAmount,
+} from "../../../utils/display";
 
 const DashboardPairsComponent = () => {
   let element = null;
@@ -27,7 +29,7 @@ const DashboardPairsComponent = () => {
 
   element =
     width > constants.width.mobile ? (
-      <DesktopDashboardPairs />
+      <DesktopPairsWrapper />
     ) : (
       <MobileDashboardPairs />
     );
@@ -53,14 +55,46 @@ const MobileDashboardPairs = () => {
   );
 };
 
-const DesktopDashboardPairs = () => {
+const DesktopPairsWrapper = () => {
   const { lpTokens } = useSelector((state) => state.wallet);
   const { selectedDex } = useSelector((state) => state.dexes);
-
   let children = <NothingToSee />;
   if (!lpTokens[selectedDex]) children = <Loading />;
   else if (lpTokens[selectedDex].length > 0)
-    children = (
+    children = <DesktopDashboardPairs lpTokens={lpTokens[selectedDex]} />;
+
+  return <div className="dashboard-wrapper-interface">{children}</div>;
+};
+
+const DesktopDashboardPairs = ({ lpTokens }) => {
+  // const divRef = useRef(null);
+  // const [cursor, setCursor] = useState(-1);
+  // function handleKeyDown(e) {
+  //   const box = document.getElementsByClassName("dashboard-table-body")[0];
+  //   // arrow up/down button should select next/previous list element
+  //   if (e.keyCode === 38 && cursor > 0) {
+  //     const token = document.getElementById("dashboard-pairs-" + (cursor - 1));
+  //     setCursor(cursor - 1);
+  //     if (!isInViewport(token, box)) token.scrollIntoView();
+  //   } else if (e.keyCode === 40 && cursor < lpTokens.length - 1) {
+  //     const token = document.getElementById("dashboard-pairs-" + (cursor + 1));
+  //     setCursor(cursor + 1);
+  //     if (!isInViewport(token, box)) token.scrollIntoView();
+  //   } else if (e.key === "Enter" && cursor > -1) {
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   divRef.current.focus();
+  // });
+
+  return (
+    <div
+      className="dashboard-wrapper-interface"
+      // ref={divRef}
+      // tabIndex="0"
+      // onKeyDown={handleKeyDown}
+    >
       <div className="dashboard-table">
         <Row className="dashboard-table-header">
           <Col>Tokens</Col>
@@ -69,14 +103,18 @@ const DesktopDashboardPairs = () => {
           <Col lg="4">Actions</Col>
         </Row>
         <div className="dashboard-table-body">
-          {lpTokens[selectedDex].map((lpTokenPair, id) => (
-            <GeneratingLPTokenDesktopView key={id} lpTokens={lpTokenPair} />
+          {lpTokens.map((lpTokenPair, id) => (
+            <GeneratingLPTokenDesktopView
+              key={id}
+              lpTokens={lpTokenPair}
+              tokenID={"dashboard-pairs-" + id}
+              // tokenSelected={cursor === id ? "token-selected" : ""}
+            />
           ))}
         </div>
       </div>
-    );
-
-  return <div className="dashboard-wrapper-interface">{children}</div>;
+    </div>
+  );
 };
 
 const GeneratingLPTokenMobileView = ({ lpTokens }) => {
@@ -84,13 +122,13 @@ const GeneratingLPTokenMobileView = ({ lpTokens }) => {
   const lpPair = lpToken1.symbol + "/" + lpToken2.symbol;
   const dispatch = useDispatch();
   const handleRemixClick = () => {
-    dispatch(resetState())
+    dispatch(resetState());
     dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
     navigate("/remix");
   };
 
   const handleUnwrapClick = () => {
-    dispatch(resetState())
+    dispatch(resetState());
     dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
     navigate("/unwrap");
   };
@@ -114,10 +152,10 @@ const GeneratingLPTokenMobileView = ({ lpTokens }) => {
           <div className="dashboard-pair-text">{lpPair}</div>
           <div className="lp-pair-desc">
             <div className="dashboard-pair-dex">
-              {displayAmountWithDecimals(liquidityTokenBalance)} LP Tokens
+              {formatAmount(liquidityTokenBalance)} LP Tokens
             </div>
             <div className="dashboard-pair-amount">
-              ${displayAmountWithDecimals(liquidityTokenBalance * lpTokenPrice)}
+              ${formatAmount(liquidityTokenBalance * lpTokenPrice)}
             </div>
           </div>
         </div>
@@ -144,23 +182,23 @@ const GeneratingLPTokenMobileView = ({ lpTokens }) => {
   );
 };
 
-const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
+const GeneratingLPTokenDesktopView = ({ lpTokens, tokenID, tokenSelected }) => {
   const { lpToken1, lpToken2, liquidityTokenBalance, lpTokenPrice } = lpTokens;
   const lpPair = lpToken1.symbol + "/" + lpToken2.symbol;
   const dispatch = useDispatch();
   const handleRemixClick = () => {
-    dispatch(resetState())
+    dispatch(resetState());
     dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
     navigate("/remix");
   };
 
   const handleUnwrapClick = () => {
-    dispatch(resetState())
+    dispatch(resetState());
     dispatch(setSelectedLpTokenPair({ selectedLpTokenPair: lpTokens }));
     navigate("/unwrap");
   };
   return (
-    <Row className="dashboard-table-row">
+    <Row id={tokenID} className={`dashboard-table-row ${tokenSelected}`}>
       <Col className="dashboard-table-tokens">
         <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
         <img
@@ -175,12 +213,12 @@ const GeneratingLPTokenDesktopView = ({ lpTokens }) => {
       <Col>
         <div className="dashboard-table-pair-text">{lpPair}</div>
         <div className="dashboard-table-pair-dex">
-          {displayAmountWithDecimals(liquidityTokenBalance)} LP Tokens
+          {formatAmount(liquidityTokenBalance)} LP Tokens
         </div>
       </Col>
       <Col>
         <div className="dashboard-table-pair-amount">
-          ${displayAmountWithDecimals(liquidityTokenBalance * lpTokenPrice)}
+          ${formatAmount(liquidityTokenBalance * lpTokenPrice)}
         </div>
       </Col>
       <Col lg="4">

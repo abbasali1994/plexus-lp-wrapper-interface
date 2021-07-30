@@ -17,7 +17,6 @@ export const LP_POSITION_QUERY = `
             name,
             symbol
           },
-          volumeUSD,
           reserve0,
           reserve1,
           totalSupply,
@@ -30,7 +29,7 @@ export const LP_POSITION_QUERY = `
       }
     }
   }
-`
+`;
 
 export const LP_TRANSACTION_MINT = `
   query mintsTransaction($user: String) {
@@ -74,7 +73,7 @@ export const LP_TRANSACTION_MINT = `
       feeLiquidity
     }
   }
-`
+`;
 
 export const LP_TRANSACTION_BURN = `
   query burnsTransaction($user: String) {
@@ -118,7 +117,7 @@ export const LP_TRANSACTION_BURN = `
       feeLiquidity
     }
   }
-`
+`;
 
 export const LP_TRANSACTION_SEND = `
   query sentTransaction($user: String) {
@@ -161,7 +160,7 @@ export const LP_TRANSACTION_SEND = `
       amountUSD
     }
   }
-`
+`;
 
 export const LP_TRANSACTION_RECEIVE = `
   query receivedTransaction($user: String) {
@@ -204,4 +203,29 @@ export const LP_TRANSACTION_RECEIVE = `
       amountUSD
     }
   }
-  `
+  `;
+
+export const LP_PAIR_DETAILS = `
+  query pairDetails($pair: String) {
+    pair(id: $pair){
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      }
+   }`;

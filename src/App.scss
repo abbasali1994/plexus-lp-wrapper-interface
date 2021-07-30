@@ -107,6 +107,16 @@
   padding: 15px 20px;
 }
 
+.dashboard-table-row:hover {
+  border-color: var(--color-border-background-2);
+  border-radius: 10px;
+  border-style: dashed;
+  border-width: 1px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+
 /*Main Wrapper CSS that is shared*/
 .main-dashboard-wrapper,
 .main-wrapper {

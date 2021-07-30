@@ -1,33 +1,230 @@
-export const graphAPIEndpoints = {
-  masterchef: 'https://api.thegraph.com/subgraphs/name/sushiswap/master-chef',
-  bar: 'https://api.thegraph.com/subgraphs/name/sushiswap/sushi-bar',
-  timelock: 'https://api.thegraph.com/subgraphs/name/sushiswap/sushi-timelock',
-  maker: 'https://api.thegraph.com/subgraphs/name/sushiswap/sushi-maker',
-  exchange: 'https://api.thegraph.com/subgraphs/name/sushiswap/exchange',
-  exchange_v1: 'https://api.thegraph.com/subgraphs/name/jiro-ono/sushiswap-v1-exchange',
-  blocklytics: 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks',
-  lockup: 'https://api.thegraph.com/subgraphs/name/matthewlilley/lockup',
-}; 
+export const LP_POSITION_QUERY = `
+  query lpPositions($user: String) {
+    user(id: $user) {
+      liquidityPositions {
+        id,
+        liquidityTokenBalance,
+        pair {
+          id,
+          token0 {
+            id,
+            name,
+            symbol
+          },
+          token1 {
+            id,
+            name,
+            symbol
+          },
+          volumeUSD,
+          reserve0,
+          reserve1,
+          totalSupply,
+          reserveETH,
+          reserveUSD,
+          token0Price,
+          token1Price
+        }
+      }
+    }
+  }
+`;
 
-export const UserSwaps = {
-  properties: [
-      'id',
-      'timestamp',
-      'transaction',
-      "pair { id, reserve0, reserve1, reserveUSD, token0 { id, symbol, derivedETH },token0Price,token1Price, token1 { id, symbol, derivedETH }, totalSupply }",
-      'amount0In',
-      'amount1In',
-      'amount0Out',
-      'amount1Out',
-      'to',
-      'amountUSD',
-  ],
-};
+export const LP_TRANSACTION_MINT = `
+  query mintsTransaction($user: String) {
+    mints(where: {
+      to: $user
+    }) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      to,
+      liquidity,
+      sender,
+      amount0,
+      amount1,
+      amountUSD,
+      feeTo,
+      feeLiquidity
+    }
+  }
+`;
 
-export const UserPositions = {
-  properties: [
-    "id",
-    "pair { id, reserve0, reserve1, reserveUSD, token0 { id, symbol, derivedETH },token0Price,token1Price, token1 { id, symbol, derivedETH }, totalSupply }",
-    "liquidityTokenBalance",
-  ],
-};
+export const LP_TRANSACTION_BURN = `
+  query burnsTransaction($user: String) {
+    burns(where: {
+      sender: $user
+    }) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      to,
+      liquidity,
+      sender,
+      amount0,
+      amount1,
+      amountUSD,
+      feeTo,
+      feeLiquidity
+    }
+  }
+`;
+
+export const LP_TRANSACTION_SEND = `
+  query sentTransaction($user: String) {
+    swaps(where: {
+      sender: $user
+    }) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      sender,
+      to,
+      amount0In,
+      amount1In,
+      amount0Out,
+      amount1Out,
+      amountUSD
+    }
+  }
+`;
+
+export const LP_TRANSACTION_RECEIVE = `
+  query receivedTransaction($user: String) {
+    swaps(where: {
+      to: $user
+    }) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      sender,
+      to,
+      amount0In,
+      amount1In,
+      amount0Out,
+      amount1Out,
+      amountUSD
+    }
+  }
+  `;
+
+export const LP_PAIR_DETAILS = `
+  query pairDetails($pair: String) {
+    pair(id: $pair){
+      id,
+      token0 {
+        id,
+        name,
+        symbol
+      },
+      token1 {
+        id,
+        name,
+        symbol
+      },
+      volumeUSD,
+      reserve0,
+      reserve1,
+      totalSupply,
+      reserveETH,
+      reserveUSD,
+      token0Price,
+      token1Price
+    }
+   }`;

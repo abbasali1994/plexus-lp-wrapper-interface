@@ -26,6 +26,17 @@
   font-weight: var(--font-weight-1);
   align-items: center;
   letter-spacing: 0.05em;
+  margin-right: auto!important;
+}
+
+.input-token-section >.remix-row:hover,
+.input-token-section >.remix-row-selected {
+  border-color: var(--color-border-background-2);
+  border-radius: 10px;
+  border-style: dashed;
+  border-width: 1px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .remix-tokens {

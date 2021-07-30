@@ -8,7 +8,7 @@ import ReactHtmlParser from "react-html-parser";
 import { constants, tokenViewTypes } from "../../../utils";
 import TokenSelector from "../../token-selector";
 import TransactionButton from "../../transaction-button";
-import { displayAmountWithDecimals } from "../../../utils/wallet";
+import { formatAmount } from "../../../utils/display";
 
 const SelectedLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -64,7 +64,7 @@ const DesktopWrapper = () => {
           <Col>
             <div className="unwrap-pair-text">{lpPairName}</div>
             <div className="unwrap-pair-dex">
-              {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+              {formatAmount(liquidityTokenBalance)} {dexName} LP Tokens
             </div>
           </Col>
         </Row>
@@ -88,7 +88,7 @@ const DesktopWrapper = () => {
             </span>
             <br className="txn-details-line-break" />
             <span className="unwrap-txn-details-label2">
-              {displayAmountWithDecimals(liquidityTokenBalance)} {lpPairName}
+              {formatAmount(liquidityTokenBalance)} {lpPairName}
               {ReactHtmlParser(space4)}
             </span>
             <span className="unwrap-txn-details-label4">
@@ -98,9 +98,9 @@ const DesktopWrapper = () => {
             <br />
             <span className="unwrap-txn-details-label3">
               {ReactHtmlParser(space1)}
-              {`${displayAmountWithDecimals(lpToken1.tokenAmount)} ${
+              {`${formatAmount(lpToken1.tokenAmount)} ${
                 lpToken1.symbol
-              } // ${displayAmountWithDecimals(lpToken2.tokenAmount)} ${lpToken2.symbol}`}
+              } // ${formatAmount(lpToken2.tokenAmount)} ${lpToken2.symbol}`}
             </span>
           </div>
           <div className="unwrap-txn-details-line">
@@ -115,7 +115,7 @@ const DesktopWrapper = () => {
             </span>
             <span className="unwrap-txn-details-label3">
               {ReactHtmlParser(space4)}
-              ~${outputTokenValueUSD}
+              ~${formatAmount(outputTokenValueUSD)}
             </span>
           </div>
         </div>
@@ -151,10 +151,10 @@ const MobileWrapper = () => {
         </Col>
         <Col>
           <div className="unwrap-pair-text">{lpPairName}</div>
-          <div className="unwrap-pair-amount">~${outputTokenValueUSD}</div>
+          <div className="unwrap-pair-amount">~${formatAmount(outputTokenValueUSD)}</div>
         </Col>
         <Col className="unwrap-pair-dex">
-          {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+          {formatAmount(liquidityTokenBalance)} {dexName} LP Tokens
         </Col>
       </Row>
       <div className="input-token-section">

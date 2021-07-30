@@ -21,7 +21,8 @@ import arrowDown from "../../../assets/images/arrow-down.svg";
 
 // Utils
 import { constants, tokenViewTypes } from "../../../utils";
-import { displayAmountWithDecimals, wrapTokens } from "../../../utils/wallet";
+import {  wrapTokens } from "../../../utils/wallet";
+import { formatAmount } from "../../../utils/display";
 import { navigate } from "hookrouter";
 
 const ConfirmLPModal = ({ theme }) => {
@@ -288,7 +289,7 @@ export const UnwrapLPContent = () => {
   const token = {};
   Object.assign(token, outputToken);
   token.tokenAmount = outputTokenValue;
-  token.tokenAmountUSD = `~$${outputTokenValueUSD}`;
+  token.tokenAmountUSD = `~$${formatAmount(outputTokenValueUSD)}`;
 
   // the input token prop
   const token1 = {};
@@ -315,14 +316,14 @@ export const UnwrapLPContent = () => {
           </div>
           <div className="lp-token-stats">
             <div className="lp-token-amount">
-              {liquidityTokenBalance} &nbsp; LP Tokens
+              {formatAmount(liquidityTokenBalance)} &nbsp; LP Tokens
             </div>
             <div className="lp-token-value">
-              {displayAmountWithDecimals(token1.tokenAmount)}{" "}
+              {formatAmount(token1.tokenAmount)}{" "}
               {token1.symbol.toUpperCase()}
             </div>
             <div className="lp-token-value">
-              {displayAmountWithDecimals(token2.tokenAmount)}{" "}
+              {formatAmount(token2.tokenAmount)}{" "}
               {token2.symbol.toUpperCase()}
             </div>
           </div>
@@ -393,12 +394,12 @@ export const RemixLPContent = () => {
   const fromToken2 = {};
   Object.assign(fromToken1, selectedLpTokenPair.lpToken1);
   Object.assign(fromToken2, selectedLpTokenPair.lpToken2);
-  fromToken1.tokenValue = `${displayAmountWithDecimals(
+  fromToken1.tokenValue = `${formatAmount(
     fromToken1.tokenAmount
   )} ${fromToken1.symbol.toUpperCase()}`;
   fromToken1.tokenAmountUSD = (liquidityTokenBalance / 2) * lpTokenPrice;
 
-  fromToken2.tokenValue = `${displayAmountWithDecimals(
+  fromToken2.tokenValue = `${formatAmount(
     fromToken2.tokenAmount
   )} ${fromToken2.symbol.toUpperCase()}`;
   fromToken2.tokenAmountUSD = (liquidityTokenBalance / 2) * lpTokenPrice;
@@ -423,7 +424,7 @@ export const RemixLPContent = () => {
           </div>
           <div className="lp-token-stats">
             <div className="lp-token-amount">
-              {displayAmountWithDecimals(liquidityTokenBalance)} &nbsp; LP
+              {formatAmount(liquidityTokenBalance)} &nbsp; LP
               Tokens
             </div>
             <div className="lp-token-value">
@@ -449,7 +450,7 @@ export const RemixLPContent = () => {
           </div>
           <div className="lp-token-stats">
             <div className="lp-token-amount">
-              {newLPTokens} &nbsp; LP Tokens
+              {formatAmount(newLPTokens)} &nbsp; LP Tokens
             </div>
             <div className="lp-token-value">
               {`${toToken1.tokenValue} // ${toToken2.tokenValue}`}

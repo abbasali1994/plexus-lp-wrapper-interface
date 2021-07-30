@@ -1,12 +1,13 @@
 import "./index.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import { constants, formatAddress } from "../../../utils";
 import {
-  displayAmountWithDecimals,
+  formatAmount,
   formatTimestamp,
-} from "../../../utils/wallet";
+  isInViewport,
+} from "../../../utils/display";
 import NothingToSee from "../../nothing-to-see";
 import Loading from "../../loading";
 
@@ -53,6 +54,9 @@ const DashboardHistoryComponent = () => {
 };
 
 const MobileDashboardHistory = ({ history }) => {
+  function handleClick(transaction) {
+    window.open(constants.etherscanTxURL + transaction.id, "_blank");
+  }
   return (
     <div className="main-wrapper-interface">
       {history.map((entry, id) => {
@@ -65,11 +69,15 @@ const MobileDashboardHistory = ({ history }) => {
           timestamp,
           transaction,
         } = entry;
-        const statement = `${displayAmountWithDecimals(amountIn, 2)} ${
+        const statement = `${formatAmount(amountIn, 2)} ${
           tokenIn.symbol
-        } to ${displayAmountWithDecimals(amountOut, 2)} ${tokenOut.symbol}`;
+        } to ${formatAmount(amountOut, 2)} ${tokenOut.symbol}`;
         return (
-          <div key={id} className="history">
+          <div
+            key={id}
+            className="history"
+            onClick={(transaction) => handleClick(transaction)}
+          >
             <div className="history-timestamp">
               {formatTimestamp(timestamp)}
             </div>
@@ -77,12 +85,7 @@ const MobileDashboardHistory = ({ history }) => {
               <span className="history-action">{action}&nbsp;</span>
               {statement}
             </div>
-            <div
-              className="history-hash"
-              onClick={() =>
-                window.open(constants.etherscanTxURL + transaction.id, "_blank")
-              }
-            >
+            <div className="history-hash">
               Hash: {formatAddress(transaction.id)}
             </div>
           </div>
@@ -93,8 +96,36 @@ const MobileDashboardHistory = ({ history }) => {
 };
 
 const DesktopDashboardHistory = ({ history }) => {
+  const divRef = useRef(null);
+  const [cursor, setCursor] = useState(-1);
+  function handleKeyDown(e) {
+    const box = document.getElementsByClassName("dashboard-table-body")[0];
+    // arrow up/down button should select next/previous list element
+    if (e.keyCode === 38 && cursor > 0) {
+      const token = document.getElementById("dashoard-history-" + (cursor - 1));
+      setCursor(cursor - 1);
+      if (!isInViewport(token, box)) token.scrollIntoView();
+    } else if (e.keyCode === 40 && cursor < history.length - 1) {
+      const token = document.getElementById("dashoard-history-" + (cursor + 1));
+      setCursor(cursor + 1);
+      if (!isInViewport(token, box)) token.scrollIntoView();
+    } else if (e.key === "Enter" && cursor > -1) {
+      handleClick(history[cursor].transaction);
+    }
+  }
+  function handleClick(transaction) {
+    window.open(constants.etherscanTxURL + transaction.id, "_blank");
+  }
+  useEffect(() => {
+    divRef.current.focus();
+  });
   return (
-    <div className="dashboard-wrapper-interface">
+    <div
+      className="dashboard-wrapper-interface"
+      ref={divRef}
+      tabIndex="0"
+      onKeyDown={handleKeyDown}
+    >
       <div className="dashboard-table">
         <Row className="dashboard-table-header">
           <Col lg="3">Date</Col>
@@ -112,13 +143,19 @@ const DesktopDashboardHistory = ({ history }) => {
               timestamp,
               transaction,
             } = entry;
-            const statement = `${displayAmountWithDecimals(amountIn)} ${
+            const statement = `${formatAmount(amountIn)} ${
               tokenIn.symbol
-            } to ${displayAmountWithDecimals(amountOut)} ${
+            } to ${formatAmount(amountOut)} ${
               tokenOut.symbol
             } Tokens`;
             return (
-              <Row className="dashboard-table-row" key={id}>
+              <Row
+                id={`dashoard-history-${id}`}
+                className={`dashboard-table-row ${
+                  cursor === id ? "token-selected" : ""
+                }`}
+                key={id}
+              >
                 <Col lg="3">{formatTimestamp(timestamp)}</Col>
                 <Col>
                   <span className="dashboard-table-action">

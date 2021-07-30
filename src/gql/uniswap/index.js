@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { LP_POSITION_QUERY, LP_TRANSACTION_RECEIVE } from "./queries";
+import { LP_POSITION_QUERY, LP_TRANSACTION_RECEIVE, LP_PAIR_DETAILS } from "./queries";
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -27,4 +27,14 @@ export const fetchUserSwaps = async (userAddress) => {
   if (data.swaps)
     return data.swaps;
   return [];
+};
+
+export const fetchPairDetails = async (pairAddress) => {
+  const { data } = await client.query({
+    query: gql(LP_PAIR_DETAILS),
+    variables: {
+      pair: pairAddress.toLowerCase(),
+    },
+  });
+  return data.pair;
 };

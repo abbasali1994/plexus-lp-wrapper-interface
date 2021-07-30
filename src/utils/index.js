@@ -35,3 +35,8 @@ export const tokenViewTypes = {
     mainInterface: 'MAIN',
     dashboardInterface: 'DASHBOARD'
 };
+
+export const schedulerFrequency = {
+    userBalances: 60*1000,
+    tokenPrices: 60*1000,
+}

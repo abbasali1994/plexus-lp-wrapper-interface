@@ -18,6 +18,7 @@ import { tokenViewTypes } from "../../../utils";
 
 // navigate
 import { navigate } from "hookrouter";
+import { formatAmount } from "../../../utils/display";
 
 const TransactionFailed = () => {
   const { activeAction } = useSelector((state) => state.dexes);
@@ -186,7 +187,7 @@ const UnwrapFailedWrapper = () => {
           <span className="txn-details-label2">{outputTokenValue}</span>
           <span className="txn-details-label3">
             {ReactHtmlParser(space4)}
-            {outputTokenValueUSD}
+            ${formatAmount(outputTokenValueUSD)}
           </span>
         </div>
 

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetTxnState, showConfirmModal } from "../../redux/transactions";
 import { resetState, setRemixValues } from "../../redux/tokens";
 import { getGasPrices } from "../../redux/prices";
-
+import spinner from "../../assets/gifs/confirmation.gif";
 // button view types
 import { tokenViewTypes } from "../../utils";
 import { navigate } from "hookrouter";
@@ -19,7 +19,8 @@ import { constants } from "../../utils";
 
 // contract calls
 import { checkIfUniPairExists, checkIfSushiPairExists } from "../../utils/wallet";
-
+import { fetchPairDetails as fetchSushiPairDetails } from "../../gql/sushiswap";
+import { fetchPairDetails as fetchUniPairDetails } from "../../gql/uniswap";
 // this component is responsible for handling all the blockchain txn's in the app
 const InputButton = () => {
   const {
@@ -130,24 +131,74 @@ const OutputButton = () => {
 
 const RemixButton = () => {
   const { lpToken1, lpToken2 } = useSelector((state) => state.tokens);
+  const { dexes, newDex } = useSelector((state) => state.dexes);
+  
+  const dexName = dexes[newDex].name;
   const disableBtn = lpToken2 === null || lpToken1 == null;
-
   let btnText = disableBtn ? "Select Tokens" : "Confirm Remix";
 
+  const [buttonDisabled, setButtonDisabled] = useState(disableBtn);
+  const [buttonText, setButtonText] = useState(btnText);
+  const [loading, setLoading] = useState(false)
+  
   const dispatch = useDispatch();
+  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+  const handleButtonClick = async() => {
+    setLoading(true)
+    let pairAddress = ZERO_ADDRESS;
+    let pair = null;
+    if(dexName === constants.dexUni) {
+      pairAddress = await checkIfUniPairExists(lpToken1.address, lpToken2.address);
+      pair = await fetchUniPairDetails(pairAddress);
+    }
+
+    if(dexName === constants.dexSushi) {
+      pairAddress = await checkIfSushiPairExists(lpToken1.address, lpToken2.address)
+      pair = await fetchSushiPairDetails(pairAddress);
+    }
+
+    if (pairAddress === ZERO_ADDRESS) {
+      setButtonDisabled(true);
+      const token1Symbol = lpToken1.symbol;
+      const token2Symbol = lpToken2.symbol;
+      const pairSymbol = token1Symbol + "-" + token2Symbol;
+
+      setButtonText(`Invalid ${dexName} (${pairSymbol}) LP Pair!`);
+    } else {
+       
+      setButtonDisabled(false);
+      setButtonText("Confirm Remix");
+      
+      // dispatch a gas request again so that we have the latest values
+      dispatch(getGasPrices());
+      dispatch(setRemixValues({pair}));
+      // then show the confirm modal
+      dispatch(showConfirmModal({ showConfirm: true }));
+      
+    }
+    setLoading(false)
+  };
+  useEffect(() => {
+    setButtonDisabled(disableBtn);
+    setButtonText(btnText);
+  }, [btnText, disableBtn, lpToken1, lpToken2, dexName]);
   return (
     <Button
       variant="primary"
       size="lg"
       block
       className="input-amount"
-      disabled={disableBtn}
-      onClick={() => {
-        dispatch(setRemixValues());
-        dispatch(showConfirmModal({ showConfirm: true }));
-      }}
+      disabled={buttonDisabled}
+      onClick={() => handleButtonClick()}
     >
-      {btnText}
+      {buttonText} {loading && <img
+                      className="token-icon"
+                      src={spinner}
+                      alt={"loading"}
+                      width="36"
+                      height="36"
+                    />}
     </Button>
   );
 };

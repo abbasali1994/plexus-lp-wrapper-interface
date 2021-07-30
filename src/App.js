@@ -1,5 +1,5 @@
 import "./App.scss";
-
+import "./utils/serviceWorker";
 //  The components
 import Header from "./components/header";
 
@@ -10,13 +10,18 @@ import routes from "./router";
 // Bootstrap Container
 import { Container } from "react-bootstrap";
 import { useState } from "react";
+
 // The Modals
-import SearchTokensModal from "./components/popup/token-search";
-import ConfirmLPModal from "./components/popup/confirm-lp";
-import AwaitingTxnModal from "./components/popup/awaiting-txn";
+import {
+  SearchTokensModal,
+  ConfirmLPModal,
+  AwaitingTxnModal,
+} from "./components/popup";
+
 import HeaderWrapper from "./components/skeleton-wrapper/header";
 import ThemeToggle from "./components/theme-toggle";
 import SkeletonWrapper from "./components/skeleton-wrapper";
+
 // Adds theme based on system settings on first render
 const mq = window.matchMedia("(prefers-color-scheme: dark)");
 if (mq.matches) {
@@ -29,9 +34,9 @@ if (mq.matches) {
 
 const App = () => {
   const routesResult = useRoutes(routes);
-  
+
   const [theme, setTheme] = useState(mq.matches ? "dark" : "light");
- 
+
   const handleChange = (value) => {
     value ? setTheme("dark") : setTheme("light");
     if (value) {
@@ -42,14 +47,12 @@ const App = () => {
       document.body.classList.add("light");
     }
   };
-  
+
   // changes theme if system settings changed
   mq.addEventListener("change", (e) => handleChange(e.matches));
 
   return (
     <Container fluid className={`App ${theme}`}>
-      {/*Render the Popups first */}
-
       <SearchTokensModal theme={theme} />
       <ConfirmLPModal theme={theme} />
       <AwaitingTxnModal theme={theme} />
@@ -57,7 +60,6 @@ const App = () => {
       <div className="app-wrapper">
         <HeaderWrapper checks={["images"]} children={<Header />} />
         <div className="app-views">
-          {/*Render all the routes */}
           <SkeletonWrapper
             checks={["icons", "images"]}
             children={routesResult}

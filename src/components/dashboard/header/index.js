@@ -33,14 +33,14 @@ const DashboardHeader = () => {
         <span className="dashboard-static-path">Dashboard / </span>
         <span className="dashboard-path-name">{pathName}</span>
       </Col>
-      <Col className="dashboard-dex-col">
+      {pathName !== "tokens"?<Col className="dashboard-dex-col">
         <span className="dashboard-dex">
           Your <span className="dex-name">{dexName}</span> LP Tokens
         </span>
         <span className="dashboard-dex-btns">
           <Dexes />
         </span>
-      </Col>
+      </Col>:""}
     </Row>
   );
 };
