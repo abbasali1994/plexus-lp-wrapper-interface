@@ -8,7 +8,7 @@ import { constants, tokenViewTypes } from "../../../utils";
 import TokenSelector from "../../token-selector";
 import TransactionButton from "../../transaction-button";
 import { RemixDexes } from "../../dex-buttons";
-import { displayAmountWithDecimals } from "../../../utils/wallet";
+import { formatAmount } from "../../../utils/display";
 
 const SelectedLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -60,7 +60,7 @@ const DesktopWrapper = () => {
           <Col>
             <div className="remix-pair-text">{lpPairName}</div>
             <div className="remix-pair-dex">
-              {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+              {formatAmount(liquidityTokenBalance)} {dexName} LP Tokens
             </div>
           </Col>
         </Row>
@@ -105,11 +105,11 @@ const MobileWrapper = () => {
         <Col>
           <div className="remix-pair-text">{lpPairName}</div>
           <div className="remix-pair-amount">
-            ${displayAmountWithDecimals(liquidityTokenBalance*lpTokenPrice)}
+            ${formatAmount(liquidityTokenBalance*lpTokenPrice)}
           </div>
         </Col>
         <Col className="remix-pair-dex">
-          {displayAmountWithDecimals(liquidityTokenBalance)} {dexName} LP Tokens
+          {formatAmount(liquidityTokenBalance)} {dexName} LP Tokens
         </Col>
       </Row>
 

@@ -18,7 +18,7 @@ export const fetchLpTokens = async (userAddress) => {
     Uniswap = [];
   }
   try {
-    Sushiswap = await fetchSushiLPTokens({ user_address: userAddress });
+    Sushiswap = await fetchSushiLPTokens(userAddress);
   } catch (e) {
     console.log(e);
     Sushiswap = [];
@@ -35,13 +35,11 @@ export const fetchUserSwaps = async (userAddress) => {
     Uniswap = [];
   }
   try {
-    Sushiswap = await fetchSushiUserSwaps({ user_address: userAddress });
+    Sushiswap = await fetchSushiUserSwaps(userAddress);
   } catch (e) {
     console.log(e);
     Sushiswap = [];
   }
-  console.log("Uniswap", Uniswap);
-  console.log("Sushiswap", Sushiswap);
   return { 1: processSwaps(Uniswap), 0: processSwaps(Sushiswap) };
 };
 

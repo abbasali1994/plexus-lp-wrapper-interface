@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { constants } from "../utils";
+import { formatAmount } from "../utils/display";
 
 export const tokensSlice = createSlice({
   name: "tokens",
@@ -9,6 +10,7 @@ export const tokensSlice = createSlice({
     inputToken: null,
     outputToken: null,
     selectedLpTokenPair: null,
+    newPair: null,
     lpToken1: null,
     lpToken2: null,
     showMax: false,
@@ -24,6 +26,7 @@ export const tokensSlice = createSlice({
     networkFeeETH: "",
     networkFeeUSD: "",
     txnHash: "",
+    newLPTokens: "",
   },
   reducers: {
     setSearchCaller: (state, action) => {
@@ -93,6 +96,7 @@ export const tokensSlice = createSlice({
       state.selectedLpTokenPair = null;
       state.lpToken1 = null;
       state.lpToken2 = null;
+      state.newPair = null;
       state.showMax = false;
       state.inputTokenValue = "";
       state.outputTokenValue = "";
@@ -198,22 +202,45 @@ export const tokensSlice = createSlice({
     },
 
     //Mock Remix
-    setRemixValues(state) {
-      const lpToken1 = state.lpToken1;
-      const lpToken2 = state.lpToken2;
-      state.lpToken1Amount = 1.2345;
-      state.lpToken1Value = 1.2345 + " " + lpToken1.symbol.toUpperCase();
-      state.lpToken2Amount = 4.5678;
-      state.lpToken2Value = 4.5678 + " " + lpToken2.symbol.toUpperCase();
+    setRemixValues(state, { payload }) {
+      const { pair } = payload;
+      const { selectedLpTokenPair, lpToken1, lpToken2 } = state;
+      const { reserveUSD, totalSupply } = pair;
 
-      state.newLPTokens = 6.7891;
+      // USD equivalent of current lp pair tokens
+      const USDAmount =
+        selectedLpTokenPair.lpTokenPrice *
+        selectedLpTokenPair.liquidityTokenBalance;
+      const newPairTokenPrice =
+        parseFloat(reserveUSD) / parseFloat(totalSupply);
+
+      state.lpToken1Amount = USDAmount / 2 / parseFloat(lpToken1.tokenUSDValue);
+      state.lpToken1Value =
+        formatAmount(state.lpToken1Amount) +
+        " " +
+        lpToken1.symbol.toUpperCase();
+
+      state.lpToken2Amount = USDAmount / 2 / parseFloat(lpToken2.tokenUSDValue);
+      state.lpToken2Value =
+        formatAmount(state.lpToken2Amount) +
+        " " +
+        lpToken2.symbol.toUpperCase();
+
+      state.newPair = pair;
+      state.newLPTokens = parseFloat(USDAmount) / parseFloat(newPairTokenPrice);
     },
-    //Mock Unwrap
+    //Set Unwrap
     setUnwrapValues(state) {
-      const outputToken = state.outputToken;
-      state.outputTokenValue = 6.7891 + " " + outputToken.symbol.toUpperCase();
-      state.outputTokenValueUSD = 1.2345;
-      state.newLPTokens = 6.7891;
+      const { selectedLpTokenPair, outputToken } = state;
+      const USDAmount =
+        selectedLpTokenPair.lpTokenPrice *
+        selectedLpTokenPair.liquidityTokenBalance;
+      const outputTokenAmount = USDAmount / outputToken.tokenUSDValue;
+      state.outputTokenValue =
+        formatAmount(outputTokenAmount) +
+        " " +
+        outputToken.symbol.toUpperCase();
+      state.outputTokenValueUSD = USDAmount;
     },
   },
 });

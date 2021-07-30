@@ -53,6 +53,8 @@ export const connectToWallet = async () => {
 
 export const fetchWalletTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
+    const { wallet } = store.getState();
+  const { balances } = wallet;
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.symbol;
       const tokenAddress = token.address;
@@ -73,7 +75,7 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 
       }
 
-      if(tokenBalance !== "0.00") {
+      if(!balances[token.symbol] || tokenBalance !== balances[token.symbol].balance) {
         store.dispatch(
           setWalletBalance({ key: tokenSymbol, balance: tokenBalance, address:tokenAddress })
         );
@@ -92,7 +94,7 @@ export const fetchLpTokenBalances = async (userAddress) => {
 
 export const fetchTokenSwaps = async (userAddress) => {
   if (web3Modal.cachedProvider) {
-    let userSwaps = await fetchUserSwaps("0x0887e769D8B1C79DB1312Ed4535B0CDa1dd43991")
+    let userSwaps = await fetchUserSwaps(userAddress)
     store.dispatch(setUserSwaps({userSwaps}));
   }
 };
@@ -346,36 +348,4 @@ function pad(number, length) {
       str = str+'0';
   } 
   return str;
-}
-
-export function displayAmountWithDecimals(amount, decimals = 4) {
-  amount = parseFloat(amount)
-  if(amount > 10**(-1*decimals)) return amount.toFixed(decimals)
-  else return amount.toExponential(decimals)
-}
-
-export function formatTimestamp(timestamp) {
-  var d = new Date(parseFloat(timestamp)*1000),
-		yyyy = d.getFullYear(),
-		mm = ('0' + (d.getMonth() + 1)).slice(-2),
-		dd = ('0' + d.getDate()).slice(-2),
-		hh = d.getHours(),
-		h = hh,
-		min = ('0' + d.getMinutes()).slice(-2),
-		ampm = 'AM',
-		time;
-			
-	if (hh > 12) {
-		h = hh - 12;
-		ampm = 'PM';
-	} else if (hh === 12) {
-		h = 12;
-		ampm = 'PM';
-	} else if (hh === 0) {
-		h = 12;
-	}
-	
-	time = mm + '-' + dd + '-' + yyyy + ' ' + h + ':' + min + ' ' + ampm;
-		
-	return time;
 }

@@ -1,5 +1,5 @@
 import "./index.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // React Bootstrap
 import { Col, Row } from "react-bootstrap";
@@ -7,10 +7,13 @@ import { Col, Row } from "react-bootstrap";
 import { LpTokenIconView } from "../../token-selector";
 import { getAllTokens, getPriceId } from "../../../utils/token";
 import { constants } from "../../../utils";
-import { displayAmountWithDecimals } from "../../../utils/wallet";
 import { navigate } from "hookrouter";
 import { setSearchCaller, setSelectedToken } from "../../../redux/tokens";
 import { setActiveDex } from "../../../redux/dex";
+import {
+  isInViewport,
+  formatAmount,
+} from "../../../utils/display";
 
 const tokens = getAllTokens();
 
@@ -37,14 +40,14 @@ const DashboardTokensComponent = () => {
 const MobileDashboardTokens = () => {
   const { balances } = useSelector((state) => state.wallet);
   const { pricesUSD } = useSelector((state) => state.prices);
-  const [tokensList,] = useState(tokens);
-  const dispatch = useDispatch()
-  const handleGenerateClick = (token,selectedDex) => {
-    dispatch(setActiveDex({selectedDex}))
-    dispatch(setSearchCaller({searchCaller: constants.inputToken}))
-    dispatch(setSelectedToken(token))
-    navigate("/")
-  }
+  const [tokensList] = useState(tokens);
+  const dispatch = useDispatch();
+  const handleGenerateClick = (token, selectedDex) => {
+    dispatch(setActiveDex({ selectedDex }));
+    dispatch(setSearchCaller({ searchCaller: constants.inputToken }));
+    dispatch(setSelectedToken(token));
+    navigate("/");
+  };
   function sortByBalance(a, b) {
     if (balances[b.symbol] && balances[a.symbol])
       return (
@@ -61,21 +64,31 @@ const MobileDashboardTokens = () => {
         .map((token, id) => {
           if (!balances[token.symbol] || balances[token.symbol].balance <= 0)
             return "";
-            let displayToken = {}
-            Object.assign(displayToken,token)
-            displayToken.balance = balances[token.symbol].balance;
-            displayToken.tokenUSDValue = pricesUSD[getPriceId(token)].usd;
+          let displayToken = {};
+          Object.assign(displayToken, token);
+          displayToken.balance = parseFloat(
+            balances[token.symbol].balance.replace(",", "")
+          );
+          displayToken.tokenUSDValue = pricesUSD[getPriceId(token)]
+            ? pricesUSD[getPriceId(token)].usd
+            : 1;
           return (
             <div key={id} className="dashboard-pair">
               <GeneratingLPTokenMobileView token={displayToken} />
               <Row>
                 <Col>
-                  <button className="dashboard-token-btn" onClick={()=>handleGenerateClick(displayToken,0)}>
+                  <button
+                    className="dashboard-token-btn"
+                    onClick={() => handleGenerateClick(displayToken, 0)}
+                  >
                     Generate Sushi LP
                   </button>
                 </Col>
                 <Col>
-                  <button className="dashboard-token-btn" onClick={()=>handleGenerateClick(displayToken,1)}>
+                  <button
+                    className="dashboard-token-btn"
+                    onClick={() => handleGenerateClick(displayToken, 1)}
+                  >
                     Generate Uni LP
                   </button>
                 </Col>
@@ -90,8 +103,35 @@ const MobileDashboardTokens = () => {
 const DesktopDashboardTokens = () => {
   const { balances } = useSelector((state) => state.wallet);
   const { pricesUSD } = useSelector((state) => state.prices);
-  const [tokensList, ] = useState(tokens);
+  const [tokensList, setTokensList] = useState(tokens);
+  const [cursor, setCursor] = useState(-1);
+  const divRef = useRef(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    function searchCriteria(token) {
+      if (!balances[token.symbol] || balances[token.symbol].balance <= 0)
+        return false;
+      return true;
+    }
+    const filteredList = tokens.filter((token) => searchCriteria(token));
+    setTokensList(filteredList);
+  }, [balances]);
 
+  function handleKeyDown(e) {
+    const box = document.getElementsByClassName("dashboard-table-body")[0];
+    // arrow up/down button should select next/previous list element
+    if (e.keyCode === 38 && cursor > 0) {
+      const token = document.getElementById("dashboard-token-" + (cursor - 1));
+      setCursor(cursor - 1);
+      if (!isInViewport(token, box)) token.scrollIntoView();
+    } else if (e.keyCode === 40 && cursor < tokensList.length - 1) {
+      const token = document.getElementById("dashboard-token-" + (cursor + 1));
+      setCursor(cursor + 1);
+      if (!isInViewport(token, box)) token.scrollIntoView();
+    } else if (e.key === "Enter" && cursor > -1) {
+      handleGenerateClick(tokensList[cursor]);
+    }
+  }
   function sortByBalance(a, b) {
     if (balances[b.symbol] && balances[a.symbol])
       return (
@@ -100,8 +140,21 @@ const DesktopDashboardTokens = () => {
       );
     return false;
   }
+  function handleGenerateClick(token) {
+    dispatch(setSearchCaller({ searchCaller: constants.inputToken }));
+    dispatch(setSelectedToken(token));
+    navigate("/");
+  }
+  useEffect(() => {
+    divRef.current.focus();
+  });
   return (
-    <div className="dashboard-wrapper-interface">
+    <div
+      className="dashboard-wrapper-interface"
+      tabIndex="0"
+      ref={divRef}
+      onKeyDown={handleKeyDown}
+    >
       <div className="dashboard-table">
         <Row className="dashboard-table-header">
           <Col>Token</Col>
@@ -113,17 +166,23 @@ const DesktopDashboardTokens = () => {
           {tokensList
             .sort((a, b) => sortByBalance(a, b))
             .map((token, id) => {
-              if (
-                !balances[token.symbol] ||
-                balances[token.symbol].balance <= 0
-              )
-                return "";
-              
-              let displayToken = {}
-              Object.assign(displayToken,token)
-              displayToken.balance = balances[token.symbol].balance;
-              displayToken.tokenUSDValue = pricesUSD[getPriceId(token)].usd;
-              return <GeneratingLPTokenDesktopView token={displayToken} />;
+              let displayToken = {};
+              Object.assign(displayToken, token);
+              displayToken.balance = parseFloat(
+                balances[token.symbol].balance.replace(",", "")
+              );
+              displayToken.tokenUSDValue = pricesUSD[getPriceId(token)]
+                ? pricesUSD[getPriceId(token)].usd
+                : 1;
+              return (
+                <GeneratingLPTokenDesktopView
+                  key={id}
+                  token={displayToken}
+                  handleGenerateClick={handleGenerateClick}
+                  tokenSelected={cursor === id ? "token-selected" : ""}
+                  tokenID={"dashboard-token-" + id}
+                />
+              );
             })}
         </div>
       </div>
@@ -140,24 +199,26 @@ const GeneratingLPTokenMobileView = ({ token }) => {
       <div className="lp-pair-info">
         <div className="dashboard-pair-text">{token.symbol}</div>
         <div className="lp-pair-desc">
-          <div className="dashboard-pair-dex">{displayAmountWithDecimals(token.balance)}&nbsp;{token.symbol}</div>
-          <div className="dashboard-pair-amount">${displayAmountWithDecimals(token.balance*token.tokenUSDValue)}</div>
+          <div className="dashboard-pair-dex">
+            {formatAmount(token.balance)}&nbsp;{token.symbol}
+          </div>
+          <div className="dashboard-pair-amount">
+            ${formatAmount(token.balance * token.tokenUSDValue)}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const GeneratingLPTokenDesktopView = ({ token }) => {
-  const dispatch = useDispatch()
-  const handleGenerateClick = (token) => {
-    dispatch(setSearchCaller({searchCaller: constants.inputToken}))
-    dispatch(setSelectedToken(token))
-    navigate("/")
-  }
-
+const GeneratingLPTokenDesktopView = ({
+  token,
+  tokenID,
+  tokenSelected,
+  handleGenerateClick,
+}) => {
   return (
-    <Row className="dashboard-table-row">
+    <Row id={tokenID} className={`dashboard-table-row ${tokenSelected}`}>
       <Col className="dashboard-table-tokens">
         <Row>
           <Col>
@@ -170,11 +231,16 @@ const GeneratingLPTokenDesktopView = ({ token }) => {
         </Row>
       </Col>
       <Col className="dashboard-table-token-balance">
-        {token.balance}&nbsp;{token.symbol}
+        {formatAmount(token.balance)}&nbsp;{token.symbol}
       </Col>
-      <Col className="dashboard-table-pair-amount">${displayAmountWithDecimals(token.balance*token.tokenUSDValue)}</Col>
+      <Col className="dashboard-table-pair-amount">
+        ${formatAmount(token.balance * token.tokenUSDValue)}
+      </Col>
       <Col lg="4">
-        <button className="dashboard-table-token-btn" onClick={()=>handleGenerateClick(token)}>
+        <button
+          className="dashboard-table-token-btn"
+          onClick={() => handleGenerateClick(token)}
+        >
           Generate Lp tokens
         </button>
       </Col>
