@@ -8,6 +8,11 @@ export function formatAmount(amount, decimals = 4) {
     if(amount === undefined) return "";
 
   if (typeof amount !== "number") amount = parseFloat(amount.replace(",", ""));
+  if (amount > 10 ** 9)
+  {
+    amount = amount/(10**9)
+    return formatAmount(amount)+"B"
+  }
   if (amount > 10)
     return amount.toLocaleString("en-US", { maximumFractionDigits: 2 });
   if (amount > 10 ** (-1 * decimals))

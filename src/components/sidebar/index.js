@@ -11,7 +11,7 @@ import token from "../../assets/images/dashboard-token.svg";
 import history from "../../assets/images/dashboard-history.svg";
 import upArrow from "../../assets/icons/u-arrow.svg";
 import downArrow from "../../assets/icons/d-arrow.svg";
-
+import spinner from "../../assets/gifs/confirmation.gif";
 // constants
 import { constants, tokenViewTypes } from "../../utils";
 
@@ -28,17 +28,23 @@ import { usePath } from "hookrouter";
 import { setActiveAction } from "../../redux/dex";
 import { resetState } from "../../redux/tokens";
 import { resetTxnState } from "../../redux/transactions";
+import { fetchUniswapStat, fetchUniswapTokensCount } from "../../gql/uniswap";
+import { formatAmount } from "../../utils/display";
+import { fetchSushiStat, fetchSushiTokensCount } from "../../gql/sushiswap";
 
 const dexStats = [
   {
+    key: "totalLiquidityUSD",
     dexStatKey: "Protocol Liquidity",
     dexStatValue: "$4.241b",
   },
   {
+    key: "pairCount",
     dexStatKey: "Number of Pairs",
     dexStatValue: "942",
   },
   {
+    key: "tokensCount",
     dexStatKey: "Number of Tokens",
     dexStatValue: "736",
   },
@@ -48,9 +54,9 @@ const DashboardSideBarComponent = () => {
   const pathName = usePath();
   const [activeDashboardPath] = useState(pathName);
   const paths = [
-    { icon: pair, name: "/dashboard/pairs", id:"pairs"},
-    { icon: token, name: "/dashboard/tokens", id:"tokens" },
-    { icon: history, name: "/dashboard/history", id:"history" },
+    { icon: pair, name: "/dashboard/pairs", id: "pairs" },
+    { icon: token, name: "/dashboard/tokens", id: "tokens" },
+    { icon: history, name: "/dashboard/history", id: "history" },
   ];
   return (
     <Col lg="1" className="dashboard-sidebar">
@@ -65,7 +71,12 @@ const DashboardSideBarComponent = () => {
             }}
           >
             <div className="dashboard-icon-background">
-              <img src={path.icon} width="22" height="22" alt={`${path.id} icon`} />
+              <img
+                src={path.icon}
+                width="22"
+                height="22"
+                alt={`${path.id} icon`}
+              />
             </div>
           </div>
         ))}
@@ -165,6 +176,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
   const [lpGenerateBtn, setLpGenerateBtn] = useState(
     "SELECT LP TOKEN TO GENERATE"
   );
+  const [liquidityStats, setLiquidityStats] = useState({});
   const { showConfirm } = useSelector((state) => state.transactions);
   const dispatch = useDispatch();
 
@@ -173,6 +185,34 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
       ? setLpGenerateBtn("START OVER")
       : setLpGenerateBtn("SELECT LP TOKEN TO GENERATE");
   }, [showConfirm]);
+
+  useEffect(() => {
+    setLiquidityStats({});
+    async function getStats() {
+      let stats = {};
+      let liquidityStats = {};
+      let tokensCount = 0;
+      if (selectedDex === 0) {
+        stats = await fetchSushiStat();
+        tokensCount = await fetchSushiTokensCount();
+        liquidityStats = {
+          tokensCount: formatAmount(tokensCount),
+          pairCount: formatAmount(stats.pairCount),
+          totalLiquidityUSD: `$${formatAmount(stats.liquidityUSD)}`,
+        };
+      } else {
+        stats = await fetchUniswapStat();
+        tokensCount = await fetchUniswapTokensCount();
+        liquidityStats = {
+          tokensCount: formatAmount(tokensCount),
+          pairCount: formatAmount(stats.pairCount),
+          totalLiquidityUSD: `$${formatAmount(stats.totalLiquidityUSD)}`,
+        };
+      }
+      setLiquidityStats(liquidityStats);
+    }
+    getStats();
+  }, [selectedDex]);
   return (
     <>
       <div className="left-action main-header-text">
@@ -195,10 +235,15 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
                 dispatch(setActiveAction({ activeAction: btn }));
                 dispatch(resetState());
                 dispatch(resetTxnState());
-                switch(btn) {
-                  case "Unwrap": navigate("/unwrap"); break;
-                  case "Remix": navigate("/remix"); break;
-                  default:navigate("/");
+                switch (btn) {
+                  case "Unwrap":
+                    navigate("/unwrap");
+                    break;
+                  case "Remix":
+                    navigate("/remix");
+                    break;
+                  default:
+                    navigate("/");
                 }
               }}
             >
@@ -231,22 +276,32 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
             style={activeAction !== "Generate" ? { visibility: "hidden" } : {}}
             onClick={() => {
               // clear the global state
-              showSideMenu(false)
+              showSideMenu(false);
               dispatch(resetState());
               dispatch(resetTxnState());
               navigate("/");
             }}
           >
             {lpGenerateBtn}
-          </Button></Col>
-        
+          </Button>
+        </Col>
       </Row>
       <div className="dex-stats">
         <div className="dex-stats-header">{dexes[selectedDex].name} stats</div>
         {dexStats.map((dex) => (
           <span key={dex.dexStatKey}>
             <div className="dex-stats-key">{dex.dexStatKey}</div>
-            <div className="dex-stats-value">{dex.dexStatValue}</div>
+            <div className="dex-stats-value">
+              {liquidityStats[dex.key] || (
+                <img
+                  className="token-icon"
+                  src={spinner}
+                  alt={"loading"}
+                  width="30"
+                  height="30"
+                />
+              )}
+            </div>
           </span>
         ))}
       </div>
