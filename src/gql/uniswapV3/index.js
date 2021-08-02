@@ -1,53 +1,58 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { LP_POSITION_QUERY, LP_TRANSACTION_RECEIVE, LP_PAIR_DETAILS, LP_SUSHISWAP_STATS, LP_TOKENS } from "./queries";
+import {
+  LP_POSITION_QUERY,
+  LP_TRANSACTION_RECEIVE,
+  LP_TRANSACTIONS,
+  LP_UNISWAPV3_STATS,
+  LP_TOKENS,
+} from "./queries";
 
 const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/sushiswap/exchange",
+  uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
   cache: new InMemoryCache(),
 });
-export const fetchLpTokens = async (userAddress) => {
+export const fetchLpTokensUniV3 = async (userAddress) => {
   const { data } = await client.query({
     query: gql(LP_POSITION_QUERY),
     variables: {
       user: userAddress.toLowerCase(),
     },
   });
-  if (data.user && data.user.liquidityPositions)
-    return data.user.liquidityPositions;
+  if (data.positions) return data.positions;
   return [];
 };
 
-export const fetchUserSwaps = async (userAddress) => {
+export const fetchUserSwapsUniV3 = async (userAddress) => {
   const { data } = await client.query({
     query: gql(LP_TRANSACTION_RECEIVE),
     variables: {
       user: userAddress.toLowerCase(),
     },
   });
-  if (data.swaps)
-    return data.swaps;
+  if (data.swaps) return data.swaps;
   return [];
 };
 
-export const fetchPairDetails = async (pairAddress) => {
+export const fetchUserTransactionsUniV3 = async (userAddress) => {
   const { data } = await client.query({
-    query: gql(LP_PAIR_DETAILS),
+    query: gql(LP_TRANSACTIONS),
     variables: {
-      pair: pairAddress.toLowerCase(),
+      user: userAddress.toLowerCase(),
     },
   });
-  return data.pair;
+  if (data) return data;
+  return [];
 };
 
-export const fetchSushiStat = async () => {
+export const fetchUniswapV3Stat = async () => {
   const { data } = await client.query({
-    query: gql(LP_SUSHISWAP_STATS),
+    query: gql(LP_UNISWAPV3_STATS),
   });
   if (data.factory) return data.factory;
   return [];
 };
 
-export const fetchSushiTokensCount = async () => {
+export const fetchUniswapV3TokensCount = async () => {
   let tokens = [];
   let count = 0;
   while (1) {
@@ -61,7 +66,6 @@ export const fetchSushiTokensCount = async () => {
       if (data.tokens) {
         tokens.push(data.tokens);
         if (data.tokens.length < 1000) {
-          count += data.tokens.length;
           break;
         }
         count += data.tokens.length;
