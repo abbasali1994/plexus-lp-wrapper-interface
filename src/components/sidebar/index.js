@@ -28,9 +28,6 @@ import { usePath } from "hookrouter";
 import { setActiveAction } from "../../redux/dex";
 import { resetState } from "../../redux/tokens";
 import { resetTxnState } from "../../redux/transactions";
-import { fetchUniswapStat, fetchUniswapTokensCount } from "../../gql/uniswap";
-import { formatAmount } from "../../utils/display";
-import { fetchSushiStat, fetchSushiTokensCount } from "../../gql/sushiswap";
 
 const dexStats = [
   {
@@ -176,7 +173,6 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
   const [lpGenerateBtn, setLpGenerateBtn] = useState(
     "SELECT LP TOKEN TO GENERATE"
   );
-  const [liquidityStats, setLiquidityStats] = useState({});
   const { showConfirm } = useSelector((state) => state.transactions);
   const dispatch = useDispatch();
 
@@ -186,33 +182,6 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
       : setLpGenerateBtn("SELECT LP TOKEN TO GENERATE");
   }, [showConfirm]);
 
-  useEffect(() => {
-    setLiquidityStats({});
-    async function getStats() {
-      let stats = {};
-      let liquidityStats = {};
-      let tokensCount = 0;
-      if (selectedDex === 0) {
-        stats = await fetchSushiStat();
-        tokensCount = await fetchSushiTokensCount();
-        liquidityStats = {
-          tokensCount: formatAmount(tokensCount),
-          pairCount: formatAmount(stats.pairCount),
-          totalLiquidityUSD: `$${formatAmount(stats.liquidityUSD)}`,
-        };
-      } else {
-        stats = await fetchUniswapStat();
-        tokensCount = await fetchUniswapTokensCount();
-        liquidityStats = {
-          tokensCount: formatAmount(tokensCount),
-          pairCount: formatAmount(stats.pairCount),
-          totalLiquidityUSD: `$${formatAmount(stats.totalLiquidityUSD)}`,
-        };
-      }
-      setLiquidityStats(liquidityStats);
-    }
-    getStats();
-  }, [selectedDex]);
   return (
     <>
       <div className="left-action main-header-text">
@@ -292,7 +261,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
           <span key={dex.dexStatKey}>
             <div className="dex-stats-key">{dex.dexStatKey}</div>
             <div className="dex-stats-value">
-              {liquidityStats[dex.key] || (
+              {(dexes[selectedDex].stats && dexes[selectedDex].stats[dex.key]) || (
                 <img
                   className="token-icon"
                   src={spinner}

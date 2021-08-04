@@ -25,9 +25,14 @@ export const dexSlice = createSlice({
       const { activeAction } = payload;
       state.activeAction = activeAction;
     },
+    setDexesStats: (state, { payload }) => {
+      const { uniStats, sushiStats } = payload;
+      state.dexes[0].stats = sushiStats;
+      state.dexes[1].stats = uniStats;
+    },
   },
 });
 
-export const { setActiveDex, setNewDex, setActiveAction } = dexSlice.actions;
+export const { setActiveDex, setNewDex, setActiveAction, setDexesStats } = dexSlice.actions;
 
 export default dexSlice.reducer;

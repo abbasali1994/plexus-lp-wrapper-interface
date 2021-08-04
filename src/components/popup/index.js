@@ -1,3 +1,4 @@
 export {default as AwaitingTxnModal } from "./awaiting-txn"
 export {default as ConfirmLPModal } from "./confirm-lp"
 export {default as SearchTokensModal } from "./token-search"
+export {default as ConfirmPrivacyModal } from "./confirm-privacy"

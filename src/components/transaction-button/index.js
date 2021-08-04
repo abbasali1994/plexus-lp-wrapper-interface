@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { resetTxnState, showConfirmModal } from "../../redux/transactions";
+import { resetTxnState, showConfirmPrivacyModal } from "../../redux/transactions";
 import { resetState, setRemixValues } from "../../redux/tokens";
 import { getGasPrices } from "../../redux/prices";
 import spinner from "../../assets/gifs/confirmation.gif";
@@ -78,7 +78,7 @@ const InputButton = () => {
       dispatch(getGasPrices());
       
       // then show the confirm modal
-      dispatch(showConfirmModal({ showConfirm: true }));
+      dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
     }
   };
 
@@ -122,7 +122,7 @@ const OutputButton = () => {
       block
       className="input-amount"
       disabled={disableBtn}
-      onClick={() => dispatch(showConfirmModal({ showConfirm: true }))}
+      onClick={() => dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }))}
     >
       {btnText}
     </Button>
@@ -174,7 +174,7 @@ const RemixButton = () => {
       dispatch(getGasPrices());
       dispatch(setRemixValues({pair}));
       // then show the confirm modal
-      dispatch(showConfirmModal({ showConfirm: true }));
+      dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
       
     }
     setLoading(false)

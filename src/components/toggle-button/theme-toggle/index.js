@@ -1,7 +1,7 @@
 import "./index.scss";
 import ToggleButton from "react-toggle-button";
-import day from "../../assets/icons/brightness.png"
-import night from "../../assets/icons/moon.png"
+import day from "../../../assets/icons/brightness.png"
+import night from "../../../assets/icons/moon.png"
 const ThemeToggle = ({ theme, handleChange }) => {
   return (
     <div className="theme-toggle">
