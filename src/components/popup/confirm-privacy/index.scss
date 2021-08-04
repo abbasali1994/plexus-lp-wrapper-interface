@@ -1,0 +1,92 @@
+.modal-header.awaiting-txn-header {
+  background: var(--color-secondary-background) !important;
+  border-bottom: none !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.confirm-privacy-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-secondary-background) !important;
+  border-radius: 0px 0px 10px 10px;
+  padding: 30px;
+}
+
+.confirm-privacy-text {
+  font-family: var(--font-family-tertiary);
+  font-size: var(--font-size-medium-1);
+  font-style: normal;
+  font-weight: var(--font-weight-2);
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: var(--color-text-6);
+}
+
+.confirm-privacy-btn {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small-3);
+  font-style: normal;
+  font-weight: var(--font-weight-1) !important;
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-9) !important;
+  height: 61px;
+  border-radius: 10px;
+  width: -webkit-fill-available;
+  background-color: var(--color-button-background);
+}
+
+.btn-primary.confirm-privacy-btn:hover {
+  background: var(--color-gradient-background);
+  color: var(--color-text-9) !important;
+}
+
+
+.confirm-privacy-qn {
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: var(--font-weight-1);
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: var(--color-text-5);
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.confirm-privacy-toggle {
+  align-items: center;
+  margin: 10px;
+  letter-spacing: 0.05em;
+  font-family: var(--font-family-secondary);
+font-style: normal;
+font-weight: normal;
+font-size: var(--font-size-small-1);
+line-height: 28px;
+color: var(--color-text-5);
+}
+.confirm-privacy-toggle-active {
+  color: #7AC2E8!important;
+}
+
+@media screen and (max-width: 1024px) {
+  .confirm-privacy-qn {
+    font-size: var(--font-size-small-3);
+  }
+
+
+  .confirm-privacy-btn {
+    width: -webkit-fill-available;
+    height: 50px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .confirm-privacy-qn {
+    font-size: var(--font-size-small-2);
+  }
+}

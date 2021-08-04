@@ -11,7 +11,7 @@ export function formatAmount(amount, decimals = 4) {
   if (amount > 10 ** 9)
   {
     amount = amount/(10**9)
-    return formatAmount(amount)+"B"
+    return amount.toLocaleString("en-US", { maximumFractionDigits: 3 })+" B"
   }
   if (amount > 10)
     return amount.toLocaleString("en-US", { maximumFractionDigits: 2 });

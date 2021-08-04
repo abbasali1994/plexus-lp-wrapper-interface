@@ -1,34 +1,36 @@
 .token-label {
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-small-3);
-    line-height: 36px;
-    letter-spacing: 0.1em;
-    text-align: left;
-    text-transform: uppercase;
-    color:  var(--color-text-4);
-    margin-bottom:20px;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small-3);
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--color-text-4);
+  margin-bottom: 20px;
 }
 
 .input-token-section {
-    margin-top: 30px; 
+  margin-top: 30px;
 }
 
 .input-btn {
-    margin-top: 35px;
+  margin-top: 35px;
 }
 
 @media screen and (min-width: 1024px) {
-    .select-token-pair-section {
-        margin-top:50px;
-    }
+  .select-token-pair-section {
+    margin-top: 50px;
   }
+  .txn-settings-mobile-btn {
+    display: none;
+  }
+}
 
-  @media screen and (max-width: 1024px) {
-    .select-token-pair-section {
-        margin-top:20px;
-    }
-    .token-label {
-        padding-top: 30px;
-    }
+@media screen and (max-width: 1024px) {
+  .select-token-pair-section {
+    margin-top: 20px;
   }
-  
+  .token-label {
+    padding-top: 30px;
+  }
+}

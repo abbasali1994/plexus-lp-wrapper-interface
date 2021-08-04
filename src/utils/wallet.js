@@ -6,20 +6,34 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import store from "../store";
 import { resetState } from "../redux/tokens";
 import { resetTxnState } from "../redux/transactions";
-import { setWalletAddress, setWalletBalance, setLpTokens, setUserSwaps } from "../redux/wallet";
+import {
+  setWalletAddress,
+  setWalletBalance,
+  setLpTokens,
+  setUserSwaps,
+} from "../redux/wallet";
 
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
 import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
 import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
 
-import { uniContractAddress, sushiContractAddress, uniV2FactoryContractAddress, sushiFactoryContractAddress } from "../helpers/contracts";
+import {
+  uniContractAddress,
+  sushiContractAddress,
+  uniV2FactoryContractAddress,
+  sushiFactoryContractAddress,
+} from "../helpers/contracts";
 import { constants } from "./";
 import { getAllTokens } from "./token";
 
 import { fetchLpTokens, fetchUserSwaps } from "../gql";
+import { formatAmount } from "./display";
+import { fetchUniswapStat, fetchUniswapTokensCount } from "../gql/uniswap";
+import { fetchSushiStat, fetchSushiTokensCount } from "../gql/sushiswap";
+import { setDexesStats } from "../redux/dex";
 
-const  abi = require('human-standard-token-abi');
+const abi = require("human-standard-token-abi");
 
 let web3 = null;
 
@@ -47,6 +61,7 @@ export const connectToWallet = async () => {
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
   await fetchTokenSwaps(userAddress);
+  await getStats();
   setWalletListener(provider);
   return web3;
 };
@@ -54,7 +69,7 @@ export const connectToWallet = async () => {
 export const fetchWalletTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     const { wallet } = store.getState();
-  const { balances } = wallet;
+    const { balances } = wallet;
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.symbol;
       const tokenAddress = token.address;
@@ -62,7 +77,11 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 
       if (web3 !== null) {
         if (tokenSymbol.toLowerCase() !== "eth") {
-          tokenBalance = await getTokenBalance(userAddress, tokenAddress, tokenSymbol);
+          tokenBalance = await getTokenBalance(
+            userAddress,
+            tokenAddress,
+            tokenSymbol
+          );
         } else {
           tokenBalance = await getUserETHBalance(userAddress);
         }
@@ -72,15 +91,20 @@ export const fetchWalletTokenBalances = async (userAddress) => {
               ? tokenBalance.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, "$&,")
               : tokenBalance.toFixed(2);
         }
-
       }
 
-      if(!balances[token.symbol] || tokenBalance !== balances[token.symbol].balance) {
+      if (
+        !balances[token.symbol] ||
+        tokenBalance !== balances[token.symbol].balance
+      ) {
         store.dispatch(
-          setWalletBalance({ key: tokenSymbol, balance: tokenBalance, address:tokenAddress })
+          setWalletBalance({
+            key: tokenSymbol,
+            balance: tokenBalance,
+            address: tokenAddress,
+          })
         );
       }
-     
     });
   }
 };
@@ -88,14 +112,36 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 export const fetchLpTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     let lpTokens = await fetchLpTokens(userAddress);
-    store.dispatch(setLpTokens({lpTokens}));
+    store.dispatch(setLpTokens({ lpTokens }));
   }
+};
+
+export const getStats = async () => {
+  let stats = {};
+  let sushiStats = {};
+  let uniStats = {};
+  let tokensCount = 0;
+    stats = await fetchSushiStat();
+    tokensCount = await fetchSushiTokensCount();
+    sushiStats = {
+      tokensCount: formatAmount(tokensCount),
+      pairCount: formatAmount(stats.pairCount),
+      totalLiquidityUSD: `$${formatAmount(stats.liquidityUSD)}`,
+    };
+    stats = await fetchUniswapStat();
+    tokensCount = await fetchUniswapTokensCount();
+    uniStats = {
+      tokensCount: formatAmount(tokensCount),
+      pairCount: formatAmount(stats.pairCount),
+      totalLiquidityUSD: `$${formatAmount(stats.totalLiquidityUSD)}`,
+    };
+  store.dispatch(setDexesStats({sushiStats,uniStats}));
 };
 
 export const fetchTokenSwaps = async (userAddress) => {
   if (web3Modal.cachedProvider) {
-    let userSwaps = await fetchUserSwaps(userAddress)
-    store.dispatch(setUserSwaps({userSwaps}));
+    let userSwaps = await fetchUserSwaps(userAddress);
+    store.dispatch(setUserSwaps({ userSwaps }));
   }
 };
 
@@ -138,80 +184,87 @@ const getTokenBalance = async (userAddress, tokenAddress, tokenSymbol) => {
     console.log(error);
     tokenBalance = 0;
   }
-  
-	return tokenBalance;
+
+  return tokenBalance;
 };
 
-export const checkIfUniPairExists = async(token1Address, token2Address) => {
-
+export const checkIfUniPairExists = async (token1Address, token2Address) => {
   let uniPairAddress = constants.ZERO_ADDRESS;
- 
+
   if (web3 !== null) {
     try {
-
       const uniV2FactoryContract = new web3.eth.Contract(
         UniswapV2FactoryABI,
         uniV2FactoryContractAddress
       );
 
-      const pairAddress = await uniV2FactoryContract.methods.getPair(token1Address, token2Address).call();
-      const uniPairExists = pairAddress === constants.ZERO_ADDRESS ? false:true;
+      const pairAddress = await uniV2FactoryContract.methods
+        .getPair(token1Address, token2Address)
+        .call();
+      const uniPairExists =
+        pairAddress === constants.ZERO_ADDRESS ? false : true;
 
-      if(uniPairExists) {
+      if (uniPairExists) {
         uniPairAddress = pairAddress;
       }
-      
     } catch (error) {
       console.log(error);
-     
     }
-
   }
   return uniPairAddress;
-}
+};
 
-export const checkIfSushiPairExists = async(token1Address, token2Address) => {
-
+export const checkIfSushiPairExists = async (token1Address, token2Address) => {
   let sushiPairAddress = constants.ZERO_ADDRESS;
- 
-  if (web3 !== null) {
 
+  if (web3 !== null) {
     try {
       const sushiFactoryContract = new web3.eth.Contract(
         SushiFactoryABI,
         sushiFactoryContractAddress
       );
 
-      const pairAddress = await sushiFactoryContract.methods.getPair(token1Address, token2Address).call();
-      const sushiPairExists = pairAddress === constants.ZERO_ADDRESS ? false:true;
+      const pairAddress = await sushiFactoryContract.methods
+        .getPair(token1Address, token2Address)
+        .call();
+      const sushiPairExists =
+        pairAddress === constants.ZERO_ADDRESS ? false : true;
 
-      if(sushiPairExists) {
+      if (sushiPairExists) {
         sushiPairAddress = pairAddress;
       }
-      
     } catch (error) {
       console.log(error);
-     
     }
-
   }
   return sushiPairAddress;
-}
+};
 
-export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lpToken2, gasPrice, ethUSDPrice) => {
-
+export const wrapTokens = async (
+  dex,
+  inputToken,
+  inputTokenAmount,
+  lpToken1,
+  lpToken2,
+  gasPrice,
+  ethUSDPrice
+) => {
   let res = null;
 
-  if(web3 !== null) {
-    
+  if (web3 !== null) {
     let wrapperContract = null;
     try {
-     
-      if(dex === constants.dexUni) {
-        wrapperContract = new web3.eth.Contract(WrapperUniABI, uniContractAddress);
+      if (dex === constants.dexUni) {
+        wrapperContract = new web3.eth.Contract(
+          WrapperUniABI,
+          uniContractAddress
+        );
       }
-      if(dex === constants.dexSushi) {
-        wrapperContract = new web3.eth.Contract(WrapperSushiABI, sushiContractAddress);
+      if (dex === constants.dexSushi) {
+        wrapperContract = new web3.eth.Contract(
+          WrapperSushiABI,
+          sushiContractAddress
+        );
       }
 
       let sourceTokenAddress = constants.ZERO_ADDRESS;
@@ -221,32 +274,38 @@ export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lp
 
       const userAddress = (await web3.eth.getAccounts())[0];
       const block = await web3.eth.getBlock("latest");
-      const gasLimit = parseInt(block.gasLimit/block.transactions.length);
+      const gasLimit = parseInt(block.gasLimit / block.transactions.length);
       const gasLimitIncrease = gasLimit * 15;
 
       let amountToWrap = 0;
 
-      if(inputToken.decimals === 18) {
+      if (inputToken.decimals === 18) {
         amountToWrap = web3.utils.toWei(inputTokenAmount);
       }
-      if(inputToken.decimals === 6) {
+      if (inputToken.decimals === 6) {
         amountToWrap = String(inputTokenAmount * 1000000);
       }
 
       if (inputToken.symbol.toLowerCase() !== "eth") {
         sourceTokenAddress = inputToken.address;
-        const wrapperContractAddress = constants.dexUni ? uniContractAddress : sushiContractAddress;
+        const wrapperContractAddress = constants.dexUni
+          ? uniContractAddress
+          : sushiContractAddress;
         const tokenContract = new web3.eth.Contract(abi, sourceTokenAddress);
 
         // check allowance for the wrapper contract for this token
-        const allowance = await tokenContract.methods.allowance(userAddress, wrapperContractAddress).call();
-  
-        if(allowance < amountToWrap) {
-          const approved = await tokenContract.methods.approve(wrapperContractAddress, amountToWrap).send({ from: userAddress, gasPrice, gas: gasLimit });
+        const allowance = await tokenContract.methods
+          .allowance(userAddress, wrapperContractAddress)
+          .call();
+
+        if (allowance < amountToWrap) {
+          const approved = await tokenContract.methods
+            .approve(wrapperContractAddress, amountToWrap)
+            .send({ from: userAddress, gasPrice, gas: gasLimit });
           console.log(approved);
         }
 
-      /*   
+        /*   
        TODO: revist and see why this is failing
        
         if(allowance > 0 && allowance < amountToWrap) {
@@ -277,36 +336,48 @@ export const wrapTokens = async (dex, inputToken, inputTokenAmount, lpToken1, lp
         destAddress2 = WETH_ADDRESS;
       }
 
-      const destTokenAddresses = [Web3.utils.toChecksumAddress(destAddress1), Web3.utils.toChecksumAddress(destAddress2)];
-    
-      if(sourceTokenAddress === constants.ZERO_ADDRESS){
-        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, value: amountToWrap, gas: gasLimitIncrease, gasPrice});
+      const destTokenAddresses = [
+        Web3.utils.toChecksumAddress(destAddress1),
+        Web3.utils.toChecksumAddress(destAddress2),
+      ];
+
+      if (sourceTokenAddress === constants.ZERO_ADDRESS) {
+        res = await wrapperContract.methods
+          .wrap(sourceTokenAddress, destTokenAddresses, amountToWrap)
+          .send({
+            from: userAddress,
+            value: amountToWrap,
+            gas: gasLimitIncrease,
+            gasPrice,
+          });
       } else {
-        res = await wrapperContract.methods.wrap(sourceTokenAddress, destTokenAddresses, amountToWrap).send({from: userAddress, gas: gasLimitIncrease, gasPrice});
+        res = await wrapperContract.methods
+          .wrap(sourceTokenAddress, destTokenAddresses, amountToWrap)
+          .send({ from: userAddress, gas: gasLimitIncrease, gasPrice });
       }
 
       const txnHash = res.transactionHash;
       const txnGasPrice = (await web3.eth.getTransaction(txnHash)).gasPrice;
       const gasUsed = res.gasUsed;
       const networkFee = Number(txnGasPrice) * Number(gasUsed);
-      let networkFeeETH = web3.utils.fromWei(String(networkFee)) ;
-      let networkFeeUSD = (Number(ethUSDPrice) * Number(networkFeeETH)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      networkFeeETH = networkFeeETH + " ETH"
+      let networkFeeETH = web3.utils.fromWei(String(networkFee));
+      let networkFeeUSD = (Number(ethUSDPrice) * Number(networkFeeETH))
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+      networkFeeETH = networkFeeETH + " ETH";
       networkFeeUSD = "~$" + networkFeeUSD;
 
       // return the txn results
       res = { networkFeeETH, networkFeeUSD, txnHash };
-
     } catch (error) {
       console.log(error);
       res = error;
     }
-
   }
 
   return res;
 };
-  
+
 const setWalletListener = (provider) => {
   provider.on("accountsChanged", async (accounts) => {
     store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
@@ -328,24 +399,26 @@ const setWalletListener = (provider) => {
 })();
 
 // Other Helper Functions
-export const createContract = (abi,address) => {
-  return new web3.eth.Contract(abi,address)
-}
+export const createContract = (abi, address) => {
+  return new web3.eth.Contract(abi, address);
+};
 
-export function convertAmountToString(amount,decimals) {
-  let amountString = amount.toString()
+export function convertAmountToString(amount, decimals) {
+  let amountString = amount.toString();
   let amountDecimals = 0;
-  if(amountString.split(".")[1])
-    amountDecimals = amountString.split(".")[1].length
-  amount = BigNumber(parseInt(amount*(10**Math.min(amountDecimals,decimals))))
-  amountString = pad(amount,Math.max(0,decimals-amountDecimals))
-  return amountString
+  if (amountString.split(".")[1])
+    amountDecimals = amountString.split(".")[1].length;
+  amount = BigNumber(
+    parseInt(amount * 10 ** Math.min(amountDecimals, decimals))
+  );
+  amountString = pad(amount, Math.max(0, decimals - amountDecimals));
+  return amountString;
 }
 
 function pad(number, length) {
-  var str = '' + number;
-  for (let i=1;i <= length;i++) {
-      str = str+'0';
-  } 
+  var str = "" + number;
+  for (let i = 1; i <= length; i++) {
+    str = str + "0";
+  }
   return str;
 }

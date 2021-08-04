@@ -16,10 +16,11 @@ import {
   SearchTokensModal,
   ConfirmLPModal,
   AwaitingTxnModal,
+  ConfirmPrivacyModal
 } from "./components/popup";
 
 import HeaderWrapper from "./components/skeleton-wrapper/header";
-import ThemeToggle from "./components/theme-toggle";
+import ThemeToggle from "./components/toggle-button/theme-toggle";
 import SkeletonWrapper from "./components/skeleton-wrapper";
 
 // Adds theme based on system settings on first render
@@ -56,6 +57,7 @@ const App = () => {
       <SearchTokensModal theme={theme} />
       <ConfirmLPModal theme={theme} />
       <AwaitingTxnModal theme={theme} />
+      <ConfirmPrivacyModal theme={theme} />
       <ThemeToggle handleChange={handleChange} theme={theme} />
       <div className="app-wrapper">
         <HeaderWrapper checks={["images"]} children={<Header />} />
