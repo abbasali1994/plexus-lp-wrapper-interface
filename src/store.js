@@ -12,20 +12,26 @@ import pricesReducer from './redux/prices';
 // middleware
 import logger from 'redux-logger';
 
-const config = {
+const config = [{
   key: "wallet",
   storage: localStorage,
   whitelist: ['walletAddress']
-};
-const persistedWallet = persistReducer(config, walletReducer);
-
+},
+{
+  key: "dex",
+  storage: localStorage,
+  whitelist: ['dexes']
+}
+];
+const persistedWallet = persistReducer(config[0], walletReducer);
+const persistedDex = persistReducer(config[1], dexReducer);
 
 export default configureStore({
   reducer: {
     wallet: persistedWallet,
     tokens: tokensReducer,
     transactions: transactionsReducer,
-    dexes: dexReducer,
+    dexes: persistedDex,
     prices: pricesReducer,
   },
   middleware: [ ...getDefaultMiddleware({

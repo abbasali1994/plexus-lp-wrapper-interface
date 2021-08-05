@@ -9,7 +9,7 @@ import Remix from './views/remix';
 const routes = {
   "/": () => <Home />,
   "/success": () => <TransactionSuccessful/>,
-  "/failure": () => <TransactionFailed/>,
+  "/rejected": () => <TransactionFailed/>,
   "/dashboard*": () => <Dashboard/>,
   "/unwrap": () => <Unwrap />,
   "/remix": () => <Remix />

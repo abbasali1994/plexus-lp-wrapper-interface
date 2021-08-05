@@ -100,8 +100,8 @@ const DesktopWrapper = ({ theme }) => {
           dispatch(setNetworkValues(res));
           navigate("/success");
         } else {
-          dispatch(setTxnStatus({ txnStatus: "failure" }));
-          navigate("/failure");
+          dispatch(setTxnStatus({ txnStatus: "rejected" }));
+          navigate("/rejected");
         }
       }
 
@@ -529,8 +529,8 @@ export const MobileLPWrapper = () => {
           dispatch(setNetworkValues(res));
           navigate("/success");
         } else {
-          dispatch(setTxnStatus({ txnStatus: "failure" }));
-          navigate("/failure");
+          dispatch(setTxnStatus({ txnStatus: "rejected" }));
+          navigate("/rejected");
         }
       }
 

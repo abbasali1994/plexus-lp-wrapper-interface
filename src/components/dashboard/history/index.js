@@ -135,19 +135,11 @@ const DesktopDashboardHistory = ({ history }) => {
         <div className="dashboard-table-body">
           {history.map((entry, id) => {
             const {
-              amountIn,
-              amountOut,
-              tokenIn,
-              tokenOut,
               action,
+              statement,
               timestamp,
               transaction,
-            } = entry;
-            const statement = `${formatAmount(amountIn)} ${
-              tokenIn.symbol
-            } to ${formatAmount(amountOut)} ${
-              tokenOut.symbol
-            } Tokens`;
+            } = entry;      
             return (
               <Row
                 id={`dashoard-history-${id}`}
@@ -155,6 +147,12 @@ const DesktopDashboardHistory = ({ history }) => {
                   cursor === id ? "token-selected" : ""
                 }`}
                 key={id}
+                onClick={() =>
+                  window.open(
+                    constants.etherscanTxURL + transaction.id,
+                    "_blank"
+                  )
+                }
               >
                 <Col lg="3">{formatTimestamp(timestamp)}</Col>
                 <Col>
@@ -165,13 +163,7 @@ const DesktopDashboardHistory = ({ history }) => {
                 </Col>
                 <Col
                   lg="2"
-                  className="dashboard-table-hash"
-                  onClick={() =>
-                    window.open(
-                      constants.etherscanTxURL + transaction.id,
-                      "_blank"
-                    )
-                  }
+                  className="dashboard-table-hash"                
                 >
                   {formatAddress(transaction.id)}
                 </Col>

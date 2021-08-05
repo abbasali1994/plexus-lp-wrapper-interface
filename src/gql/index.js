@@ -1,12 +1,13 @@
 import {
   fetchLpTokens as fetchUniLPTokens,
-  fetchUserSwaps as fetchUniUserSwaps,
+  fetchUserTransactions as fetchUniUserTransactions,
 } from "./uniswap";
 import {
   fetchLpTokens as fetchSushiLPTokens,
-  fetchUserSwaps as fetchSushiUserSwaps,
+  fetchUserTransactions as fetchSushiUserTransactions,
 } from "./sushiswap";
 import { getAllTokens } from "../utils/token";
+import { formatAmount } from "../utils/display";
 const tokens = getAllTokens();
 
 export const fetchLpTokens = async (userAddress) => {
@@ -29,18 +30,21 @@ export const fetchLpTokens = async (userAddress) => {
 export const fetchUserSwaps = async (userAddress) => {
   let Uniswap, Sushiswap;
   try {
-    Uniswap = await fetchUniUserSwaps(userAddress);
+    Uniswap = await fetchUniUserTransactions(userAddress);
   } catch (e) {
     console.log(e);
     Uniswap = [];
   }
   try {
-    Sushiswap = await fetchSushiUserSwaps(userAddress);
+    Sushiswap = await fetchSushiUserTransactions(userAddress);
   } catch (e) {
     console.log(e);
     Sushiswap = [];
   }
-  return { 1: processSwaps(Uniswap), 0: processSwaps(Sushiswap) };
+  return {
+    1: processTransactions(Uniswap, "Uniswap-V2"),
+    0: processTransactions(Sushiswap, "Sushiswap"),
+  };
 };
 
 const processResult = (result) => {
@@ -85,9 +89,37 @@ const processResult = (result) => {
   return lpTokens;
 };
 
-const processSwaps = (result) => {
-  const swaps = [];
-  result.forEach((swap) => {
+const processTransactions = (result, type) => {
+  const transactions = [];
+  const { burns, mints, received } = result;
+
+  burns.forEach((burn) => {
+    let { transaction, timestamp, pair, liquidity } = burn;
+    const { token0, token1 } = pair;
+    const statement = `${formatAmount(liquidity)} ${token0.symbol}/${
+      token1.symbol
+    } ${type} LP Tokens`;
+    transactions.push({
+      action: "Unwrap",
+      timestamp: parseFloat(timestamp),
+      transaction,
+      statement,
+    });
+  });
+  mints.forEach((mint) => {
+    let { transaction, timestamp, pair, liquidity } = mint;
+    const { token0, token1 } = pair;
+    const statement = `${formatAmount(liquidity)} ${token0.symbol}/${
+      token1.symbol
+    } ${type} LP Tokens`;
+    transactions.push({
+      action: "Wrap",
+      timestamp: parseFloat(timestamp),
+      transaction,
+      statement,
+    });
+  });
+  received.forEach((swap) => {
     let {
       transaction,
       timestamp,
@@ -98,21 +130,19 @@ const processSwaps = (result) => {
       amount0In,
     } = swap;
     const { token0, token1 } = pair;
-    const amountIn =
-      amount1In !== "0" ? parseFloat(amount1In) : parseFloat(amount0In);
-    const amountOut =
-      amount1Out !== "0" ? parseFloat(amount1Out) : parseFloat(amount0Out);
+    const amountIn = amount1In !== "0" ? amount1In : amount0In;
+    const amountOut = amount1Out !== "0" ? amount1Out : amount0Out;
     const tokenIn = amount1In !== "0" ? token1 : token0;
     const tokenOut = amount1Out !== "0" ? token1 : token0;
-    swaps.push({
+    const statement = `${formatAmount(amountIn)} ${
+      tokenIn.symbol
+    } to ${formatAmount(amountOut)} ${tokenOut.symbol}`;
+    transactions.push({
       action: "Swap",
-      amountIn,
-      amountOut,
       timestamp: parseFloat(timestamp),
       transaction,
-      tokenIn,
-      tokenOut,
+      statement,
     });
   });
-  return swaps;
+  return transactions;
 };

@@ -8,8 +8,8 @@
   letter-spacing: 0.05em;
   margin-right: auto!important;
 }
-.input-token-section > .unwrap-row:hover,
-.input-token-section >.unwrap-row-selected {
+.input-token-section > .home-table-body > .unwrap-row:hover,
+.input-token-section > .home-table-body > .unwrap-row-selected {
   border-color: var(--color-border-background-2);
   border-radius: 10px;
   border-style: dashed;
