@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { LP_POSITION_QUERY, LP_TRANSACTION_RECEIVE, LP_PAIR_DETAILS, LP_SUSHISWAP_STATS, LP_TOKENS } from "./queries";
+import { LP_POSITION_QUERY, LP_TRANSACTION_RECEIVE, LP_PAIR_DETAILS, LP_SUSHISWAP_STATS, LP_TOKENS, LP_TRANSACTIONS } from "./queries";
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/sushiswap/exchange",
@@ -72,4 +72,15 @@ export const fetchSushiTokensCount = async () => {
   }
 
   return count;
+};
+
+export const fetchUserTransactions = async (userAddress) => {
+  const { data } = await client.query({
+    query: gql(LP_TRANSACTIONS),
+    variables: {
+      user: userAddress.toLowerCase(),
+    },
+  });
+  if (data) return data;
+  return [];
 };

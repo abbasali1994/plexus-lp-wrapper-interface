@@ -250,3 +250,154 @@ export const LP_TOKENS = `
     }
   }
 `;
+
+export const LP_TRANSACTIONS = `
+  query transactions($user: String) {
+    mints(where: { to: $user }, orderBy: timestamp, orderDirection: desc) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      to,
+      liquidity,
+      sender,
+      amount0,
+      amount1,
+      amountUSD,
+      feeTo,
+      feeLiquidity
+    }
+    burns(where: { sender: $user }, orderBy: timestamp, orderDirection: desc) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      to,
+      liquidity,
+      sender,
+      amount0,
+      amount1,
+      amountUSD,
+      feeTo,
+      feeLiquidity
+    }
+    received: swaps(where: { to: $user }, orderBy: timestamp, orderDirection: desc) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      sender,
+      to,
+      amount0In,
+      amount1In,
+      amount0Out,
+      amount1Out,
+      amountUSD
+    }
+    sent: swaps(where: { sender: $user }, orderBy: timestamp, orderDirection: desc) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
+        id,
+        token0 {
+          id,
+          name,
+          symbol
+        },
+        token1 {
+          id,
+          name,
+          symbol
+        },
+        reserve0,
+        reserve1,
+        totalSupply,
+        reserveETH,
+        reserveUSD,
+        token0Price,
+        token1Price,
+        volumeUSD
+      },
+      sender,
+      to,
+      amount0In,
+      amount1In,
+      amount0Out,
+      amount1Out,
+      amountUSD
+    }
+  }
+`;

@@ -8,10 +8,7 @@ import { setSelectedLpTokenPair } from "../../../redux/tokens";
 import Dexes, { MobileDexes } from "../../dex-buttons";
 
 import { constants } from "../../../utils";
-import {
-  formatAmount,
-  isInViewport,
-} from "../../../utils/display";
+import { formatAmount, isInViewport } from "../../../utils/display";
 
 const SelectLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -70,16 +67,17 @@ const DesktopWrapper = ({ lpTokenPairs }) => {
       >
         <div className="input-token-section">
           <div className="token-label">Select LP Tokens to Unwrap</div>
-
-          {lpTokenPairs &&
-            lpTokenPairs.map((pair, idx) => (
-              <DesktopLpTokens
-                lpPair={pair}
-                idx={idx}
-                key={idx}
-                tokenSelected={cursor === idx ? "unwrap-row-selected" : ""}
-              />
-            ))}
+          <div className="home-table-body">
+            {lpTokenPairs &&
+              lpTokenPairs.map((pair, idx) => (
+                <DesktopLpTokens
+                  lpPair={pair}
+                  idx={idx}
+                  key={idx}
+                  tokenSelected={cursor === idx ? "unwrap-row-selected" : ""}
+                />
+              ))}
+          </div>
         </div>
       </div>
     </>

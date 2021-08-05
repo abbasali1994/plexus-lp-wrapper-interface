@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import gear from "../../assets/images/gear.svg";
 import close from "../../assets/images/close.svg";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import SettingsToggle from "../toggle-button/settings-toggle";
 import { useDispatch } from "react-redux";
 import { showTransactionSettings } from "../../redux/transactions";
@@ -46,8 +46,8 @@ const TransactionSettings = () => {
 
 const TransactionSettingsContent = () => {
   const [deadline, setDeadline] = useState(true);
-  const [multihops, setMultiHops] = useState(false);
   const [shield, setShield] = useState(false);
+  const [slippage, setSlippage] = useState();
   const [txnDeadline, setTxnDeadline] = useState();
   const dispatch = useDispatch();
 
@@ -56,6 +56,31 @@ const TransactionSettingsContent = () => {
       setTxnDeadline(value);
     }
   };
+
+  const handleSlippageChange = (value) => {
+    if (/^(|[0-9]\d*)(\.\d*)?$/.test(value)) {
+      setSlippage(value);
+    }
+  };
+  const handleSlippageFocus = (value) => {
+    const newInputAmount = value.split("%")[0];
+    if (newInputAmount) setSlippage(newInputAmount.trim());
+  };
+  const validateValue = (value) => {
+    let validatedValue = value.trim();
+    if (validatedValue.length) {
+      if (validatedValue > 100) validatedValue = 100;
+      if (validatedValue <= 0) validatedValue = "";
+    }
+    return validatedValue;
+  };
+  const handleSlippageBlur = useCallback((value) => {
+    const validValue = validateValue(value.toString());
+
+    if (validValue.toString().length) setSlippage(validValue + "%");
+    else setSlippage(validValue);
+  }, []);
+
   return (
     <div>
       <h1 className="txn-settings-menu-header">
@@ -80,13 +105,13 @@ const TransactionSettingsContent = () => {
           aria-label="Default"
           aria-describedby="inputGroup-sizing-default"
           placeholder={"0.5%"}
-          disabled
+          value={slippage}
+          onChange={(event) => handleSlippageChange(event.target.value)}
+          onBlur={(event) => handleSlippageBlur(event.target.value)}
+          onFocus={(evt) => handleSlippageFocus(evt.target.value)}
         />
-        <InputGroup.Append onClick={() => {}}>
-          <InputGroup.Text id="auto-token">
-            Auto
-           
-          </InputGroup.Text>
+        <InputGroup.Append onClick={() => setSlippage("0.5%")}>
+          <InputGroup.Text id="auto-token">Auto</InputGroup.Text>
         </InputGroup.Append>
       </InputGroup>
 
@@ -117,18 +142,7 @@ const TransactionSettingsContent = () => {
       </Row>
       <Row>
         <Col lg={9} xs={8} className="txn-settings-label">
-          Disable Multihops
-        </Col>
-        <Col className="txn-setings-toggle">
-          <SettingsToggle
-            value={multihops}
-            handleChange={(value) => setMultiHops(!value)}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={9} xs={8} className="txn-settings-label">
-          MEV Shield by Archer DAO
+          MEV Shield by Eden Network (coming soon)
         </Col>
         <Col className="txn-setings-toggle">
           <SettingsToggle

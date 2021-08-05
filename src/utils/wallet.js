@@ -57,6 +57,7 @@ export const connectToWallet = async () => {
   const provider = await web3Modal.connect();
   web3 = new Web3(provider);
   const userAddress = (await web3.eth.getAccounts())[0];
+  // const userAddress ="0xab5801a7d398351b8be11c439e05c5b3259aec9b"
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);

@@ -103,6 +103,16 @@
   border-radius: 20px;
 }
 
+.home-table-body {
+  display: block;
+  height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-left: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .dashboard-table-row {
   padding: 15px 20px;
 }

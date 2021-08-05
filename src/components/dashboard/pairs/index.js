@@ -90,7 +90,6 @@ const DesktopDashboardPairs = ({ lpTokens }) => {
 
   return (
     <div
-      className="dashboard-wrapper-interface"
       // ref={divRef}
       // tabIndex="0"
       // onKeyDown={handleKeyDown}
