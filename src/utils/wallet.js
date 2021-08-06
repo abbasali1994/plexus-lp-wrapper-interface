@@ -58,11 +58,11 @@ export const connectToWallet = async () => {
   web3 = new Web3(provider);
   const userAddress = (await web3.eth.getAccounts())[0];
   // const userAddress ="0xab5801a7d398351b8be11c439e05c5b3259aec9b"
+  // const userAddress ="0x0887e769D8B1C79DB1312Ed4535B0CDa1dd43991"
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
   await fetchTokenSwaps(userAddress);
-  await getStats();
   setWalletListener(provider);
   return web3;
 };
@@ -392,9 +392,10 @@ const setWalletListener = (provider) => {
 
 //web3modal if provider preexist add listener
 (async () => {
+  getStats();
   if (web3Modal.cachedProvider) {
     await connectToWallet();
-    store.dispatch(resetState());
+    // store.dispatch(resetState());
     store.dispatch(resetTxnState());
   }
 })();
