@@ -46,13 +46,13 @@ const TransactionSettings = () => {
 
 const TransactionSettingsContent = () => {
   const [deadline, setDeadline] = useState(true);
-  const [shield, setShield] = useState(false);
+  // const [shield, setShield] = useState(false);
   const [slippage, setSlippage] = useState();
   const [txnDeadline, setTxnDeadline] = useState();
   const dispatch = useDispatch();
 
   const handleTxnDeadlineChange = (value) => {
-    if (/^\d*$/.test(value)) {
+    if (/^(|[0-9]\d*)(\d*)?$/.test(value)) {
       setTxnDeadline(value);
     }
   };
@@ -146,8 +146,8 @@ const TransactionSettingsContent = () => {
         </Col>
         <Col className="txn-setings-toggle">
           <SettingsToggle
-            value={shield}
-            handleChange={(value) => setShield(!value)}
+            value={false}
+            handleChange={() => {}}
           />
         </Col>
       </Row>

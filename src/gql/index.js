@@ -6,8 +6,9 @@ import {
   fetchLpTokens as fetchSushiLPTokens,
   fetchUserTransactions as fetchSushiUserTransactions,
 } from "./sushiswap";
-import { getAllTokens } from "../utils/token";
+import { getAllTokens, getPriceId } from "../utils/token";
 import { formatAmount } from "../utils/display";
+import store from "../store";
 const tokens = getAllTokens();
 
 export const fetchLpTokens = async (userAddress) => {
@@ -48,42 +49,40 @@ export const fetchUserSwaps = async (userAddress) => {
 };
 
 const processResult = (result) => {
+  const { prices } = store.getState();
+  const { pricesUSD } = prices;
   const lpTokens = [];
   result.forEach((liquidityPosition) => {
     let { pair, liquidityTokenBalance } = liquidityPosition;
-    const {
-      token0,
-      token0Price,
-      token1,
-      token1Price,
-      reserveUSD,
-      totalSupply,
-    } = pair;
+    const { token0, token1, reserveUSD, totalSupply } = pair;
+
     liquidityTokenBalance = parseFloat(liquidityTokenBalance);
     if (liquidityTokenBalance > 0) {
       const lpTokenPrice = parseFloat(reserveUSD) / parseFloat(totalSupply);
       const lpToken1 = tokens.find((token) => token.address === token0.id);
-      const token1Amount =
-        ((liquidityTokenBalance / 2) * lpTokenPrice) / token0Price;
-
       const lpToken2 = tokens.find((token) => token.address === token1.id);
-      const token2Amount =
-        ((liquidityTokenBalance / 2) * lpTokenPrice) / token1Price;
-
-      lpTokens.push({
-        lpToken1: {
-          ...lpToken1,
-          tokenUSDValue: token0Price,
-          tokenAmount: token1Amount,
-        },
-        lpToken2: {
-          ...lpToken2,
-          tokenUSDValue: token1Price,
-          tokenAmount: token2Amount,
-        },
-        lpTokenPrice,
-        liquidityTokenBalance,
-      });
+      const lpToken1Price = pricesUSD[getPriceId(lpToken1)].usd;
+      const lpToken2Price = pricesUSD[getPriceId(lpToken2)].usd;
+      if (lpToken1Price && lpToken2Price) {
+        const token1Amount =
+          ((liquidityTokenBalance / 2) * lpTokenPrice) / lpToken1Price;
+        const token2Amount =
+          ((liquidityTokenBalance / 2) * lpTokenPrice) / lpToken2Price;
+        lpTokens.push({
+          lpToken1: {
+            ...lpToken1,
+            tokenUSDValue: lpToken1Price,
+            tokenAmount: token1Amount,
+          },
+          lpToken2: {
+            ...lpToken2,
+            tokenUSDValue: lpToken2Price,
+            tokenAmount: token2Amount,
+          },
+          lpTokenPrice,
+          liquidityTokenBalance,
+        });
+      }
     }
   });
   return lpTokens;

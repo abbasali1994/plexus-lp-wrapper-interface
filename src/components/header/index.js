@@ -19,6 +19,7 @@ import { usePath } from "hookrouter";
 // token usd prices
 import { getTokenUSDPrices, getGasPrices } from '../../redux/prices';
 import { getCoinGeckoTokenIDS } from "../../utils/token";
+import { resetState } from "../../redux/tokens";
 
 
 const Header = () => {
@@ -45,14 +46,17 @@ const Header = () => {
           alt="logo"
           width="170"
           height="32"
-          onClick={() => navigate("/")}
+          onClick={() => {
+            dispatch(resetState())
+            navigate("/")
+          }}
         />
       </Col>
       <Col lg={6} xs={12}>
         <div className="user-info">
           {walletAddress ? <NotificationButton /> : null}
           {walletAddress ? (
-            <button className="header-btn">
+            <button className="header-btn" onClick={()=>window.open(`https://etherscan.io/address/${walletAddress}`, "_blank")}>
               {" "}
               {formatAddress(walletAddress)}
             </button>

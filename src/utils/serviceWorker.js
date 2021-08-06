@@ -27,5 +27,5 @@ const refreshPriceDetails = async () => {
   store.dispatch(getGasPrices());
 };
 
-setInterval(()=>refreshUserDetails(),schedulerFrequency.userBalances)
 setInterval(()=>refreshPriceDetails(),schedulerFrequency.tokenPrices)
+setInterval(()=>refreshUserDetails(),schedulerFrequency.userBalances)
