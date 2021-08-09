@@ -58,12 +58,13 @@ const processResult = (result) => {
 
     liquidityTokenBalance = parseFloat(liquidityTokenBalance);
     if (liquidityTokenBalance > 0) {
-      const lpTokenPrice = parseFloat(reserveUSD) / parseFloat(totalSupply);
-      const lpToken1 = tokens.find((token) => token.address === token0.id);
-      const lpToken2 = tokens.find((token) => token.address === token1.id);
-      const lpToken1Price = pricesUSD[getPriceId(lpToken1)].usd;
-      const lpToken2Price = pricesUSD[getPriceId(lpToken2)].usd;
-      if (lpToken1Price && lpToken2Price) {
+      try {
+        const lpTokenPrice = parseFloat(reserveUSD) / parseFloat(totalSupply);
+        const lpToken1 = tokens.find((token) => token.address === token0.id);
+        const lpToken2 = tokens.find((token) => token.address === token1.id);
+
+        const lpToken1Price = pricesUSD[getPriceId(lpToken1)].usd;
+        const lpToken2Price = pricesUSD[getPriceId(lpToken2)].usd;
         const token1Amount =
           ((liquidityTokenBalance / 2) * lpTokenPrice) / lpToken1Price;
         const token2Amount =
@@ -82,6 +83,8 @@ const processResult = (result) => {
           lpTokenPrice,
           liquidityTokenBalance,
         });
+      } catch (e) {
+        console.log(e);
       }
     }
   });

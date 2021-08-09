@@ -51,3 +51,16 @@
 .dashboard-table-action {
   color: var(--color-text-6) !important;
 }
+
+.pagination {
+  justify-content: center;
+    margin-top: 10px;
+    border-color: var(--color-primary-background)!important;
+}
+
+.page-item:not(.active) > .page-link {
+  background-color: var(--color-primary-background)!important;  
+  border-color: var(--color-primary-background)!important;
+  color: var(--color-text-6)!important;
+}
+
