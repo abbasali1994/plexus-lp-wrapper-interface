@@ -47,8 +47,8 @@ const TransactionSettings = () => {
 const TransactionSettingsContent = () => {
   const [deadline, setDeadline] = useState(true);
   // const [shield, setShield] = useState(false);
-  const [slippage, setSlippage] = useState();
-  const [txnDeadline, setTxnDeadline] = useState();
+  const [slippage, setSlippage] = useState("");
+  const [txnDeadline, setTxnDeadline] = useState("");
   const dispatch = useDispatch();
 
   const handleTxnDeadlineChange = (value) => {
@@ -64,7 +64,7 @@ const TransactionSettingsContent = () => {
   };
   const handleSlippageFocus = (value) => {
     const newInputAmount = value.split("%")[0];
-    if (newInputAmount) setSlippage(newInputAmount.trim());
+    if (newInputAmount) handleSlippageChange(newInputAmount.trim());
   };
   const validateValue = (value) => {
     let validatedValue = value.trim();
@@ -77,8 +77,8 @@ const TransactionSettingsContent = () => {
   const handleSlippageBlur = useCallback((value) => {
     const validValue = validateValue(value.toString());
 
-    if (validValue.toString().length) setSlippage(validValue + "%");
-    else setSlippage(validValue);
+    if (validValue.toString().length) handleSlippageChange(validValue + "%");
+    else handleSlippageChange(validValue);
   }, []);
 
   return (
@@ -101,6 +101,7 @@ const TransactionSettingsContent = () => {
       <div className="txn-settings-label">Slippage Tollerance</div>
       <InputGroup className="mb-3">
         <FormControl
+        type="input"
           className="txn-settings-input"
           aria-label="Default"
           aria-describedby="inputGroup-sizing-default"

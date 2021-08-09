@@ -1,7 +1,7 @@
 import "./index.scss";
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Pagination } from "react-bootstrap";
 import { constants, formatAddress } from "../../../utils";
 import {
   formatAmount,
@@ -98,6 +98,7 @@ const MobileDashboardHistory = ({ history }) => {
 const DesktopDashboardHistory = ({ history }) => {
   const divRef = useRef(null);
   const [cursor, setCursor] = useState(-1);
+  const [activePage, setActivePage] = useState(1);
   function handleKeyDown(e) {
     const box = document.getElementsByClassName("dashboard-table-body")[0];
     // arrow up/down button should select next/previous list element
@@ -119,6 +120,7 @@ const DesktopDashboardHistory = ({ history }) => {
   useEffect(() => {
     divRef.current.focus();
   });
+
   return (
     <div
       className="dashboard-wrapper-interface"
@@ -133,13 +135,8 @@ const DesktopDashboardHistory = ({ history }) => {
           <Col lg="2">Txn Hash</Col>
         </Row>
         <div className="dashboard-table-body">
-          {history.map((entry, id) => {
-            const {
-              action,
-              statement,
-              timestamp,
-              transaction,
-            } = entry;      
+          {history.slice((activePage-1)*50,activePage*50).map((entry, id) => {
+            const { action, statement, timestamp, transaction } = entry;
             return (
               <Row
                 id={`dashoard-history-${id}`}
@@ -161,10 +158,7 @@ const DesktopDashboardHistory = ({ history }) => {
                   </span>
                   {statement}
                 </Col>
-                <Col
-                  lg="2"
-                  className="dashboard-table-hash"                
-                >
+                <Col lg="2" className="dashboard-table-hash">
                   {formatAddress(transaction.id)}
                 </Col>
               </Row>
@@ -172,8 +166,32 @@ const DesktopDashboardHistory = ({ history }) => {
           })}
         </div>
       </div>
+   <PaginationComponent activePage={activePage}  pageCount={Math.floor(history.length/50)+1} setActivePage={setActivePage}/>
     </div>
   );
 };
 
+const PaginationComponent = ({activePage, pageCount, setActivePage}) => {
+  const items = []
+  const start = Math.max(1,activePage-3)
+  const end = Math.min(5,pageCount)
+  for (let number = start; number <= end; number++) {
+    items.push(
+      <Pagination.Item key={number} active={number === activePage} onClick={()=>setActivePage(number)}>
+        {number}
+      </Pagination.Item>,
+    );
+  }
+  return (
+    <Pagination >
+      <Pagination.First disabled={activePage===1} onClick={()=>setActivePage(1)}/>
+      <Pagination.Prev disabled={activePage===1} onClick={()=>setActivePage(activePage-1)}/>
+      {start!==1 && <Pagination.Ellipsis />}
+      {items}
+      {end!==pageCount && <Pagination.Ellipsis />}
+      <Pagination.Next disabled={activePage===pageCount} onClick={()=>setActivePage(activePage+1)}/>
+      <Pagination.Last disabled={activePage===pageCount} onClick={()=>setActivePage(pageCount)}/>
+    </Pagination>
+  );
+};
 export default DashboardHistoryComponent;
