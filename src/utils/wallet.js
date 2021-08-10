@@ -2,7 +2,7 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import BigNumber from "big-number";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
+import ENS, { getEnsAddress } from "@ensdomains/ensjs";
 import store from "../store";
 import { resetState } from "../redux/tokens";
 import { resetTxnState } from "../redux/transactions";
@@ -11,6 +11,7 @@ import {
   setWalletBalance,
   setLpTokens,
   setUserSwaps,
+  setEnsName,
 } from "../redux/wallet";
 
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
@@ -56,9 +57,14 @@ const web3Modal = new Web3Modal({
 export const connectToWallet = async () => {
   const provider = await web3Modal.connect();
   web3 = new Web3(provider);
+  const ens = new ENS({ provider, ensAddress: getEnsAddress("1") });
   const userAddress = (await web3.eth.getAccounts())[0];
-  // const userAddress ="0xab5801a7d398351b8be11c439e05c5b3259aec9b"
+
+  //Addresses for testing
+  // const userAddress = "0xab5801a7d398351b8be11c439e05c5b3259aec9b";
   // const userAddress ="0x0887e769D8B1C79DB1312Ed4535B0CDa1dd43991"
+  // const userAddress = "0xaccf74209c0cd03ef77fb1295ef402e547dad457";
+  getENSName(ens,userAddress)
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
@@ -122,21 +128,21 @@ export const getStats = async () => {
   let sushiStats = {};
   let uniStats = {};
   let tokensCount = 0;
-    stats = await fetchSushiStat();
-    tokensCount = await fetchSushiTokensCount();
-    sushiStats = {
-      tokensCount: formatAmount(tokensCount),
-      pairCount: formatAmount(stats.pairCount),
-      totalLiquidityUSD: `$${formatAmount(stats.liquidityUSD)}`,
-    };
-    stats = await fetchUniswapStat();
-    tokensCount = await fetchUniswapTokensCount();
-    uniStats = {
-      tokensCount: formatAmount(tokensCount),
-      pairCount: formatAmount(stats.pairCount),
-      totalLiquidityUSD: `$${formatAmount(stats.totalLiquidityUSD)}`,
-    };
-  store.dispatch(setDexesStats({sushiStats,uniStats}));
+  stats = await fetchSushiStat();
+  tokensCount = await fetchSushiTokensCount();
+  sushiStats = {
+    tokensCount: formatAmount(tokensCount),
+    pairCount: formatAmount(stats.pairCount),
+    totalLiquidityUSD: `$${formatAmount(stats.liquidityUSD)}`,
+  };
+  stats = await fetchUniswapStat();
+  tokensCount = await fetchUniswapTokensCount();
+  uniStats = {
+    tokensCount: formatAmount(tokensCount),
+    pairCount: formatAmount(stats.pairCount),
+    totalLiquidityUSD: `$${formatAmount(stats.totalLiquidityUSD)}`,
+  };
+  store.dispatch(setDexesStats({ sushiStats, uniStats }));
 };
 
 export const fetchTokenSwaps = async (userAddress) => {
@@ -188,6 +194,15 @@ const getTokenBalance = async (userAddress, tokenAddress, tokenSymbol) => {
 
   return tokenBalance;
 };
+
+const getENSName = (ens,userAddress) => {
+  ens.getName(userAddress).then(async ({name})=>{
+    console.log(name)
+    let address = await ens.name(name).getAddress()
+    if(userAddress.toLowerCase() !== address.toLowerCase()) name = null;
+    store.dispatch(setEnsName({ ensName: name }));
+  });
+}
 
 export const checkIfUniPairExists = async (token1Address, token2Address) => {
   let uniPairAddress = constants.ZERO_ADDRESS;
