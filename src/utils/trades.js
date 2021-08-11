@@ -1,7 +1,6 @@
 import { ChainId, Token, Trade, TokenAmount, Pair, WETH } from "@uniswap/sdk";
 import {
-  checkIfSushiPairExists,
-  checkIfUniPairExists,
+  checkIfPairExists,
   convertAmountToString,
   createContract,
 } from "./wallet";
@@ -47,13 +46,15 @@ export const checkBestPriceTrades = async (
 
   switch (dex) {
     case constants.dexUni:
-      isPair = await checkIfUniPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexUni,
         outputToken.address,
         inputToken.address
       );
       break;
     case constants.dexSushi:
-      isPair = await checkIfSushiPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexUni,
         outputToken.address,
         inputToken.address
       );
@@ -80,7 +81,7 @@ export const checkBestPriceTrades = async (
     pairs = [pair1, pair2];
   }
 
-  const bestTrades = await Trade.bestTradeExactIn(
+  const bestTrades = Trade.bestTradeExactIn(
     pairs,
     inputTokenAmount,
     outputToken,
@@ -102,7 +103,8 @@ export const calcMaxAmountOuts = async (
   let router = null;
   switch (dex) {
     case constants.dexUni:
-      isPair = await checkIfUniPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexUni,
         outputToken.address,
         inputToken.address
       );
@@ -112,7 +114,8 @@ export const calcMaxAmountOuts = async (
       );
       break;
     case constants.dexSushi:
-      isPair = await checkIfSushiPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexSushi,
         outputToken.address,
         inputToken.address
       );

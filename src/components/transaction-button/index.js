@@ -6,10 +6,7 @@ import { Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import {
-  resetTxnState,
-  showConfirmPrivacyModal,
-} from "../../redux/transactions";
+import { resetTxnState, showConfirmModal } from "../../redux/transactions";
 import { resetState, setRemixValues } from "../../redux/tokens";
 import { getGasPrices } from "../../redux/prices";
 import spinner from "../../assets/gifs/confirmation.gif";
@@ -27,6 +24,7 @@ import {
 } from "../../utils/wallet";
 import { fetchPairDetails as fetchSushiPairDetails } from "../../gql/sushiswap";
 import { fetchPairDetails as fetchUniPairDetails } from "../../gql/uniswap";
+
 // this component is responsible for handling all the blockchain txn's in the app
 const InputButton = () => {
   const {
@@ -36,6 +34,8 @@ const InputButton = () => {
     inputTokenValue,
     lpToken1Value,
     lpToken2Value,
+ //   lpToken1Amount,
+ //   lpToken2Amount,
   } = useSelector((state) => state.tokens);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -88,11 +88,22 @@ const InputButton = () => {
       setButtonDisabled(false);
       setButtonText("Review Transaction");
 
-      // dispatch a gas request again so that we have the latest values
+      // TODO: Revist in another iteration and fix
+      // const token1 = { lpToken1, lpToken1Amount };
+      // const token2  = { lpToken2, lpToken2Amount };
+
+      // getLpTokensEstimate(pairAddress, token1, token2);
+
+      // dispatch a gas request again so that we have the latest gas cost svalues
       dispatch(getGasPrices());
 
       // then show the confirm modal
-      dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
+      // TODO: We'll enable this once we add the MEV handling logic
+      // dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
+
+      // show the txn confirmation modal
+
+      dispatch(showConfirmModal({ showConfirm: true }));
     }
   };
 

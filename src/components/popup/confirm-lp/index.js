@@ -21,7 +21,7 @@ import arrowDown from "../../../assets/images/arrow-down.svg";
 
 // Utils
 import { constants, tokenViewTypes } from "../../../utils";
-import {  wrapTokens } from "../../../utils/wallet";
+import {  wrapTokens } from "../../../utils/wrap";
 import { formatAmount } from "../../../utils/display";
 import { navigate } from "hookrouter";
 

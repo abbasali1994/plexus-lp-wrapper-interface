@@ -29,10 +29,17 @@
   top: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.04;
   background-repeat: no-repeat;
   background-size: 242px 306px;
   background-position: right bottom;
+}
+
+.left-sidebar-uni:before {
+  opacity: 0.08;
+}
+
+.left-sidebar-sushi:before {
+  opacity: 0.04;
 }
 
 .left-sidebar-wrapper {
