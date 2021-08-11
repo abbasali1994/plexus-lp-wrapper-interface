@@ -34,7 +34,7 @@ const Header = () => {
   },[dispatch])
 
 
-  const { walletAddress } = useSelector((state) => state.wallet);
+  const { walletAddress, ensName } = useSelector((state) => state.wallet);
   const [toggleIcon, setToggleIcon] = useState(false);
 
   return (
@@ -57,8 +57,7 @@ const Header = () => {
           {walletAddress ? <NotificationButton /> : null}
           {walletAddress ? (
             <button className="header-btn" onClick={()=>window.open(`https://etherscan.io/address/${walletAddress}`, "_blank")}>
-              {" "}
-              {formatAddress(walletAddress)}
+              {ensName?ensName:formatAddress(walletAddress)}
             </button>
           ) : null}
           {walletAddress ? (

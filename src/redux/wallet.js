@@ -12,6 +12,7 @@ export const walletSlice = createSlice({
   name: "wallet",
   initialState: {
     walletAddress: null,
+    ensName: null,
     balances: tokenBalances,
     lpTokens:{
       Uniswap:null,
@@ -35,6 +36,10 @@ export const walletSlice = createSlice({
       const { walletAddress } = payload;
       state.walletAddress = walletAddress;
     },
+    setEnsName: (state, { payload }) => {
+      const { ensName } = payload;
+      state.ensName = ensName;
+    },
     setWalletBalance: (state, { payload }) => {
       const { key } = payload;
       if(!state.balances[key]) state.balances[key] = {}
@@ -47,7 +52,7 @@ export const walletSlice = createSlice({
   },
 });
 
-export const { setWalletAddress, setWalletBalance, setLpTokens, setUserSwaps, setWalletUSDValue } =
+export const { setWalletAddress, setEnsName, setWalletBalance, setLpTokens, setUserSwaps, setWalletUSDValue } =
   walletSlice.actions;
 
 export default walletSlice.reducer;
