@@ -1,50 +1,74 @@
-import {
-  fetchLpTokens as fetchUniLPTokens,
-  fetchUserTransactions as fetchUniUserTransactions,
-} from "./uniswap";
-import {
-  fetchLpTokens as fetchSushiLPTokens,
-  fetchUserTransactions as fetchSushiUserTransactions,
-} from "./sushiswap";
+import { client as uniClient } from "./uniswap";
+import { client as sushiClient } from "./sushiswap";
 import { getAllTokens, getPriceId } from "../utils/token";
 import { formatAmount } from "../utils/display";
 import store from "../store";
+import { LP_POSITION_QUERY, LP_TRANSACTIONS } from "./queries";
+import { gql } from "@apollo/client";
 const tokens = getAllTokens();
+
+const queryLpTokens = async (client, userAddress) => {
+  try {
+    let { data, error } = await client.query({
+      query: gql(LP_POSITION_QUERY),
+      variables: {
+        user: userAddress.toLowerCase(),
+      },
+    });
+    if (data.user?.liquidityPositions)
+      return { data: data.user.liquidityPositions, error };
+    return { data: [], error };
+  } catch (e) {
+    return { data: [], error: e.message };
+  }
+};
 
 export const fetchLpTokens = async (userAddress) => {
   let Uniswap, Sushiswap;
-  try {
-    Uniswap = await fetchUniLPTokens(userAddress);
-  } catch (e) {
-    console.log(e);
-    Uniswap = [];
-  }
-  try {
-    Sushiswap = await fetchSushiLPTokens(userAddress);
-  } catch (e) {
-    console.log(e);
-    Sushiswap = [];
-  }
-  return { 1: processResult(Uniswap), 0: processResult(Sushiswap) };
+  Uniswap = await queryLpTokens(uniClient, userAddress);
+  Sushiswap = await queryLpTokens(sushiClient, userAddress);
+  return {
+    lpTokens: {
+      1: processResult(Uniswap.data),
+      0: processResult(Sushiswap.data),
+    },
+    errors: {
+      uniswap: Uniswap.error,
+      sushiswap: Sushiswap.error,
+    },
+  };
 };
 
-export const fetchUserSwaps = async (userAddress) => {
+const queryUserTxns = async (client, userAddress) => {
+  try {
+    let { data, error } = await client.query({
+      query: gql(LP_TRANSACTIONS),
+      variables: {
+        user: userAddress.toLowerCase(),
+      },
+    });
+    console.log(data)
+    if (data) return { data, error };
+    return { data: {}, error };
+  } catch (e) {
+    return { data: {}, error: e.message };
+  }
+};
+
+export const fetchUserTxns = async (userAddress) => {
   let Uniswap, Sushiswap;
-  try {
-    Uniswap = await fetchUniUserTransactions(userAddress);
-  } catch (e) {
-    console.log(e);
-    Uniswap = [];
-  }
-  try {
-    Sushiswap = await fetchSushiUserTransactions(userAddress);
-  } catch (e) {
-    console.log(e);
-    Sushiswap = [];
-  }
+  Uniswap = await queryUserTxns(uniClient, userAddress);
+
+  Sushiswap = await queryUserTxns(sushiClient, userAddress);
   return {
-    1: processTransactions(Uniswap, "Uniswap-V2"),
-    0: processTransactions(Sushiswap, "Sushiswap"),
+    userSwaps: {
+      1: processTransactions(Uniswap.data, "Uniswap-V2"),
+      0: processTransactions(Sushiswap.data, "Sushiswap"),
+    },
+    errors: {
+      uniswap: Uniswap.error,
+      sushiswap: Sushiswap.error,
+    },
   };
 };
 
@@ -95,7 +119,7 @@ const processTransactions = (result, type) => {
   const transactions = [];
   const { burns, mints, received } = result;
 
-  burns.forEach((burn) => {
+  burns?.forEach((burn) => {
     let { transaction, timestamp, pair, liquidity } = burn;
     const { token0, token1 } = pair;
     const statement = `${formatAmount(liquidity)} ${token0.symbol}/${
@@ -108,7 +132,7 @@ const processTransactions = (result, type) => {
       statement,
     });
   });
-  mints.forEach((mint) => {
+  mints?.forEach((mint) => {
     let { transaction, timestamp, pair, liquidity } = mint;
     const { token0, token1 } = pair;
     const statement = `${formatAmount(liquidity)} ${token0.symbol}/${
@@ -121,7 +145,7 @@ const processTransactions = (result, type) => {
       statement,
     });
   });
-  received.forEach((swap) => {
+  received?.forEach((swap) => {
     let {
       transaction,
       timestamp,

@@ -1,7 +1,6 @@
 export const LP_POSITION_QUERY = `
   query lpPositions($user: String) {
     user(id: $user) {
-      usdSwapped,
       liquidityPositions {
         id,
         liquidityTokenBalance,
@@ -17,14 +16,14 @@ export const LP_POSITION_QUERY = `
             name,
             symbol
           },
+          volumeUSD,
           reserve0,
           reserve1,
           totalSupply,
           reserveETH,
           reserveUSD,
           token0Price,
-          token1Price,
-          volumeUSD
+          token1Price
         }
       }
     }
@@ -162,9 +161,18 @@ export const LP_TRANSACTION_SEND = `
   }
 `;
 
-export const LP_PAIR_DETAILS = `
-  query pairDetails($pair: String) {
-    pair(id: $pair){
+export const LP_TRANSACTION_RECEIVE = `
+  query receivedTransaction($user: String) {
+    swaps(where: {
+      to: $user
+    }) {
+      id,
+      transaction {
+        id,
+        blockNumber
+      }
+      timestamp,
+      pair {
         id,
         token0 {
           id,
@@ -184,16 +192,51 @@ export const LP_PAIR_DETAILS = `
         token0Price,
         token1Price,
         volumeUSD
-      }
+      },
+      sender,
+      to,
+      amount0In,
+      amount1In,
+      amount0Out,
+      amount1Out,
+      amountUSD
+    }
+  }
+  `;
+
+export const LP_PAIR_DETAILS = `
+  query pairDetails($pair: String) {
+    pair(id: $pair){
+      id,
+      token0 {
+        id,
+        name,
+        symbol
+      },
+      token1 {
+        id,
+        name,
+        symbol
+      },
+      volumeUSD,
+      reserve0,
+      reserve1,
+      totalSupply,
+      reserveETH,
+      reserveUSD,
+      token0Price,
+      token1Price
+    }
    }`;
 
-export const LP_UNISWAP_STATS = `
-  query uniswapStats {
-    uniswapFactory(id: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"){
-      totalVolumeUSD
-      totalLiquidityUSD
+export const LP_SUSHISWAP_STATS = `
+  query sushiStats {
+    factory(id: "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"){
+      volumeUSD
+      liquidityUSD
       pairCount
       txCount
+      tokenCount
     }
   }
 `;
@@ -321,49 +364,6 @@ export const LP_TRANSACTIONS = `
       amountUSD
     }
     sent: swaps(where: { sender: $user }, orderBy: timestamp, orderDirection: desc) {
-      id,
-      transaction {
-        id,
-        blockNumber
-      }
-      timestamp,
-      pair {
-        id,
-        token0 {
-          id,
-          name,
-          symbol
-        },
-        token1 {
-          id,
-          name,
-          symbol
-        },
-        reserve0,
-        reserve1,
-        totalSupply,
-        reserveETH,
-        reserveUSD,
-        token0Price,
-        token1Price,
-        volumeUSD
-      },
-      sender,
-      to,
-      amount0In,
-      amount1In,
-      amount0Out,
-      amount1Out,
-      amountUSD
-    }
-  }
-`;
-
-export const LP_TRANSACTION_RECEIVE = `
-  query receivedTransaction($user: String) {
-    swaps(where: {
-      to: $user
-    }) {
       id,
       transaction {
         id,

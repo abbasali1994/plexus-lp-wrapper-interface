@@ -17,10 +17,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { usePath } from "hookrouter";
 
 // token usd prices
-import { getTokenUSDPrices, getGasPrices } from '../../redux/prices';
+import { getTokenUSDPrices, getGasPrices } from "../../redux/prices";
 import { getCoinGeckoTokenIDS } from "../../utils/token";
 import { resetState } from "../../redux/tokens";
-
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -30,11 +29,10 @@ const Header = () => {
 
     dispatch(getTokenUSDPrices(tokenIds));
     dispatch(getGasPrices());
-
-  },[dispatch])
-
+  }, [dispatch]);
 
   const { walletAddress, ensName } = useSelector((state) => state.wallet);
+  const { queryErrors } = useSelector((state) => state.transactions);
   const [toggleIcon, setToggleIcon] = useState(false);
 
   return (
@@ -47,17 +45,30 @@ const Header = () => {
           width="170"
           height="32"
           onClick={() => {
-            dispatch(resetState())
-            navigate("/")
+            dispatch(resetState());
+            navigate("/");
           }}
         />
       </Col>
-      <Col lg={6} xs={12}>
+      <Col lg={8} xs={12}>
+        <b className="query-errors">
+          {queryErrors.uniswap || queryErrors.sushiswap
+            ? "Error: Internet connection disabled or unstable"
+            : ""}
+        </b>
         <div className="user-info">
           {walletAddress ? <NotificationButton /> : null}
           {walletAddress ? (
-            <button className="header-btn" onClick={()=>window.open(`https://etherscan.io/address/${walletAddress}`, "_blank")}>
-              {ensName?ensName:formatAddress(walletAddress)}
+            <button
+              className="header-btn"
+              onClick={() =>
+                window.open(
+                  `https://etherscan.io/address/${walletAddress}`,
+                  "_blank"
+                )
+              }
+            >
+              {ensName ? ensName : formatAddress(walletAddress)}
             </button>
           ) : null}
           {walletAddress ? (
@@ -86,7 +97,7 @@ const NotificationButton = () => {
   const { txnStatus } = useSelector((state) => state.transactions);
   const pathName = usePath();
   const handleClick = () => {
-    if (txnStatus && pathName !== "/"+txnStatus) navigate("/" + txnStatus);
+    if (txnStatus && pathName !== "/" + txnStatus) navigate("/" + txnStatus);
   };
   return (
     <>
@@ -97,7 +108,7 @@ const NotificationButton = () => {
         height="28"
         onClick={() => handleClick()}
       />
-      {txnStatus && pathName !== "/"+txnStatus && (
+      {txnStatus && pathName !== "/" + txnStatus && (
         <Badge>
           <div className={"circle"} />
         </Badge>

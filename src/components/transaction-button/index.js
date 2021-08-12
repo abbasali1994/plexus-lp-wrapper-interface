@@ -6,7 +6,10 @@ import { Button } from "react-bootstrap";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { resetTxnState, showConfirmPrivacyModal } from "../../redux/transactions";
+import {
+  resetTxnState,
+  showConfirmPrivacyModal,
+} from "../../redux/transactions";
 import { resetState, setRemixValues } from "../../redux/tokens";
 import { getGasPrices } from "../../redux/prices";
 import spinner from "../../assets/gifs/confirmation.gif";
@@ -18,7 +21,10 @@ import { navigate } from "hookrouter";
 import { constants } from "../../utils";
 
 // contract calls
-import { checkIfUniPairExists, checkIfSushiPairExists } from "../../utils/wallet";
+import {
+  checkIfUniPairExists,
+  checkIfSushiPairExists,
+} from "../../utils/wallet";
 import { fetchPairDetails as fetchSushiPairDetails } from "../../gql/sushiswap";
 import { fetchPairDetails as fetchUniPairDetails } from "../../gql/uniswap";
 // this component is responsible for handling all the blockchain txn's in the app
@@ -33,8 +39,10 @@ const InputButton = () => {
   } = useSelector((state) => state.tokens);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
-  const allTokensNotSelected = inputToken === null || lpToken1 === null || lpToken2 === null;
-  const allTokenValuesNotSet = inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
+  const allTokensNotSelected =
+    inputToken === null || lpToken1 === null || lpToken2 === null;
+  const allTokenValuesNotSet =
+    inputTokenValue === "" || lpToken1Value === "" || lpToken2Value === "";
   const disableBtn = allTokensNotSelected || allTokenValuesNotSet;
   const btnText = disableBtn
     ? allTokensNotSelected
@@ -53,14 +61,20 @@ const InputButton = () => {
   const dispatch = useDispatch();
   const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-  const handleButtonClick = async() => {
+  const handleButtonClick = async () => {
     let pairAddress = ZERO_ADDRESS;
-    if(dexName === constants.dexUni) {
-      pairAddress = await checkIfUniPairExists(lpToken1.address, lpToken2.address);
+    if (dexName === constants.dexUni) {
+      pairAddress = await checkIfUniPairExists(
+        lpToken1.address,
+        lpToken2.address
+      );
     }
 
-    if(dexName === constants.dexSushi) {
-      pairAddress = await checkIfSushiPairExists(lpToken1.address, lpToken2.address)
+    if (dexName === constants.dexSushi) {
+      pairAddress = await checkIfSushiPairExists(
+        lpToken1.address,
+        lpToken2.address
+      );
     }
 
     if (pairAddress === ZERO_ADDRESS) {
@@ -76,7 +90,7 @@ const InputButton = () => {
 
       // dispatch a gas request again so that we have the latest values
       dispatch(getGasPrices());
-      
+
       // then show the confirm modal
       dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
     }
@@ -91,7 +105,6 @@ const InputButton = () => {
       disabled={buttonDisabled}
     >
       {buttonText}
- 
     </Button>
   ) : (
     <Button
@@ -103,7 +116,6 @@ const InputButton = () => {
       onClick={() => handleButtonClick()}
     >
       {buttonText}
-
     </Button>
   );
 };
@@ -122,7 +134,9 @@ const OutputButton = () => {
       block
       className="input-amount"
       disabled={disableBtn}
-      onClick={() => dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }))}
+      onClick={() =>
+        dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }))
+      }
     >
       {btnText}
     </Button>
@@ -132,29 +146,35 @@ const OutputButton = () => {
 const RemixButton = () => {
   const { lpToken1, lpToken2 } = useSelector((state) => state.tokens);
   const { dexes, newDex } = useSelector((state) => state.dexes);
-  
+
   const dexName = dexes[newDex].name;
   const disableBtn = lpToken2 === null || lpToken1 == null;
   let btnText = disableBtn ? "Select Tokens" : "Confirm Remix";
 
   const [buttonDisabled, setButtonDisabled] = useState(disableBtn);
   const [buttonText, setButtonText] = useState(btnText);
-  const [loading, setLoading] = useState(false)
-  
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-  const handleButtonClick = async() => {
-    setLoading(true)
+  const handleButtonClick = async () => {
+    setLoading(true);
     let pairAddress = ZERO_ADDRESS;
     let pair = null;
-    if(dexName === constants.dexUni) {
-      pairAddress = await checkIfUniPairExists(lpToken1.address, lpToken2.address);
+    if (dexName === constants.dexUni) {
+      pairAddress = await checkIfUniPairExists(
+        lpToken1.address,
+        lpToken2.address
+      );
       pair = await fetchUniPairDetails(pairAddress);
     }
 
-    if(dexName === constants.dexSushi) {
-      pairAddress = await checkIfSushiPairExists(lpToken1.address, lpToken2.address)
+    if (dexName === constants.dexSushi) {
+      pairAddress = await checkIfSushiPairExists(
+        lpToken1.address,
+        lpToken2.address
+      );
       pair = await fetchSushiPairDetails(pairAddress);
     }
 
@@ -166,18 +186,19 @@ const RemixButton = () => {
 
       setButtonText(`Invalid ${dexName} (${pairSymbol}) LP Pair!`);
     } else {
-       
-      setButtonDisabled(false);
       setButtonText("Confirm Remix");
-      
+
       // dispatch a gas request again so that we have the latest values
       dispatch(getGasPrices());
-      dispatch(setRemixValues({pair}));
+
       // then show the confirm modal
       dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
-      
+      if (pair) {
+        dispatch(setRemixValues({ pair }));
+        setButtonDisabled(false);
+      }
     }
-    setLoading(false)
+    setLoading(false);
   };
   useEffect(() => {
     setButtonDisabled(disableBtn);
@@ -192,13 +213,16 @@ const RemixButton = () => {
       disabled={buttonDisabled}
       onClick={() => handleButtonClick()}
     >
-      {buttonText} {loading && <img
-                      className="token-icon"
-                      src={spinner}
-                      alt={"loading"}
-                      width="36"
-                      height="36"
-                    />}
+      {buttonText}{" "}
+      {loading && (
+        <img
+          className="token-icon"
+          src={spinner}
+          alt={"loading"}
+          width="36"
+          height="36"
+        />
+      )}
     </Button>
   );
 };
