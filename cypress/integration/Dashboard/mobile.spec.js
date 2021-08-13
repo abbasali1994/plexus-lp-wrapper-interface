@@ -14,7 +14,12 @@ describe(
     it("visits the app", () => {
       cy.visit("/");
     });
-
+    it("clicks connect wallet button", () => {
+      cy.get(".connect-wallet-btn").first().click();
+    });
+    it("clicks metamask button", () => {
+      cy.get(".web3modal-provider-name").contains("MetaMask").click();
+    });
     it("Clicks dashboard button", () => {
       cy.get(".header-btn").contains("dashboard").click();
     });

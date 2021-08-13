@@ -5,14 +5,14 @@ describe("Cypress", () => {
   });
 });
 describe(
-  "Home Page Flow Test",
+  "Unwrap Page Flow Test",
   {
-    viewportHeight: 800,
-    viewportWidth: 1200,
+    viewportHeight: 900,
+    viewportWidth: 400,
   },
   () => {
     it("visits the app", () => {
-      cy.visit("/");
+      cy.visit("/unwrap");
     });
     it("clicks connect wallet button", () => {
       cy.get(".connect-wallet-btn").first().click();
@@ -20,39 +20,22 @@ describe(
     it("clicks metamask button", () => {
       cy.get(".web3modal-provider-name").contains("MetaMask").click();
     });
-    describe("Select input token", () => {
+    describe("Select pair token", () => {
       it("Clicks select token button", () => {
-        cy.get(".select-token").first().click();
-      });
-      it("Select input token", () => {
-        cy.get(".token").find("span").contains("ETH").click();
+        cy.get(".unwrap-row").first().click();
       });
     });
-    describe("Select lp token 1", () => {
+    describe("Select lp token", () => {
       it("Clicks select token button", () => {
-        cy.get(".lp-token1").click();
-      });
-      it("Selects input token", () => {
-        cy.get(".token").find("span").contains("ETH").click();
-      });
-    });
-    describe("Select lp token 2", () => {
-      it("Clicks select token button", () => {
-        cy.get(".lp-token2").click();
+        cy.get(".select-token-text").contains("Select a Token").click();
       });
       it("Selects input token", () => {
         cy.get(".token").find("span").contains("USDC").click();
       });
     });
-    describe("Set input amount", () => {
-      it("Selects input token", () => {
-        cy.get("span").contains("max").click();
-      });
-    });
-    
-    describe("Confirm lp generation", () => {
-      it("Clicks submit button", () => {
-        cy.get(".confirm-lp").click();
+    describe("Confirm Unwrap", () => {
+      it("Clicks Unwrap button", () => {
+        cy.get(".input-btn").click();
       });
     });
     describe("Confirm privacy policy", () => {
@@ -62,7 +45,7 @@ describe(
     });
     describe("Confirm txn", () => {
       it("Clicks submit button", () => {
-        cy.get(".confirm-tx").click();
+        cy.get(".confirm-tx").contains("Confirm").click();
       });
     });
     describe("Awaiting txn modal visible", () => {
@@ -88,12 +71,12 @@ describe(
       });
     });
 
-    describe("Generate new lp tokens", () => {
-      it("Clicks generate new token button", () => {
-        cy.get("button").contains("Generate New LP Tokens").click();
+    describe("Unwrap More lp tokens", () => {
+      it("Clicks Unwrap More token button", () => {
+        cy.get("button", { timeout: 3000 }).contains("Unwrap More LP Tokens").click();
       });
       it("Checks redirected to home page", () => {
-        cy.location("pathname").should("eq", "/");
+        cy.location("pathname").should("eq", "/unwrap");
       });
     });
   }

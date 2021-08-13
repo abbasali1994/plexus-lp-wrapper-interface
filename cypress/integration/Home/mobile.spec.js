@@ -17,6 +17,9 @@ describe(
     it("clicks connect wallet button", () => {
       cy.get(".connect-wallet-btn").first().click();
     });
+    it("clicks metamask button", () => {
+      cy.get(".web3modal-provider-name").contains("MetaMask").click();
+    });
     describe("Check Footer Menu works", () => {
       it("Clicks footer menu up icon", () => {
         cy.get(".display-header-button").click();
@@ -60,9 +63,15 @@ describe(
         cy.get("span").contains("max").click();
       });
     });
+    
     describe("Confirm lp generation", () => {
       it("Clicks submit button", () => {
         cy.get(".confirm-lp").click();
+      });
+    });
+    describe("Confirm privacy policy", () => {
+      it("Clicks submit button", () => {
+        cy.get(".confirm-privacy-btn").click();
       });
     });
     describe("Confirm txn", () => {
