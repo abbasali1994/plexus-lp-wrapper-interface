@@ -5,7 +5,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import ENS, { getEnsAddress } from "@ensdomains/ensjs";
 import store from "../store";
 import { resetState } from "../redux/tokens";
-import { resetTxnState } from "../redux/transactions";
+import { resetTxnState, setQueryErrors } from "../redux/transactions";
 import {
   setWalletAddress,
   setWalletBalance,
@@ -28,7 +28,7 @@ import {
 import { constants } from "./";
 import { getAllTokens } from "./token";
 
-import { fetchLpTokens, fetchUserSwaps } from "../gql";
+import { fetchLpTokens, fetchUserTxns } from "../gql";
 import { formatAmount } from "./display";
 import { fetchUniswapStat, fetchUniswapTokensCount } from "../gql/uniswap";
 import { fetchSushiStat, fetchSushiTokensCount } from "../gql/sushiswap";
@@ -64,7 +64,7 @@ export const connectToWallet = async () => {
   // const userAddress = "0xab5801a7d398351b8be11c439e05c5b3259aec9b";
   // const userAddress ="0x0887e769D8B1C79DB1312Ed4535B0CDa1dd43991"
   // const userAddress = "0xaccf74209c0cd03ef77fb1295ef402e547dad457";
-  getENSName(ens,userAddress)
+  getENSName(ens, userAddress);
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
@@ -118,8 +118,11 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 
 export const fetchLpTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
-    let lpTokens = await fetchLpTokens(userAddress);
-    store.dispatch(setLpTokens({ lpTokens }));
+    let { lpTokens, errors } = await fetchLpTokens(userAddress);
+    if (!errors.uniswap && !errors.sushiswap)
+      store.dispatch(setLpTokens({ lpTokens }));
+
+    store.dispatch(setQueryErrors({ errors }));
   }
 };
 
@@ -147,8 +150,11 @@ export const getStats = async () => {
 
 export const fetchTokenSwaps = async (userAddress) => {
   if (web3Modal.cachedProvider) {
-    let userSwaps = await fetchUserSwaps(userAddress);
-    store.dispatch(setUserSwaps({ userSwaps }));
+    let { userSwaps, errors } = await fetchUserTxns(userAddress);
+    if (!errors.uniswap && !errors.sushiswap)
+      store.dispatch(setUserSwaps({ userSwaps }));
+
+    store.dispatch(setQueryErrors({ errors }));
   }
 };
 
@@ -195,14 +201,14 @@ const getTokenBalance = async (userAddress, tokenAddress, tokenSymbol) => {
   return tokenBalance;
 };
 
-const getENSName = (ens,userAddress) => {
-  ens.getName(userAddress).then(async ({name})=>{
-    console.log(name)
-    let address = await ens.name(name).getAddress()
-    if(userAddress.toLowerCase() !== address.toLowerCase()) name = null;
+const getENSName = (ens, userAddress) => {
+  ens.getName(userAddress).then(async ({ name }) => {
+    console.log(name);
+    let address = await ens.name(name).getAddress();
+    if (userAddress.toLowerCase() !== address.toLowerCase()) name = null;
     store.dispatch(setEnsName({ ensName: name }));
   });
-}
+};
 
 export const checkIfUniPairExists = async (token1Address, token2Address) => {
   let uniPairAddress = constants.ZERO_ADDRESS;

@@ -36,5 +36,5 @@ export default configureStore({
   },
   middleware: [ ...getDefaultMiddleware({
     serializableCheck: false,
-  }), logger]
+  }),logger]
 })

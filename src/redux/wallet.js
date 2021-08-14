@@ -15,12 +15,12 @@ export const walletSlice = createSlice({
     ensName: null,
     balances: tokenBalances,
     lpTokens:{
-      Uniswap:null,
-      Sushiswap:null,
+      1:[],
+      0:[],
     },
     userSwaps: {
-      Uniswap:null,
-      Sushiswap:null,
+      1:null,
+      0:null,
     }
   },
   reducers: {
