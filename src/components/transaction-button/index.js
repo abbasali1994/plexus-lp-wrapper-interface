@@ -256,10 +256,10 @@ const UnwrapMoreLPS = () => {
       block
       className="input-amount confirm-lp"
       onClick={() => {
+        navigate("/unwrap");
         // clear the global state
         dispatch(resetState());
         dispatch(resetTxnState());
-        navigate("/unwrap");
       }}
     >
       Unwrap More LP Tokens
@@ -276,10 +276,11 @@ const RemixMoreLPS = () => {
       block
       className="input-amount confirm-lp"
       onClick={() => {
+        navigate("/remix");
         // clear the global state
         dispatch(resetState());
         dispatch(resetTxnState());
-        navigate("/remix");
+        
       }}
     >
       Remix More LP Tokens

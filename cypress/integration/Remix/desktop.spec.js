@@ -5,14 +5,14 @@ describe("Cypress", () => {
   });
 });
 describe(
-  "Home Page Flow Test",
+  "Remix Page Flow Test",
   {
     viewportHeight: 800,
-    viewportWidth: 1200,
+    viewportWidth: 1400,
   },
   () => {
     it("visits the app", () => {
-      cy.visit("/");
+      cy.visit("/remix");
     });
     it("clicks connect wallet button", () => {
       cy.get(".connect-wallet-btn").first().click();
@@ -20,17 +20,14 @@ describe(
     it("clicks metamask button", () => {
       cy.get(".web3modal-provider-name").contains("MetaMask").click();
     });
-    describe("Select input token", () => {
+    describe("Select pair token", () => {
       it("Clicks select token button", () => {
-        cy.get(".select-token").first().click();
-      });
-      it("Select input token", () => {
-        cy.get(".token").find("span").contains("ETH").click();
+        cy.get("#remix-row-0").first().click();
       });
     });
     describe("Select lp token 1", () => {
       it("Clicks select token button", () => {
-        cy.get(".lp-token1").click();
+        cy.get(".lp-token1").first().click();
       });
       it("Selects input token", () => {
         cy.get(".token").find("span").contains("ETH").click();
@@ -38,21 +35,15 @@ describe(
     });
     describe("Select lp token 2", () => {
       it("Clicks select token button", () => {
-        cy.get(".lp-token2").click();
+        cy.get(".select-token-text").contains("Select a Token").click();
       });
       it("Selects input token", () => {
         cy.get(".token").find("span").contains("USDC").click();
       });
     });
-    describe("Set input amount", () => {
-      it("Selects input token", () => {
-        cy.get("span").contains("max").click();
-      });
-    });
-    
-    describe("Confirm lp generation", () => {
-      it("Clicks submit button", () => {
-        cy.get(".confirm-lp").click();
+    describe("Confirm Remix", () => {
+      it("Clicks Remix button", () => {
+        cy.get(".input-btn").click();
       });
     });
     describe("Confirm privacy policy", () => {
@@ -88,12 +79,12 @@ describe(
       });
     });
 
-    describe("Generate new lp tokens", () => {
-      it("Clicks generate new token button", () => {
-        cy.get("button").contains("Generate New LP Tokens").click();
+    describe("Remix More lp tokens", () => {
+      it("Clicks Remix More token button", () => {
+        cy.get("button", { timeout: 3000 }).contains("Remix More LP Tokens").click();
       });
       it("Checks redirected to home page", () => {
-        cy.location("pathname").should("eq", "/");
+        cy.location("pathname").should("eq", "/remix");
       });
     });
   }

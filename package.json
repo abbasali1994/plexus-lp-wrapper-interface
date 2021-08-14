@@ -45,7 +45,7 @@
     "setImages": "node setImages",
     "cypress:open": "cypress open",
     "cypress:ci": "cypress run",
-    "start": "node scripts/setImages && export PORT=3006 && react-scripts start",
+    "start": "node scripts/setImages && export PORT=3000 && react-scripts start",
     "build": "node scripts/setImages && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
