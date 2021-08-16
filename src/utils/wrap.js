@@ -1,8 +1,6 @@
 import {
     plexusUniContractAddress,
-    plexusSushiContractAddress,
-    uniV2FactoryContractAddress,
-    sushiFactoryContractAddress,
+    plexusSushiContractAddress
   } from "../helpers/contracts";
 
 import { constants } from "./";
@@ -11,8 +9,6 @@ import { numberFromWei, numberToWei, checkSumAddress  } from "./webThreeUtils";
   // contract abi's
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
-import UniswapV2FactoryABI from "../helpers/abis/uniswapV2Factory.json";
-import SushiFactoryABI from "../helpers/abis/sushiFactory.json";
 
 // finally get web3
 import { getWeb3 } from './wallet';
@@ -82,55 +78,6 @@ export const getLpTokensEstimate = async(pairAddress, tkn1, tkn2) => {
 
 }
 
-export const checkIfPairExists = async ( dex, token1Address, token2Address) => {
-    let dexPairAddress = constants.ZERO_ADDRESS;
-    const web3 = getWeb3();
-  
-    if (web3 !== null) {
-      try {
-
-        if (dex === constants.dexUni) {
-            const uniV2FactoryContract = new web3.eth.Contract(
-                UniswapV2FactoryABI,
-                uniV2FactoryContractAddress
-            );
-    
-            const pairAddress = await uniV2FactoryContract.methods
-            .getPair(token1Address, token2Address)
-            .call();
-            const uniPairExists = pairAddress === constants.ZERO_ADDRESS ? false : true;
-    
-            if (uniPairExists) {
-                dexPairAddress = pairAddress;
-            }
-        }
-
-        if (dex === constants.dexSushi) {
-            const sushiFactoryContract = new web3.eth.Contract(
-            SushiFactoryABI,
-            sushiFactoryContractAddress
-            );
-    
-            const pairAddress = await sushiFactoryContract.methods
-            .getPair(token1Address, token2Address)
-            .call();
-
-            const sushiPairExists =
-            pairAddress === constants.ZERO_ADDRESS ? false : true;
-    
-            if (sushiPairExists) {
-                dexPairAddress = pairAddress;
-            }
-        }
-       
-       
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    return dexPairAddress;
-  };
-  
 export const wrapTokens = async (
     dex,
     inputToken,

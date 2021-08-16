@@ -18,10 +18,10 @@ import { navigate } from "hookrouter";
 import { constants } from "../../utils";
 
 // contract calls
-import {
-  checkIfUniPairExists,
-  checkIfSushiPairExists,
-} from "../../utils/wallet";
+import { checkIfPairExists, numberToWei} from "../../utils/webThreeUtils";
+import { fetchBestTrades } from "../../utils/trades";
+
+// graphql calls
 import { fetchPairDetails as fetchSushiPairDetails } from "../../gql/sushiswap";
 import { fetchPairDetails as fetchUniPairDetails } from "../../gql/uniswap";
 
@@ -33,9 +33,7 @@ const InputButton = () => {
     lpToken2,
     inputTokenValue,
     lpToken1Value,
-    lpToken2Value,
- //   lpToken1Amount,
- //   lpToken2Amount,
+    lpToken2Value
   } = useSelector((state) => state.tokens);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -59,25 +57,26 @@ const InputButton = () => {
   }, [btnText, disableBtn, inputToken, lpToken1, lpToken2, dexName]);
 
   const dispatch = useDispatch();
-  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
   const handleButtonClick = async () => {
-    let pairAddress = ZERO_ADDRESS;
+    let pairAddress = constants.ZERO_ADDRESS;
     if (dexName === constants.dexUni) {
-      pairAddress = await checkIfUniPairExists(
+      pairAddress = await checkIfPairExists(
+        dexName,
         lpToken1.address,
         lpToken2.address
       );
     }
 
     if (dexName === constants.dexSushi) {
-      pairAddress = await checkIfSushiPairExists(
+      pairAddress = await checkIfPairExists(
+        dexName,
         lpToken1.address,
         lpToken2.address
       );
     }
 
-    if (pairAddress === ZERO_ADDRESS) {
+    if (pairAddress === constants.ZERO_ADDRESS) {
       setButtonDisabled(true);
       const token1Symbol = lpToken1.symbol;
       const token2Symbol = lpToken2.symbol;
@@ -87,6 +86,12 @@ const InputButton = () => {
     } else {
       setButtonDisabled(false);
       setButtonText("Review Transaction");
+
+      const inputAmount = inputTokenValue / 2;
+      const inputAmountWei = numberToWei(inputAmount.toString(), inputToken.decimals);
+      
+      await fetchBestTrades(dexName, inputToken, lpToken1, inputAmountWei);
+      await fetchBestTrades(dexName, inputToken, lpToken2, inputAmountWei);
 
       // TODO: Revist in another iteration and fix
       // const token1 = { lpToken1, lpToken1Amount };
@@ -102,7 +107,6 @@ const InputButton = () => {
       // dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
 
       // show the txn confirmation modal
-
       dispatch(showConfirmModal({ showConfirm: true }));
     }
   };
@@ -146,7 +150,7 @@ const OutputButton = () => {
       className="input-amount"
       disabled={disableBtn}
       onClick={() =>
-        dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }))
+        dispatch(showConfirmModal({ showConfirm: true }))
       }
     >
       {btnText}
@@ -167,14 +171,13 @@ const RemixButton = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
   const handleButtonClick = async () => {
     setLoading(true);
-    let pairAddress = ZERO_ADDRESS;
+    let pairAddress = constants.ZERO_ADDRESS;
     let pair = null;
     if (dexName === constants.dexUni) {
-      pairAddress = await checkIfUniPairExists(
+      pairAddress = await checkIfPairExists(
         lpToken1.address,
         lpToken2.address
       );
@@ -182,14 +185,14 @@ const RemixButton = () => {
     }
 
     if (dexName === constants.dexSushi) {
-      pairAddress = await checkIfSushiPairExists(
+      pairAddress = await checkIfPairExists(
         lpToken1.address,
         lpToken2.address
       );
       pair = await fetchSushiPairDetails(pairAddress);
     }
 
-    if (pairAddress === ZERO_ADDRESS) {
+    if (pairAddress === constants.ZERO_ADDRESS) {
       setButtonDisabled(true);
       const token1Symbol = lpToken1.symbol;
       const token2Symbol = lpToken2.symbol;
@@ -203,7 +206,7 @@ const RemixButton = () => {
       dispatch(getGasPrices());
 
       // then show the confirm modal
-      dispatch(showConfirmPrivacyModal({ showConfirmPrivacy: true }));
+      dispatch(showConfirmModal({ showConfirm: true }));
       if (pair) {
         dispatch(setRemixValues({ pair }));
         setButtonDisabled(false);
