@@ -1,7 +1,5 @@
 import { ChainId, Token, Trade, TokenAmount, Pair, WETH } from "@uniswap/sdk";
 import {
-  checkIfSushiPairExists,
-  checkIfUniPairExists,
   convertAmountToString,
   createContract,
 } from "./wallet";
@@ -10,50 +8,68 @@ import {
   sushiRouterContractAddress,
   uniV2Router02ContractAddress,
 } from "../helpers/contracts";
+import { checkIfPairExists, checkSumAddress } from "./webThreeUtils";
 import { constants } from ".";
 
-export const fetchBestTrades = async (dex, amount, lptoken1, lptoken2) => {
-  const token1 = new Token(
+export const fetchBestTrades = async (dex, token1, token2, inputTokenAmount) => {
+
+  if(token1.symbol === "eth"){
+    token1 = WETH[ChainId.MAINNET];
+  }
+  if(token2.symbol === "eth"){
+    token2 = WETH[ChainId.MAINNET];
+  }
+  const t1 = new Token(
     ChainId.MAINNET,
-    lptoken1.address,
-    lptoken1.decimals,
-    lptoken1.symbol,
-    lptoken1.name
+    checkSumAddress(token1.address),
+    token1.decimals,
+    token1.symbol.toUpperCase(),
+    token1.name
   );
-  const token2 = new Token(
+  const t2 = new Token(
     ChainId.MAINNET,
-    lptoken2.address,
-    lptoken2.decimals,
-    lptoken2.symbol,
-    lptoken2.name
+    checkSumAddress(token2.address),
+    token2.decimals,
+    token2.symbol.toUpperCase(),
+    token2.name
   );
-  const inputTokenAmount = new TokenAmount(
-    token2,
-    amount * (10 ** token1.decimals).toString()
-  );
-  await checkBestPriceTrades(dex, token1, inputTokenAmount, token2);
+
+  console.log(inputTokenAmount);
+  console.log(typeof inputTokenAmount);
+  console.log(ChainId.MAINNET);
+  console.log(t1);
+  console.log(t2);
+
+  const itAmount = new TokenAmount(token1, inputTokenAmount);
+
+  await checkBestPriceTrades(dex, t1, t2, itAmount);
 };
 
 // Generates Trade Array with est possible Trade using SDK
 export const checkBestPriceTrades = async (
   dex,
+  inputToken,
   outputToken,
   inputTokenAmount,
-  inputToken
 ) => {
   //check if pair exist
   let isPair = null;
   let pairs = null;
 
+  console.log(inputToken);
+  console.log(outputToken);
+
   switch (dex) {
     case constants.dexUni:
-      isPair = await checkIfUniPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexUni,
         outputToken.address,
         inputToken.address
       );
       break;
     case constants.dexSushi:
-      isPair = await checkIfSushiPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexUni,
         outputToken.address,
         inputToken.address
       );
@@ -61,7 +77,9 @@ export const checkBestPriceTrades = async (
     default:
       isPair = null;
   }
-  if (isPair) {
+
+  console.log(isPair);
+  if (isPair !== constants.ZERO_ADDRESS) {
     pairs = [
       new Pair(
         new TokenAmount(outputToken, "2000000000000000000"),
@@ -80,7 +98,9 @@ export const checkBestPriceTrades = async (
     pairs = [pair1, pair2];
   }
 
-  const bestTrades = await Trade.bestTradeExactIn(
+  console.log(pairs);
+
+  const bestTrades = Trade.bestTradeExactIn(
     pairs,
     inputTokenAmount,
     outputToken,
@@ -102,7 +122,8 @@ export const calcMaxAmountOuts = async (
   let router = null;
   switch (dex) {
     case constants.dexUni:
-      isPair = await checkIfUniPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexUni,
         outputToken.address,
         inputToken.address
       );
@@ -112,7 +133,8 @@ export const calcMaxAmountOuts = async (
       );
       break;
     case constants.dexSushi:
-      isPair = await checkIfSushiPairExists(
+      isPair = await checkIfPairExists(
+        constants.dexSushi,
         outputToken.address,
         inputToken.address
       );
