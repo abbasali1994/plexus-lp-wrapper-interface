@@ -18,10 +18,10 @@ import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import {plexusUniContractAddress} from "../helpers/contracts";
 import { getAllTokens } from "./token";
 
-import { fetchLpTokens, fetchUserTxns } from "../gql";
+import { fetchLpTokens, fetchUserTxns, fetchTokensCount } from "../gql";
 import { formatAmount } from "./display";
-import { fetchUniswapStat, fetchUniswapTokensCount } from "../gql/uniswap";
-import { fetchSushiStat, fetchSushiTokensCount } from "../gql/sushiswap";
+import { fetchUniswapStat, client as uniClient } from "../gql/uniswap";
+import { fetchSushiStat, client as sushiClient } from "../gql/sushiswap";
 import { setDexesStats } from "../redux/dex";
 import { numberFromWei } from "./webThreeUtils"
 
@@ -128,14 +128,14 @@ export const getStats = async () => {
   let uniStats = {};
   let tokensCount = 0;
   stats = await fetchSushiStat();
-  tokensCount = await fetchSushiTokensCount();
+  tokensCount = await fetchTokensCount(sushiClient);
   sushiStats = {
     tokensCount: formatAmount(tokensCount),
     pairCount: formatAmount(stats.pairCount),
     totalLiquidityUSD: `$${formatAmount(stats.liquidityUSD)}`,
   };
   stats = await fetchUniswapStat();
-  tokensCount = await fetchUniswapTokensCount();
+  tokensCount = await fetchTokensCount(uniClient);
   uniStats = {
     tokensCount: formatAmount(tokensCount),
     pairCount: formatAmount(stats.pairCount),

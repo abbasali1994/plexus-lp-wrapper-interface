@@ -22,8 +22,9 @@ import { checkIfPairExists, numberToWei} from "../../utils/webThreeUtils";
 import { fetchBestTrades } from "../../utils/trades";
 
 // graphql calls
-import { fetchPairDetails as fetchSushiPairDetails } from "../../gql/sushiswap";
-import { fetchPairDetails as fetchUniPairDetails } from "../../gql/uniswap";
+import { queryPairDetails } from "../../gql";
+import { client as sushiClient } from "../../gql/sushiswap";
+import { client as uniClient } from "../../gql/uniswap";
 
 // this component is responsible for handling all the blockchain txn's in the app
 const InputButton = () => {
@@ -181,7 +182,7 @@ const RemixButton = () => {
         lpToken1.address,
         lpToken2.address
       );
-      pair = await fetchUniPairDetails(pairAddress);
+      pair = await queryPairDetails(uniClient,pairAddress);
     }
 
     if (dexName === constants.dexSushi) {
@@ -189,7 +190,7 @@ const RemixButton = () => {
         lpToken1.address,
         lpToken2.address
       );
-      pair = await fetchSushiPairDetails(pairAddress);
+      pair = await queryPairDetails(sushiClient,pairAddress);
     }
 
     if (pairAddress === constants.ZERO_ADDRESS) {
