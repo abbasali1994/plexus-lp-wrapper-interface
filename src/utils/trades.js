@@ -40,7 +40,7 @@ export const fetchBestTrades = async (dex, token1, token2, inputTokenAmount) => 
   console.log(t1);
   console.log(t2);
 
-  const itAmount = new TokenAmount(token1, inputTokenAmount);
+  const itAmount = new TokenAmount(t1, inputTokenAmount);
 
   await checkBestPriceTrades(dex, t1, t2, itAmount);
 };
@@ -107,6 +107,11 @@ export const checkBestPriceTrades = async (
     { maxNumResults: 3, maxHops: 3 }
   );
   console.log(bestTrades);
+
+  return pairs;
+
+  // you can also return trades array 
+  // return bestTrades; 
 };
 
 // Calculates maximum amount of output token possible to recieve on swap using router contract
