@@ -2,8 +2,16 @@ import { client as uniClient } from "./uniswap";
 import { client as sushiClient } from "./sushiswap";
 import { getAllTokens, getPriceId } from "../utils/token";
 import { formatAmount } from "../utils/display";
+import { setQueryErrors } from "../redux/transactions";
+import {
+  LP_POSITION_QUERY,
+  LP_TRANSACTIONS,
+  LP_TOKENS,
+  LP_PAIR_DETAILS,
+  LP_PAIRS_0,
+  LP_PAIRS_1,
+} from "./queries";
 import store from "../store";
-import { LP_POSITION_QUERY, LP_TRANSACTIONS } from "./queries";
 import { gql } from "@apollo/client";
 const tokens = getAllTokens();
 
@@ -47,7 +55,6 @@ const queryUserTxns = async (client, userAddress) => {
         user: userAddress.toLowerCase(),
       },
     });
-    console.log(data)
     if (data) return { data, error };
     return { data: {}, error };
   } catch (e) {
@@ -70,6 +77,74 @@ export const fetchUserTxns = async (userAddress) => {
       sushiswap: Sushiswap.error,
     },
   };
+};
+
+export const fetchTokensCount = async (client) => {
+  let tokens = [];
+  let count = 0;
+  while (1) {
+    try {
+      const { data } = await client.query({
+        query: gql(LP_TOKENS),
+        variables: {
+          skip: count,
+        },
+      });
+      if (data.tokens) {
+        tokens.push(data.tokens);
+        if (data.tokens.length < 1000) {
+          count += data.tokens.length;
+          break;
+        }
+        count += data.tokens.length;
+      }
+    } catch (e) {
+      break;
+    }
+  }
+
+  return count;
+};
+
+export const queryPairDetails = async (client, pairAddress) => {
+  try {
+    const { data } = await client.query({
+      query: gql(LP_PAIR_DETAILS),
+      variables: {
+        pair: pairAddress.toLowerCase(),
+      },
+    });
+    if (data.pair) return data.pair;
+    return null;
+  } catch (e) {
+    store.dispatch(setQueryErrors({ errors: { uniswap: e.message } }));
+    return null;
+  }
+};
+
+export const fetchPairs = async (client, address) => {
+  try {
+    const list1 = await client.query({
+      query: gql(LP_PAIRS_0),
+      variables: {
+        token: address.toLowerCase(),
+      },
+    });
+    const list2 = await client.query({
+      query: gql(LP_PAIRS_1),
+      variables: {
+        token: address.toLowerCase(),
+      },
+    });
+
+    const data1 = list1.data ? list1.data.pairs : [];
+    const data2 = list2.data ? list2.data.pairs : [];
+
+    // returns top 10 pairs
+    return processPairs(data1, data2);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const processResult = (result) => {
@@ -171,4 +246,10 @@ const processTransactions = (result, type) => {
     });
   });
   return transactions;
+};
+
+const processPairs = (list1, list2) => {
+  return [...list1, ...list2].sort((a, b) => {
+    return b.reserveUSD - a.reserveUSD;
+  });
 };
