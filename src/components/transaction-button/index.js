@@ -18,8 +18,8 @@ import { navigate } from "hookrouter";
 import { constants } from "../../utils";
 
 // contract calls
-import { checkIfPairExists, numberToWei} from "../../utils/webThreeUtils";
-import { fetchBestTrades } from "../../utils/trades";
+import { checkIfPairExists } from "../../utils/webThreeUtils";
+import { fetchBestRoutes } from "../../utils/tradeRoutes";
 
 // graphql calls
 import { fetchPairDetails as fetchSushiPairDetails } from "../../gql/sushiswap";
@@ -88,10 +88,10 @@ const InputButton = () => {
       setButtonText("Review Transaction");
 
       const inputAmount = inputTokenValue / 2;
-      const inputAmountWei = numberToWei(inputAmount.toString(), inputToken.decimals);
+      // const inputAmountWei = numberToWei(inputAmount.toString(), inputToken.decimals);
       
-      await fetchBestTrades(dexName, inputToken, lpToken1, inputAmountWei);
-      await fetchBestTrades(dexName, inputToken, lpToken2, inputAmountWei);
+      await fetchBestRoutes(dexName, inputToken, lpToken1, inputAmount.toString());
+      await fetchBestRoutes(dexName, inputToken, lpToken2, inputAmount.toString());
 
       // TODO: Revist in another iteration and fix
       // const token1 = { lpToken1, lpToken1Amount };
