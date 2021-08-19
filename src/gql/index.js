@@ -6,8 +6,10 @@ import { setQueryErrors } from "../redux/transactions";
 import {
   LP_POSITION_QUERY,
   LP_TRANSACTIONS,
+  LP_TOKENS_COUNT,
   LP_TOKENS,
   LP_PAIR_DETAILS,
+  LP_PAIRS,
   LP_PAIRS_0,
   LP_PAIRS_1,
 } from "./queries";
@@ -85,7 +87,7 @@ export const fetchTokensCount = async (client) => {
   while (1) {
     try {
       const { data } = await client.query({
-        query: gql(LP_TOKENS),
+        query: gql(LP_TOKENS_COUNT),
         variables: {
           skip: count,
         },
@@ -122,7 +124,34 @@ export const queryPairDetails = async (client, pairAddress) => {
   }
 };
 
-export const fetchPairs = async (client, address) => {
+export const fetchPairs = async (client) => {
+  try {
+    const list = await client.query({
+      query: gql(LP_PAIRS),
+    });
+    const data = list.data ? list.data.pairs ?? []: [];
+
+    // returns top 50 pairs
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const fetchTokens = async (client) => {
+  try {
+    const list = await client.query({
+      query: gql(LP_TOKENS),
+    });
+    const data = list.data ? list.data.tokens ?? []: [];
+
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const fetchPairsByTokenAddress = async (client, address) => {
   try {
     const list1 = await client.query({
       query: gql(LP_PAIRS_0),

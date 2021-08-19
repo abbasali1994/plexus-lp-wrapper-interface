@@ -177,12 +177,50 @@ export const LP_UNISWAPV3_STATS = `
   }
 `;
 
-export const LP_TOKENS = `
+export const LP_TOKENS_COUNT = `
   query tokens($skip: Int!) {
     tokens(first: 1000, skip: $skip) {
       id
       name
       symbol
     }
+  }
+`;
+
+export const LP_TOKENS = `
+  query tokens {
+    tokens(first: 50,  orderBy: totalSupply, orderDirection: desc) {
+      id
+      name
+      symbol
+      totalSupply
+    }
+  }
+`;
+
+
+export const LP_PAIRS = `
+  query pairs {
+    pools(first: 50, orderBy: totalValueLockedUSD, orderDirection: desc) {
+      id,
+      token0 {
+        id,
+        name,
+        symbol
+      },
+      token1 {
+        id,
+        name,
+        symbol
+      },
+      volumeUSD,
+      volumeToken0,
+      volumeToken1,
+      liquidity,
+      totalValueLockedETH,
+      totalValueLockedUSD,
+      token0Price,
+      token1Price
+    }  
   }
 `;

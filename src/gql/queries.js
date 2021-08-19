@@ -55,12 +55,23 @@ export const LP_PAIR_DETAILS = `
     }
    }`;
 
-export const LP_TOKENS = `
+export const LP_TOKENS_COUNT = `
   query tokens($skip: Int!) {
     tokens(first: 1000, skip: $skip) {
       id
       name
       symbol
+    }
+  }
+`;
+
+export const LP_TOKENS = `
+  query tokens {
+    tokens(first: 50, orderBy: totalSupply, orderDirection: desc) {
+      id
+      name
+      symbol
+      totalSupply
     }
   }
 `;
@@ -213,6 +224,32 @@ export const LP_TRANSACTIONS = `
       amount1Out,
       amountUSD
     }
+  }
+`;
+
+export const LP_PAIRS = `
+  query pairs {
+    pairs(first: 50, orderBy: reserveUSD, orderDirection: desc) {
+      id,
+      token0 {
+        id,
+        name,
+        symbol
+      },
+      token1 {
+        id,
+        name,
+        symbol
+      },
+      volumeUSD,
+      reserve0,
+      reserve1,
+      totalSupply,
+      reserveETH,
+      reserveUSD,
+      token0Price,
+      token1Price
+    }  
   }
 `;
 

@@ -5,12 +5,15 @@ import {
   LP_TRANSACTIONS,
   LP_UNISWAPV3_STATS,
   LP_TOKENS,
+  LP_TOKENS_COUNT,
+  LP_PAIRS,
 } from "./queries";
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
   cache: new InMemoryCache(),
 });
+
 export const fetchLpTokensUniV3 = async (userAddress) => {
   const { data } = await client.query({
     query: gql(LP_POSITION_QUERY),
@@ -58,7 +61,7 @@ export const fetchUniswapV3TokensCount = async () => {
   while (1) {
     try {
       const { data } = await client.query({
-        query: gql(LP_TOKENS),
+        query: gql(LP_TOKENS_COUNT),
         variables: {
           skip: count,
         },
@@ -76,4 +79,20 @@ export const fetchUniswapV3TokensCount = async () => {
   }
 
   return count;
+};
+
+export const fetchPairsUniV3 = async () => {
+  const { data } = await client.query({
+    query: gql(LP_PAIRS),
+  });
+  if (data.pools) return data.pools;
+  return [];
+};
+
+export const fetchTokensUniV3 = async () => {
+  const { data } = await client.query({
+    query: gql(LP_TOKENS),
+  });
+  if (data.tokens) return data.tokens;
+  return [];
 };
