@@ -6,7 +6,7 @@ import { setQueryErrors } from "../redux/transactions";
 import {
   LP_POSITION_QUERY,
   LP_TRANSACTIONS,
-  LP_TOKENS,
+  LP_TOKENS_COUNT,
   LP_PAIR_DETAILS,
   LP_PAIRS_0,
   LP_PAIRS_1,
@@ -82,23 +82,26 @@ export const fetchUserTxns = async (userAddress) => {
 export const fetchTokensCount = async (client) => {
   let tokens = [];
   let count = 0;
+  let lastID = "";
   while (1) {
     try {
       const { data } = await client.query({
-        query: gql(LP_TOKENS),
+        query: gql(LP_TOKENS_COUNT),
         variables: {
-          skip: count,
+          lastID: lastID,
         },
       });
       if (data.tokens) {
-        tokens.push(data.tokens);
+        tokens = [...tokens, ...data.tokens];
         if (data.tokens.length < 1000) {
           count += data.tokens.length;
           break;
         }
         count += data.tokens.length;
-      }
+        lastID = tokens[count - 1].id;
+      } else break;
     } catch (e) {
+      console.log(e)
       break;
     }
   }

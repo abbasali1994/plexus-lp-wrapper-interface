@@ -55,9 +55,9 @@ export const LP_PAIR_DETAILS = `
     }
    }`;
 
-export const LP_TOKENS = `
-  query tokens($skip: Int!) {
-    tokens(first: 1000, skip: $skip) {
+export const LP_TOKENS_COUNT = `
+  query tokens($lastID: String) {
+    tokens(first: 1000,  where: { id_gt: $lastID  }) {
       id
       name
       symbol
