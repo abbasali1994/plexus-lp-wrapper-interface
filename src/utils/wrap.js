@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+
 import {
     plexusUniContractAddress,
     plexusSushiContractAddress
@@ -10,17 +12,18 @@ import { numberFromWei, numberToWei, checkSumAddress  } from "./webThreeUtils";
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
 import WrapperSushiABI from "../helpers/abis/wrapperSushi.json";
 
-// finally get web3
-import { getWeb3 } from './wallet';
-
+// uni lib imports
 import { ChainId, Token, TokenAmount, Pair } from "@uniswap/sdk";
+
+// provider
+import { getEthersProvider } from './wallet';
 
 // standard ERC 20 Token Abi
 const abi = require("human-standard-token-abi");
 
 export const getLpTokensEstimate = async(pairAddress, tkn1, tkn2) => {
 
-    const web3 = getWeb3();
+    const web3 = null;
 
     if (web3 !== null) {
 
@@ -85,25 +88,33 @@ export const wrapTokens = async (
     lpToken1,
     lpToken2,
     gasPrice,
-    ethUSDPrice
+    ethUSDPrice,
+    paths,
+    slippageTolerance,
+    deadline
   ) => {
+    
     let res = null;
 
-    const web3 = getWeb3();
+    const provider = getEthersProvider();
   
-    if (web3 !== null) {
+    if (provider !== null) {
       let wrapperContract = null;
+      const signer = provider.getSigner();
+
       try {
         if (dex === constants.dexUni) {
-          wrapperContract = new web3.eth.Contract(
+          wrapperContract = new ethers.Contract(
+            plexusUniContractAddress,
             WrapperUniABI,
-            plexusUniContractAddress
+            signer
           );
         }
         if (dex === constants.dexSushi) {
-          wrapperContract = new web3.eth.Contract(
+          wrapperContract = new ethers.Contract(
+            plexusSushiContractAddress,
             WrapperSushiABI,
-            plexusSushiContractAddress
+            signer
           );
         }
   
@@ -112,57 +123,36 @@ export const wrapTokens = async (
         let destAddress1 = constants.ZERO_ADDRESS;
         let destAddress2 = constants.ZERO_ADDRESS;
   
-        const userAddress = (await web3.eth.getAccounts())[0];
-        const block = await web3.eth.getBlock("latest");
-        const gasLimit = parseInt(block.gasLimit / block.transactions.length);
-        const gasLimitIncrease = gasLimit * 15;
-        const amountToWrap = numberToWei(inputTokenAmount, inputToken.decimals);
+        const userAddress =  await signer.getAddress();
+        const amountToWrap = ethers.utils.parseEther(inputTokenAmount);
 
         if (inputToken.symbol.toLowerCase() !== "eth") {
           sourceTokenAddress = inputToken.address;
-          const wrapperContractAddress = constants.dexUni
-            ? plexusUniContractAddress
-            : plexusSushiContractAddress;
-          const tokenContract = new web3.eth.Contract(abi, sourceTokenAddress);
+          const wrapperContractAddress = constants.dexUni? plexusUniContractAddress : plexusSushiContractAddress;
+          const tokenContract = new ethers.Contract(sourceTokenAddress, abi, signer);
   
           // check allowance for the wrapper contract for this token
-          const allowance = await tokenContract.methods
-            .allowance(userAddress, wrapperContractAddress)
-            .call();
-  
-          if (allowance < amountToWrap) {
-           
-            const gas = await tokenContract.methods.approve(wrapperContractAddress, amountToWrap).estimateGas({ from: userAddress, gas:  gasLimitIncrease});
+          let allowance = await tokenContract.allowance(userAddress, wrapperContractAddress);
+          allowance = numberFromWei(allowance, inputToken.decimals);
 
-            if(gas < gasLimit) {
-              const approved = await tokenContract.methods
-              .approve(wrapperContractAddress, amountToWrap)
-              .send({ from: userAddress, gas, gasPrice });
-              console.log(approved);
-            } else {
-              throw  new Error("Gas limit exceeded!!");
+          console.log(allowance);
+          console.log(inputTokenAmount);
+  
+          if (allowance < inputTokenAmount) {
+
+            const overrides = {
+              from: userAddress
+            };
+
+            const approved = await(await tokenContract.approve(wrapperContractAddress, amountToWrap, overrides)).wait();
+              
+            console.log(approved);
+
+             // Check conversion is successful
+            if (approved.status !== 1) {
+              throw  new Error("Token approval failed!!");
             }
-          
-          
           }
-  
-          /*   
-         TODO: revist and see why this is failing
-         
-          if(allowance > 0 && allowance < amountToWrap) {
-            let addedValue = 0;
-  
-            if(inputToken.decimals === 18){
-              addedValue = web3.utils.toWei(Number(web3.utils.fromWei(amountToWrap)) - Number(web3.utils.fromWei(allowance)));
-            }
-            if(inputToken.decimals === 6) {
-              addedValue = Number(amountToWrap) - Number(allowance);
-            }
-            
-            console.log(addedValue);
-            const allowanceIncreased = await tokenContract.methods.increaseAllowance(wrapperContractAddress, addedValue).send({ from: userAddress, gasPrice, gas: gasLimit});
-            console.log(allowanceIncreased);
-          } */
         }
   
         if (lpToken1.symbol.toLowerCase() !== "eth") {
@@ -182,43 +172,80 @@ export const wrapTokens = async (
           checkSumAddress(destAddress2),
         ];
 
+        // WE DO THE ACTUAL WRAPPING HERE
+        // FIRST OF ALL WE MAKE SURE THE DEADLINE IS OK
+        // So if the deadline is 0 we default to a 5 mins deadline
+        if(deadline === 0) {
+          const unixTimeInSecs = Math.floor(new Date().getTime() / 1000);
+          const deadlineInSecs = 5 * 60;
+          deadline = unixTimeInSecs + deadlineInSecs;
+        }
+
+        // ETH WRAPPING
+        
         if (sourceTokenAddress === constants.ZERO_ADDRESS) {
 
-          // get a better gas estimate
-          const gas = await wrapperContract.methods
-          .wrap(sourceTokenAddress, destTokenAddresses, amountToWrap)
-          .estimateGas({ from: userAddress, value: amountToWrap, gas: gasLimitIncrease });
+          const overrides = {
+            from: userAddress,
+            value: amountToWrap,
+           
+          };
 
-          if(gas < gasLimitIncrease) {
+          console.log(overrides);
+          console.log(sourceTokenAddress);
+          console.log(destTokenAddresses);
+          console.log(paths);
+          console.log(amountToWrap);
+          console.log(amountToWrap.toString());
+          console.log(slippageTolerance);
+          console.log(deadline);
 
-            res = await wrapperContract.methods
-            .wrap(sourceTokenAddress, destTokenAddresses, amountToWrap)
-            .send({
-              from: userAddress,
-              value: amountToWrap,
-              gas,
-              gasPrice,
-            });
-          }
-  
+          const gas = await wrapperContract
+          .estimateGas
+          .wrap(sourceTokenAddress, 
+            destTokenAddresses, 
+            paths, 
+            amountToWrap, 
+            slippageTolerance,
+            deadline,
+            overrides);
+
+          console.log(gas);
+
+
+          res = await(await wrapperContract
+            .wrap(sourceTokenAddress, 
+              destTokenAddresses, 
+              paths, 
+              amountToWrap, 
+              slippageTolerance,
+              deadline,
+              overrides))
+            .wait();
          
-        } else {
+        } else { // ERC 20 WRAPPING
 
-          const gas = await wrapperContract.methods
-          .wrap(sourceTokenAddress, destTokenAddresses, amountToWrap)
-          .estimateGas({ from: userAddress, gas: gasLimitIncrease });
+          const overrides = {
+            from: userAddress,
+            gasLimit: ethers.BigNumber.from("1000000")
+          };
 
-          if(gas < gasLimitIncrease) {
-             
-            res = await wrapperContract.methods
-            .wrap(sourceTokenAddress, destTokenAddresses, amountToWrap)
-            .send({ from: userAddress, gas, gasPrice });
-          }
+          res = await(await wrapperContract
+            .wrap(sourceTokenAddress, 
+              destTokenAddresses, 
+              paths, 
+              amountToWrap.toString(), 
+              slippageTolerance,
+              deadline,
+              overrides))
+            .wait();
          
         }
+
+        console.log(res);
   
-        const txnHash = res.transactionHash;
-        const txnGasPrice = (await web3.eth.getTransaction(txnHash)).gasPrice;
+       /*  const txnHash = res.transactionHash;
+        const txnGasPrice = (await provider.getTransaction(txnHash)).gasPrice;
         const gasUsed = res.gasUsed;
         const networkFee = Number(txnGasPrice) * Number(gasUsed);
         let networkFeeETH = web3.utils.fromWei(String(networkFee));
@@ -226,14 +253,16 @@ export const wrapTokens = async (
           .toFixed(2)
           .replace(/\d(?=(\d{3})+\.)/g, "$&,");
         networkFeeETH = networkFeeETH + " ETH";
-        networkFeeUSD = "~$" + networkFeeUSD;
+        networkFeeUSD = "~$" + networkFeeUSD; */
   
         // return the txn results
-        res = { networkFeeETH, networkFeeUSD, txnHash };
+        //res = { networkFeeETH, networkFeeUSD, txnHash };
+        
+        res = {networkFeeETH:0.002, networkFeeUSD:10, txnHash:res.transactionHash}
       } catch (error) {
         console.log(error);
         res = error;
-      }
+      } 
     }
   
     return res;

@@ -13,6 +13,7 @@ import React, { useCallback, useState } from "react";
 import SettingsToggle from "../toggle-button/settings-toggle";
 import { useDispatch } from "react-redux";
 import { showTransactionSettings } from "../../redux/transactions";
+import { setSlippageTolerance, setTransactionDeadline } from "../../redux/tokens";
 
 // The forwardRef is important!!
 
@@ -54,12 +55,19 @@ const TransactionSettingsContent = () => {
   const handleTxnDeadlineChange = (value) => {
     if (/^(|[0-9]\d*)(\d*)?$/.test(value)) {
       setTxnDeadline(value);
+      const unixTimeInSecs = Math.floor(new Date().getTime() / 1000);
+      const deadlineInSecs = Number(value) * 60;
+      const deadline = unixTimeInSecs + deadlineInSecs;
+
+      dispatch(setTransactionDeadline(deadline));
     }
   };
 
   const handleSlippageChange = (value) => {
     if (/^(|[0-9]\d*)(\.\d*)?$/.test(value)) {
       setSlippage(value);
+      console.log(value);
+      dispatch(setSlippageTolerance(Math.ceil(value)));
     }
   };
   const handleSlippageFocus = (value) => {
@@ -98,20 +106,20 @@ const TransactionSettingsContent = () => {
           <img src={close} alt="close" />
         </Button>
       </h1>
-      <div className="txn-settings-label">Slippage Tollerance</div>
+      <div className="txn-settings-label">Slippage Tolerance</div>
       <InputGroup className="mb-3">
         <FormControl
         type="input"
           className="txn-settings-input"
           aria-label="Default"
           aria-describedby="inputGroup-sizing-default"
-          placeholder={"0.5%"}
+          placeholder={"1%"}
           value={slippage}
           onChange={(event) => handleSlippageChange(event.target.value)}
           onBlur={(event) => handleSlippageBlur(event.target.value)}
           onFocus={(evt) => handleSlippageFocus(evt.target.value)}
         />
-        <InputGroup.Append onClick={() => setSlippage("0.5%")}>
+        <InputGroup.Append onClick={() => handleSlippageFocus("1%")}>
           <InputGroup.Text id="auto-token">Auto</InputGroup.Text>
         </InputGroup.Append>
       </InputGroup>
@@ -138,17 +146,6 @@ const TransactionSettingsContent = () => {
           <SettingsToggle
             value={deadline}
             handleChange={(value) => setDeadline(!value)}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={9} xs={8} className="txn-settings-label">
-          MEV Shield by Eden Network (coming soon)
-        </Col>
-        <Col className="txn-setings-toggle">
-          <SettingsToggle
-            value={false}
-            handleChange={() => {}}
           />
         </Col>
       </Row>

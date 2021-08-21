@@ -27,6 +27,10 @@ export const tokensSlice = createSlice({
     networkFeeUSD: "",
     txnHash: "",
     newLPTokens: "",
+    wrapPaths: [],
+    unwrapPaths: [],
+    slippageTolerance: 5,
+    deadline: 0 // set a deadline of 30 seconds
   },
   reducers: {
     setSearchCaller: (state, action) => {
@@ -111,6 +115,27 @@ export const tokensSlice = createSlice({
       state.networkFeeUSD = "";
       state.txnHash = "";
       state.newLPTokens = "";
+      state.wrapPaths = [];
+      state.unwrapPaths = [];
+      state.slippageTolerance = 1;
+      state.deadline =  Math.floor(new Date().getTime() / 1000) + 30;
+    },
+    setPaths(state, { payload }) {
+      const { type, paths } = payload;
+
+      if(type === constants.wrapPaths) {
+        state.wrapPaths = paths;
+      }
+      if(type === constants.unwrapPaths) {
+        state.unwrapPaths = paths;
+      }
+
+    },
+    setSlippageTolerance(state, { payload }) {
+      state.slippageTolerance = payload;
+    },
+    setTransactionDeadline(state, { payload }) {
+      state.deadline = payload;
     },
     updateInputTokenAmount(state, { payload }) {
       const { inputTokenAmount } = payload;
@@ -260,6 +285,9 @@ export const {
   setUnwrapValues,
   setNetworkValues,
   setNewInputAmount,
+  setPaths,
+  setSlippageTolerance,
+  setTransactionDeadline,
   updateInputTokenAmount,
   resetState,
 } = tokensSlice.actions;

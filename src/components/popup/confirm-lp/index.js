@@ -47,9 +47,13 @@ const ConfirmLPModal = ({ theme }) => {
 
 const DesktopWrapper = ({ theme }) => {
   const { activeAction } = useSelector((state) => state.dexes);
-  const { inputToken, inputTokenValue, lpToken1, lpToken2 } = useSelector(
-    (state) => state.tokens
-  );
+  const { inputToken, 
+    inputTokenValue,
+    lpToken1, 
+    lpToken2, 
+    wrapPaths,
+    slippageTolerance,
+    deadline } = useSelector((state) => state.tokens);
   const { gasPrices } = useSelector((state) => state.prices);
   const { pricesUSD } = useSelector((state) => state.prices);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
@@ -88,7 +92,10 @@ const DesktopWrapper = ({ theme }) => {
         lpToken1,
         lpToken2,
         gasPrices.fast,
-        pricesUSD["ethereum"].usd
+        pricesUSD["ethereum"].usd,
+        wrapPaths,
+        slippageTolerance,
+        deadline
       );
 
       // user rejected txn
