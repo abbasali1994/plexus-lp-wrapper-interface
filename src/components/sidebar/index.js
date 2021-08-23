@@ -27,6 +27,7 @@ import { usePath } from "hookrouter";
 
 import { setActiveAction } from "../../redux/dex";
 import { resetState } from "../../redux/tokens";
+import { resetErrors } from "../../redux/errors";
 import { resetTxnState } from "../../redux/transactions";
 
 const dexStats = [
@@ -203,6 +204,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
               onClick={() => {
                 dispatch(setActiveAction({ activeAction: btn }));
                 dispatch(resetState());
+                dispatch(resetErrors());
                 dispatch(resetTxnState());
                 switch (btn) {
                   case "Unwrap":
@@ -247,6 +249,7 @@ const SideBarContent = ({ dexes, selectedDex, showSideMenu, activeAction }) => {
               // clear the global state
               showSideMenu(false);
               dispatch(resetState());
+              dispatch(resetErrors());
               dispatch(resetTxnState());
               navigate("/");
             }}

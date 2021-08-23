@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { setQueryErrors } from "../../redux/transactions";
+import { setQueryErrors } from "../../redux/errors";
 import store from "../../store";
 import { LP_UNISWAP_STATS } from "./queries";
 

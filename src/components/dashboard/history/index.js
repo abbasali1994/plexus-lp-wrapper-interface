@@ -134,7 +134,7 @@ const DesktopDashboardHistory = ({ history }) => {
           <Col>Action</Col>
           <Col lg="2">Txn Hash</Col>
         </Row>
-        <div className="dashboard-table-body">
+        <div className="dashboard-history-table-body">
           {history.slice((activePage-1)*50,activePage*50).map((entry, id) => {
             const { action, statement, timestamp, transaction } = entry;
             return (

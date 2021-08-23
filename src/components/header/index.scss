@@ -47,7 +47,7 @@ button.header-btn {
     border-radius: 50%;
 }
 
-.query-errors {
+.errors {
     color:red;
     font-family: var(--font-family-primary);
 }
@@ -58,7 +58,7 @@ button.header-btn {
         margin-bottom: 70px;
         width: 100%;
     }
-    .query-errors {
+    .errors {
         font-size:12px;
         text-align: center;
     }
@@ -74,7 +74,7 @@ button.header-btn {
   }
 
   @media screen and (max-width: 360px) {
-    .query-errors {
+    .errors {
         font-size:10px;
         text-align: center;
     }

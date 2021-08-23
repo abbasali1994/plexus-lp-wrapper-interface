@@ -13,9 +13,7 @@ import NothingToSee from "../../nothing-to-see";
 import Loading from "../../loading";
 import { resetState, setSelectedLpTokenPair } from "../../../redux/tokens";
 import { navigate } from "hookrouter";
-import {
-  formatAmount,
-} from "../../../utils/display";
+import { formatAmount } from "../../../utils/display";
 
 const DashboardPairsComponent = () => {
   let element = null;
@@ -61,9 +59,13 @@ const DesktopPairsWrapper = () => {
   let children = <NothingToSee />;
   if (!lpTokens[selectedDex]) children = <Loading />;
   else if (lpTokens[selectedDex].length > 0)
-    children = <DesktopDashboardPairs lpTokens={lpTokens[selectedDex]} />;
+    children = (
+      <div className="dashboard-wrapper-interface">
+        <DesktopDashboardPairs lpTokens={lpTokens[selectedDex]} />
+      </div>
+    );
 
-  return <div className="dashboard-wrapper-interface">{children}</div>;
+  return children;
 };
 
 const DesktopDashboardPairs = ({ lpTokens }) => {
@@ -90,9 +92,9 @@ const DesktopDashboardPairs = ({ lpTokens }) => {
 
   return (
     <div
-      // ref={divRef}
-      // tabIndex="0"
-      // onKeyDown={handleKeyDown}
+    // ref={divRef}
+    // tabIndex="0"
+    // onKeyDown={handleKeyDown}
     >
       <div className="dashboard-table">
         <Row className="dashboard-table-header">

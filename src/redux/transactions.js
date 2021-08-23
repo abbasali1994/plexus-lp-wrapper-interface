@@ -8,10 +8,6 @@ export const transactionsSlice = createSlice({
     showConfirmPrivacy: false,
     txnStatus: null,
     showTransactionSettings: false,
-    queryErrors: {
-      uniswap: null,
-      sushiswap: null,
-    },
   },
   reducers: {
     showConfirmModal: (state, { payload }) => {
@@ -34,10 +30,6 @@ export const transactionsSlice = createSlice({
       const { txnStatus } = payload;
       state.txnStatus = txnStatus;
     },
-    setQueryErrors: (state, { payload }) => {
-      const { errors } = payload;
-      state.queryErrors = errors;
-    },
     resetTxnState: (state) => {
       state.txnStatus = null;
       state.showConfirm = false;
@@ -52,7 +44,6 @@ export const {
   showConfirmPrivacyModal,
   showTransactionSettings,
   setTxnStatus,
-  setQueryErrors,
   resetTxnState,
 } = transactionsSlice.actions;
 

@@ -20,6 +20,7 @@ import { usePath } from "hookrouter";
 import { getTokenUSDPrices, getGasPrices } from "../../redux/prices";
 import { getCoinGeckoTokenIDS } from "../../utils/token";
 import { resetState } from "../../redux/tokens";
+import { resetErrors } from "../../redux/errors";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Header = () => {
   }, [dispatch]);
 
   const { walletAddress, ensName } = useSelector((state) => state.wallet);
-  const { queryErrors } = useSelector((state) => state.transactions);
+  const { queryErrors, tradeError, networkError } = useSelector((state) => state.errors);
   const [toggleIcon, setToggleIcon] = useState(false);
 
   return (
@@ -46,15 +47,18 @@ const Header = () => {
           height="32"
           onClick={() => {
             dispatch(resetState());
+            dispatch(resetErrors());
             navigate("/");
           }}
         />
       </Col>
       <Col lg={8} xs={12}>
-        <b className="query-errors">
+        <b className="errors">
           {queryErrors.uniswap || queryErrors.sushiswap
             ? "Error: Internet connection disabled or unstable"
             : ""}
+          {tradeError ?? ""}
+          {networkError ?? ""}
         </b>
         <div className="user-info">
           {walletAddress ? <NotificationButton /> : null}
