@@ -7,7 +7,7 @@ import { Button } from "react-bootstrap";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { resetTxnState, showConfirmModal } from "../../redux/transactions";
-import { resetState, setRemixValues } from "../../redux/tokens";
+import { resetState, setRemixValues, setPaths } from "../../redux/tokens";
 import { setTradeErrors, resetErrors } from "../../redux/errors";
 import { getGasPrices } from "../../redux/prices";
 import spinner from "../../assets/gifs/confirmation.gif";
@@ -48,10 +48,11 @@ const InputButton = () => {
     ? allTokensNotSelected
       ? "Input Amount & Select Tokens"
       : "Input Amount"
-    : "Review Transaction";
+    : "Generate Transaction";
 
   const [buttonDisabled, setButtonDisabled] = useState(disableBtn);
   const [buttonText, setButtonText] = useState(btnText);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setButtonDisabled(disableBtn);
@@ -62,6 +63,12 @@ const InputButton = () => {
 
   const handleButtonClick = async () => {
     dispatch(resetErrors());
+    // show loading spinner and disable button
+    setLoading(true);
+    setButtonDisabled(true);
+    setButtonText(`Generating Transaction..`);
+
+    // do the necesary checks here
     let pairAddress = constants.ZERO_ADDRESS;
 
     pairAddress = await checkIfPairExists(
@@ -71,18 +78,33 @@ const InputButton = () => {
     );
 
     if (pairAddress === constants.ZERO_ADDRESS) {
-      setButtonDisabled(true);
+    
       const token1Symbol = lpToken1.symbol;
       const token2Symbol = lpToken2.symbol;
       const pairSymbol = token1Symbol + "-" + token2Symbol;
 
       setButtonText(`Invalid ${dexName} (${pairSymbol}) LP Pair!`);
+      setLoading(false);
     } else {
-      setButtonDisabled(false);
-      setButtonText("Review Transaction");
-
+     
       const inputAmount = inputTokenValue / 2;
-      // const inputAmountWei = numberToWei(inputAmount.toString(), inputToken.decimals);
+      
+      const routes1 = await fetchBestRoutes(dexName, inputToken, lpToken1, inputAmount.toString());
+      const routes2 = await fetchBestRoutes(dexName, inputToken, lpToken2, inputAmount.toString());
+      // we assume index 0 paths are the best
+      const wrapPaths = [routes1[0].routePathArray, routes2[0].routePathArray];
+
+      // we set the best wrap paths
+      dispatch(setPaths({type: constants.wrapPaths, paths: wrapPaths}));
+
+      // dispatch a gas request again so that we have the latest gas cost svalues
+      dispatch(getGasPrices());
+
+
+      setButtonDisabled(false);
+      setLoading(false);
+      setButtonText("Generate Transaction");
+
 
       const token1Routes = await fetchBestRoutes(
         dexName,
@@ -110,8 +132,7 @@ const InputButton = () => {
 
       // getLpTokensEstimate(pairAddress, token1, token2);
 
-      // dispatch a gas request again so that we have the latest gas cost svalues
-      dispatch(getGasPrices());
+     
 
       // then show the confirm modal
       // TODO: We'll enable this once we add the MEV handling logic
@@ -131,6 +152,15 @@ const InputButton = () => {
       disabled={buttonDisabled}
     >
       {buttonText}
+      {loading && (
+        <img
+          className="token-icon"
+          src={spinner}
+          alt={"loading"}
+          width="36"
+          height="36"
+        />
+      )}
     </Button>
   ) : (
     <Button

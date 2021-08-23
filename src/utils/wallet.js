@@ -1,8 +1,7 @@
-import Web3 from "web3";
+import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import BigNumber from "big-number";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import ENS, { getEnsAddress } from "@ensdomains/ensjs";
 import store from "../store";
 import { resetState } from "../redux/tokens";
 import { resetTxnState } from "../redux/transactions";
@@ -26,7 +25,7 @@ import { fetchSushiStat, client as sushiClient } from "../gql/sushiswap";
 import { setDexesStats } from "../redux/dex";
 import { numberFromWei } from "./webThreeUtils";
 
-let web3 = null;
+let provider = null;
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -45,48 +44,51 @@ const web3Modal = new Web3Modal({
 });
 
 export const connectToWallet = async () => {
-  const provider = await web3Modal.connect();
-  web3 = new Web3(provider);
+  const web3Connection = await web3Modal.connect();
+  provider = new ethers.providers.Web3Provider(web3Connection);
+  const signer = provider.getSigner()
 
-  const userAddress = (await web3.eth.getAccounts())[0];
-  const networkId = await web3.eth.net.getId();
-  console.log(networkId);
-  try {
-    const ens = new ENS({
-      provider,
-      ensAddress: getEnsAddress(networkId.toString()),
-    });
-    getENSName(ens, userAddress);
-  } catch(e) {
-    console.log(e)
+  const userAddress = await signer.getAddress();
+
+  const ensName = await provider.lookupAddress(userAddress);
+
+  if(ensName !== null) {
+    store.dispatch(setEnsName({ ensName }));
   }
+  const netinfo = await provider.getNetwork();
+  const networkId = netinfo.chainId;
+  console.log(networkId);
   
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
-  if (networkId !== 1)
+
+  if (networkId !== 1) {
     store.dispatch(
       setNetworkErrors({ error: "Please Connect to Ethereum Mainnet" })
     );
+  }
+
+  // fetch user txns using ethers.js and the subgraph
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
   await fetchTokenSwaps(userAddress);
-  setWalletListener(provider);
-  setNetworkListener(provider);
-  return web3;
+  setWalletListener(web3Connection);
+  setNetworkListener(web3Connection);
 };
 
-export const getWeb3 = () => web3;
+export const getEthersProvider = () => provider;
 
 export const fetchWalletTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     const { wallet } = store.getState();
     const { balances } = wallet;
+
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.symbol;
       const tokenAddress = token.address;
       const tokenDecimals = token.decimals;
       let tokenBalance = null;
 
-      if (web3 !== null) {
+      if (provider !== null) {
         if (tokenSymbol.toLowerCase() !== "eth") {
           tokenBalance = await getTokenBalance(
             userAddress,
@@ -94,7 +96,7 @@ export const fetchWalletTokenBalances = async (userAddress) => {
             tokenDecimals
           );
         } else {
-          tokenBalance = await getUserETHBalance(userAddress);
+          tokenBalance = await getUserETHBalance();
         }
         if (tokenBalance !== null) {
           if (tokenBalance !== undefined) {
@@ -128,10 +130,12 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 export const fetchLpTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     let { lpTokens, errors } = await fetchLpTokens(userAddress);
-    if (!errors.uniswap && !errors.sushiswap)
+    if (!errors.uniswap && !errors.sushiswap) {
       store.dispatch(setLpTokens({ lpTokens }));
-
-    store.dispatch(setQueryErrors({ errors }));
+    } else {
+      store.dispatch(setQueryErrors({ errors }));
+    }
+    
   }
 };
 
@@ -167,15 +171,19 @@ export const fetchTokenSwaps = async (userAddress) => {
   }
 };
 
-const getUserETHBalance = async (userAddress) => {
+const getUserETHBalance = async () => {
   let ethBalance = 0;
 
-  try {
-    const tokenBalanceInWei = await web3.eth.getBalance(userAddress);
-    ethBalance = Number(web3.utils.fromWei(tokenBalanceInWei, "ether"));
-  } catch (error) {
-    console.log(error);
-    ethBalance = 0;
+  if (provider !== null) {
+
+    try {
+      const signer = provider.getSigner();
+      ethBalance = Number(ethers.utils.formatEther(await signer.getBalance()));
+    } catch (error) {
+      console.log(error);
+      ethBalance = 0;
+    }
+
   }
 
   return ethBalance;
@@ -184,33 +192,19 @@ const getUserETHBalance = async (userAddress) => {
 const getTokenBalance = async (userAddress, tokenAddress, tokenDecimals) => {
   let tokenBalance = 0;
 
-  try {
-    const uniContract = new web3.eth.Contract(
-      WrapperUniABI,
-      plexusUniContractAddress
-    );
+  if(provider !== null) {
+    try {
+      const uniContract = new ethers.Contract(plexusUniContractAddress, WrapperUniABI, provider);
+      const tokenBalanceInWei = await uniContract.getUserTokenBalance(userAddress, tokenAddress);
+      tokenBalance = numberFromWei(tokenBalanceInWei, tokenDecimals);
+    } catch (error) {
+      console.log(error);
+      tokenBalance = 0;
+    }
 
-    const tokenBalanceInWei = await uniContract.methods
-      .getUserTokenBalance(userAddress, tokenAddress)
-      .call();
-
-    tokenBalance = numberFromWei(tokenBalanceInWei, tokenDecimals);
-  } catch (error) {
-    console.log(error);
-    tokenBalance = 0;
   }
 
   return tokenBalance;
-};
-
-const getENSName = (ens, userAddress) => {
-  ens.getName(userAddress).then(async ({ name }) => {
-    if (name !== null) {
-      let address = await ens.name(name).getAddress();
-      if (userAddress.toLowerCase() !== address.toLowerCase()) name = null;
-      store.dispatch(setEnsName({ ensName: name }));
-    }
-  });
 };
 
 const setWalletListener = (provider) => {
@@ -246,10 +240,7 @@ const setNetworkListener = (provider) => {
   }
 })();
 
-// Other Helper Functions
-export const createContract = (abi, address) => {
-  return new web3.eth.Contract(abi, address);
-};
+
 
 export function convertAmountToString(amount, decimals) {
   let amountString = amount.toString();
