@@ -5,7 +5,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import ENS, { getEnsAddress } from "@ensdomains/ensjs";
 import store from "../store";
 import { resetState } from "../redux/tokens";
-import { resetTxnState, setQueryErrors } from "../redux/transactions";
+import { resetTxnState } from "../redux/transactions";
+import { resetErrors, setNetworkErrors, setQueryErrors } from "../redux/errors";
 import {
   setWalletAddress,
   setWalletBalance,
@@ -15,7 +16,7 @@ import {
 } from "../redux/wallet";
 
 import WrapperUniABI from "../helpers/abis/wrapperUniswap.json";
-import {plexusUniContractAddress} from "../helpers/contracts";
+import { plexusUniContractAddress } from "../helpers/contracts";
 import { getAllTokens } from "./token";
 
 import { fetchLpTokens, fetchUserTxns, fetchTokensCount } from "../gql";
@@ -23,7 +24,7 @@ import { formatAmount } from "./display";
 import { fetchUniswapStat, client as uniClient } from "../gql/uniswap";
 import { fetchSushiStat, client as sushiClient } from "../gql/sushiswap";
 import { setDexesStats } from "../redux/dex";
-import { numberFromWei } from "./webThreeUtils"
+import { numberFromWei } from "./webThreeUtils";
 
 let web3 = null;
 
@@ -46,16 +47,30 @@ const web3Modal = new Web3Modal({
 export const connectToWallet = async () => {
   const provider = await web3Modal.connect();
   web3 = new Web3(provider);
-  const ens = new ENS({ provider, ensAddress: getEnsAddress("1") });
+
   const userAddress = (await web3.eth.getAccounts())[0];
-
-  getENSName(ens,userAddress);
-
+  const networkId = await web3.eth.net.getId();
+  console.log(networkId);
+  try {
+    const ens = new ENS({
+      provider,
+      ensAddress: getEnsAddress(networkId.toString()),
+    });
+    getENSName(ens, userAddress);
+  } catch(e) {
+    console.log(e)
+  }
+  
   store.dispatch(setWalletAddress({ walletAddress: userAddress }));
+  if (networkId !== 1)
+    store.dispatch(
+      setNetworkErrors({ error: "Please Connect to Ethereum Mainnet" })
+    );
   await fetchWalletTokenBalances(userAddress);
   await fetchLpTokenBalances(userAddress);
   await fetchTokenSwaps(userAddress);
   setWalletListener(provider);
+  setNetworkListener(provider);
   return web3;
 };
 
@@ -82,17 +97,15 @@ export const fetchWalletTokenBalances = async (userAddress) => {
           tokenBalance = await getUserETHBalance(userAddress);
         }
         if (tokenBalance !== null) {
-
           if (tokenBalance !== undefined) {
             tokenBalance = Number(tokenBalance);
             tokenBalance =
-            tokenBalance > 0
-              ? tokenBalance.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, "$&,")
-              : tokenBalance.toFixed(2);
+              tokenBalance > 0
+                ? tokenBalance.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                : tokenBalance.toFixed(2);
           } else {
             tokenBalance = "0.00";
           }
-        
         }
       }
 
@@ -176,14 +189,12 @@ const getTokenBalance = async (userAddress, tokenAddress, tokenDecimals) => {
       WrapperUniABI,
       plexusUniContractAddress
     );
-    
+
     const tokenBalanceInWei = await uniContract.methods
       .getUserTokenBalance(userAddress, tokenAddress)
       .call();
 
-   
     tokenBalance = numberFromWei(tokenBalanceInWei, tokenDecimals);
-   
   } catch (error) {
     console.log(error);
     tokenBalance = 0;
@@ -192,25 +203,36 @@ const getTokenBalance = async (userAddress, tokenAddress, tokenDecimals) => {
   return tokenBalance;
 };
 
-const getENSName = (ens,userAddress) => {
-  ens.getName(userAddress).then(async ({name})=>{
-    if(name !== null) {
-      let address = await ens.name(name).getAddress()
-      if(userAddress.toLowerCase() !== address.toLowerCase()) name = null;
+const getENSName = (ens, userAddress) => {
+  ens.getName(userAddress).then(async ({ name }) => {
+    if (name !== null) {
+      let address = await ens.name(name).getAddress();
+      if (userAddress.toLowerCase() !== address.toLowerCase()) name = null;
       store.dispatch(setEnsName({ ensName: name }));
     }
   });
 };
 
-
 const setWalletListener = (provider) => {
   provider.on("accountsChanged", async (accounts) => {
     store.dispatch(setWalletAddress({ walletAddress: accounts[0] }));
     store.dispatch(resetState());
+    store.dispatch(resetErrors());
     store.dispatch(resetTxnState());
     await fetchWalletTokenBalances(accounts[0]);
     await fetchLpTokenBalances(accounts[0]);
     await fetchTokenSwaps(accounts[0]);
+  });
+};
+
+const setNetworkListener = (provider) => {
+  provider.on("chainChanged", async (networkId) => {
+    console.log(networkId.toString());
+    if (networkId === "0x1") store.dispatch(setNetworkErrors({ error: null }));
+    else store.dispatch(setNetworkErrors({ error: "Please Connect to Ethereum Mainnet" }));
+    store.dispatch(resetState());
+    store.dispatch(resetErrors());
+    store.dispatch(resetTxnState());
   });
 };
 

@@ -1,9 +1,19 @@
-.nothing-to-see {
+.nothing-to-see-text {
   margin-top: -40px;
 }
+.nothing-to-see-text-1 {
+  font-family: var(--font-family-tertiary);
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-large-3);
+  line-height: 36px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-6);
+}
 
-.nothing-to-see-1,
-.nothing-to-see-2 {
+.nothing-to-see-text-2,
+.nothing-to-see-text-3 {
   font-family: var(--font-family-primary);
   font-style: normal;
   font-weight: var(--font-weight-1);
@@ -13,10 +23,29 @@
   text-align: center;
 }
 
-.nothing-to-see-1 {
+.nothing-to-see-text-2 {
   color: var(--color-text-1);
 }
 
-.nothing-to-see-2 {
+.nothing-to-see-text-3 {
   color: var(--color-text-2);
+}
+
+.nothing-to-see {
+  justify-content: center;
+  text-align: center;
+}
+
+@media screen and (min-width: 1024px) {
+  .nothing-to-see {
+    padding-top: 14vh;
+    padding-bottom: 16vh;
+    margin-left: -90px !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .nothing-to-see {
+    padding-top: 10vh;
+  }
 }

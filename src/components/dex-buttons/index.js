@@ -64,4 +64,25 @@ export const RemixDexes = () => {
   );
 };
 
+export const DashboardDexes = () => {
+  const { dexes, selectedDex } = useSelector((state) => state.dexes);
+  const dispatch = useDispatch();
+
+  return (
+    <Col>
+      <ButtonGroup className="action-btns">
+        {dexes.map((dex) => (
+          <Button
+            key={dex.id}
+            id={dex.id === selectedDex ? "active-btn" : ""}
+            onClick={() => dispatch(setActiveDex({ selectedDex: dex.id }))}
+          >
+            {dex.name}
+          </Button>
+        ))}
+      </ButtonGroup>
+    </Col>
+  );
+};
+
 export default DesktopDexes;

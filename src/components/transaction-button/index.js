@@ -8,6 +8,7 @@ import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { resetTxnState, showConfirmModal } from "../../redux/transactions";
 import { resetState, setRemixValues } from "../../redux/tokens";
+import { setTradeErrors, resetErrors } from "../../redux/errors";
 import { getGasPrices } from "../../redux/prices";
 import spinner from "../../assets/gifs/confirmation.gif";
 // button view types
@@ -34,7 +35,7 @@ const InputButton = () => {
     lpToken2,
     inputTokenValue,
     lpToken1Value,
-    lpToken2Value
+    lpToken2Value,
   } = useSelector((state) => state.tokens);
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -60,22 +61,14 @@ const InputButton = () => {
   const dispatch = useDispatch();
 
   const handleButtonClick = async () => {
+    dispatch(resetErrors());
     let pairAddress = constants.ZERO_ADDRESS;
-    if (dexName === constants.dexUni) {
-      pairAddress = await checkIfPairExists(
-        dexName,
-        lpToken1.address,
-        lpToken2.address
-      );
-    }
 
-    if (dexName === constants.dexSushi) {
-      pairAddress = await checkIfPairExists(
-        dexName,
-        lpToken1.address,
-        lpToken2.address
-      );
-    }
+    pairAddress = await checkIfPairExists(
+      dexName,
+      lpToken1.address,
+      lpToken2.address
+    );
 
     if (pairAddress === constants.ZERO_ADDRESS) {
       setButtonDisabled(true);
@@ -90,10 +83,27 @@ const InputButton = () => {
 
       const inputAmount = inputTokenValue / 2;
       // const inputAmountWei = numberToWei(inputAmount.toString(), inputToken.decimals);
-      
-      await fetchBestRoutes(dexName, inputToken, lpToken1, inputAmount.toString());
-      await fetchBestRoutes(dexName, inputToken, lpToken2, inputAmount.toString());
 
+      const token1Routes = await fetchBestRoutes(
+        dexName,
+        inputToken,
+        lpToken1,
+        inputAmount.toString()
+      );
+      if(token1Routes.error) {
+        dispatch(setTradeErrors({ error: token1Routes.error }));
+        return;
+      }
+      const token2Routes = await fetchBestRoutes(
+        dexName,
+        inputToken,
+        lpToken2,
+        inputAmount.toString()
+      );
+      if(token2Routes.error) {
+        dispatch(setTradeErrors({ error: token2Routes.error }));
+        return;
+      }
       // TODO: Revist in another iteration and fix
       // const token1 = { lpToken1, lpToken1Amount };
       // const token2  = { lpToken2, lpToken2Amount };
@@ -150,9 +160,7 @@ const OutputButton = () => {
       block
       className="input-amount"
       disabled={disableBtn}
-      onClick={() =>
-        dispatch(showConfirmModal({ showConfirm: true }))
-      }
+      onClick={() => dispatch(showConfirmModal({ showConfirm: true }))}
     >
       {btnText}
     </Button>
@@ -178,19 +186,13 @@ const RemixButton = () => {
     let pairAddress = constants.ZERO_ADDRESS;
     let pair = null;
     if (dexName === constants.dexUni) {
-      pairAddress = await checkIfPairExists(
-        lpToken1.address,
-        lpToken2.address
-      );
-      pair = await queryPairDetails(uniClient,pairAddress);
+      pairAddress = await checkIfPairExists(lpToken1.address, lpToken2.address);
+      pair = await queryPairDetails(uniClient, pairAddress);
     }
 
     if (dexName === constants.dexSushi) {
-      pairAddress = await checkIfPairExists(
-        lpToken1.address,
-        lpToken2.address
-      );
-      pair = await queryPairDetails(sushiClient,pairAddress);
+      pairAddress = await checkIfPairExists(lpToken1.address, lpToken2.address);
+      pair = await queryPairDetails(sushiClient, pairAddress);
     }
 
     if (pairAddress === constants.ZERO_ADDRESS) {
@@ -253,6 +255,7 @@ const GenerateMoreLPS = () => {
       onClick={() => {
         // clear the global state
         dispatch(resetState());
+        dispatch(resetErrors());
         dispatch(resetTxnState());
         navigate("/");
       }}
@@ -274,6 +277,7 @@ const UnwrapMoreLPS = () => {
         navigate("/unwrap");
         // clear the global state
         dispatch(resetState());
+        dispatch(resetErrors());
         dispatch(resetTxnState());
       }}
     >
@@ -294,8 +298,8 @@ const RemixMoreLPS = () => {
         navigate("/remix");
         // clear the global state
         dispatch(resetState());
+        dispatch(resetErrors());
         dispatch(resetTxnState());
-        
       }}
     >
       Remix More LP Tokens

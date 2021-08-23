@@ -2,7 +2,7 @@ import { client as uniClient } from "./uniswap";
 import { client as sushiClient } from "./sushiswap";
 import { getAllTokens, getPriceId } from "../utils/token";
 import { formatAmount } from "../utils/display";
-import { setQueryErrors } from "../redux/transactions";
+import { setQueryErrors } from "../redux/errors";
 import {
   LP_POSITION_QUERY,
   LP_TRANSACTIONS,

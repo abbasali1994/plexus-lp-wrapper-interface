@@ -64,3 +64,14 @@
   color: var(--color-text-6)!important;
 }
 
+.dashboard-history-table-body {
+  padding: 20px 20px;
+  font-size: var(--font-size-small-2);
+  background-color: var(--color-primary-background);
+  display: block;
+  height: 416px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 20px;
+}
+
