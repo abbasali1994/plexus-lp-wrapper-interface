@@ -63,13 +63,13 @@ const TransactionSettingsContent = () => {
     }
   };
 
-  const handleSlippageChange = (value) => {
+  const handleSlippageChange = useCallback((value) => {
     if (/^(|[0-9]\d*)(\.\d*)?$/.test(value)) {
       setSlippage(value);
       console.log(value);
       dispatch(setSlippageTolerance(Math.ceil(value)));
     }
-  };
+  },[dispatch]);
   const handleSlippageFocus = (value) => {
     const newInputAmount = value.split("%")[0];
     if (newInputAmount) handleSlippageChange(newInputAmount.trim());
@@ -87,7 +87,7 @@ const TransactionSettingsContent = () => {
 
     if (validValue.toString().length) handleSlippageChange(validValue + "%");
     else handleSlippageChange(validValue);
-  }, []);
+  }, [handleSlippageChange]);
 
   return (
     <div>
