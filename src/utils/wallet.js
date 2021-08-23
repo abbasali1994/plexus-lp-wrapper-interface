@@ -55,7 +55,7 @@ export const connectToWallet = async () => {
   if(ensName !== null) {
     store.dispatch(setEnsName({ ensName }));
   }
-  const netinfo = await ethers.provider.getNetwork();
+  const netinfo = await provider.getNetwork();
   const networkId = netinfo.chainId;
   console.log(networkId);
   
@@ -77,11 +77,11 @@ export const connectToWallet = async () => {
 
 export const getEthersProvider = () => provider;
 
-
 export const fetchWalletTokenBalances = async (userAddress) => {
   if (web3Modal.cachedProvider) {
     const { wallet } = store.getState();
     const { balances } = wallet;
+
     getAllTokens().forEach(async (token) => {
       const tokenSymbol = token.symbol;
       const tokenAddress = token.address;
@@ -206,7 +206,6 @@ const getTokenBalance = async (userAddress, tokenAddress, tokenDecimals) => {
 
   return tokenBalance;
 };
-
 
 const setWalletListener = (provider) => {
   provider.on("accountsChanged", async (accounts) => {

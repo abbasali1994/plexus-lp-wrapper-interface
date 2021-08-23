@@ -7,12 +7,8 @@ import { Button } from "react-bootstrap";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { resetTxnState, showConfirmModal } from "../../redux/transactions";
-<<<<<<< HEAD
-import { resetState, setRemixValues } from "../../redux/tokens";
-import { setTradeErrors, resetErrors } from "../../redux/errors";
-=======
 import { resetState, setRemixValues, setPaths } from "../../redux/tokens";
->>>>>>> 5a711a3 (final lp wrapper changes)
+import { setTradeErrors, resetErrors } from "../../redux/errors";
 import { getGasPrices } from "../../redux/prices";
 import spinner from "../../assets/gifs/confirmation.gif";
 // button view types
@@ -66,17 +62,13 @@ const InputButton = () => {
   const dispatch = useDispatch();
 
   const handleButtonClick = async () => {
-<<<<<<< HEAD
     dispatch(resetErrors());
-=======
-
     // show loading spinner and disable button
     setLoading(true);
     setButtonDisabled(true);
     setButtonText(`Generating Transaction..`);
 
     // do the necesary checks here
->>>>>>> 5a711a3 (final lp wrapper changes)
     let pairAddress = constants.ZERO_ADDRESS;
 
     pairAddress = await checkIfPairExists(
@@ -96,9 +88,6 @@ const InputButton = () => {
     } else {
      
       const inputAmount = inputTokenValue / 2;
-<<<<<<< HEAD
-      // const inputAmountWei = numberToWei(inputAmount.toString(), inputToken.decimals);
-=======
       
       const routes1 = await fetchBestRoutes(dexName, inputToken, lpToken1, inputAmount.toString());
       const routes2 = await fetchBestRoutes(dexName, inputToken, lpToken2, inputAmount.toString());
@@ -116,7 +105,6 @@ const InputButton = () => {
       setLoading(false);
       setButtonText("Generate Transaction");
 
->>>>>>> 5a711a3 (final lp wrapper changes)
 
       const token1Routes = await fetchBestRoutes(
         dexName,
