@@ -46,20 +46,21 @@ const web3Modal = new Web3Modal({
 export const connectToWallet = async () => {
   const web3Connection = await web3Modal.connect();
   provider = new ethers.providers.Web3Provider(web3Connection);
-  const signer = provider.getSigner()
+  const signer = provider.getSigner();
 
   const userAddress = await signer.getAddress();
+  store.dispatch(setWalletAddress({ walletAddress: userAddress }));
+  try {
+    const ensName = await provider.lookupAddress(userAddress);
 
-  const ensName = await provider.lookupAddress(userAddress);
-
-  if(ensName !== null) {
-    store.dispatch(setEnsName({ ensName }));
+    if (ensName !== null) {
+      store.dispatch(setEnsName({ ensName }));
+    }
+  } catch (e) {
+    console.log(e);
   }
   const netinfo = await provider.getNetwork();
   const networkId = netinfo.chainId;
-  console.log(networkId);
-  
-  store.dispatch(setWalletAddress({ walletAddress: userAddress }));
 
   if (networkId !== 1) {
     store.dispatch(
@@ -135,7 +136,6 @@ export const fetchLpTokenBalances = async (userAddress) => {
     } else {
       store.dispatch(setQueryErrors({ errors }));
     }
-    
   }
 };
 
@@ -175,7 +175,6 @@ const getUserETHBalance = async () => {
   let ethBalance = 0;
 
   if (provider !== null) {
-
     try {
       const signer = provider.getSigner();
       ethBalance = Number(ethers.utils.formatEther(await signer.getBalance()));
@@ -183,7 +182,6 @@ const getUserETHBalance = async () => {
       console.log(error);
       ethBalance = 0;
     }
-
   }
 
   return ethBalance;
@@ -192,16 +190,22 @@ const getUserETHBalance = async () => {
 const getTokenBalance = async (userAddress, tokenAddress, tokenDecimals) => {
   let tokenBalance = 0;
 
-  if(provider !== null) {
+  if (provider !== null) {
     try {
-      const uniContract = new ethers.Contract(plexusUniContractAddress, WrapperUniABI, provider);
-      const tokenBalanceInWei = await uniContract.getUserTokenBalance(userAddress, tokenAddress);
+      const uniContract = new ethers.Contract(
+        plexusUniContractAddress,
+        WrapperUniABI,
+        provider
+      );
+      const tokenBalanceInWei = await uniContract.getUserTokenBalance(
+        userAddress,
+        tokenAddress
+      );
       tokenBalance = numberFromWei(tokenBalanceInWei, tokenDecimals);
     } catch (error) {
       console.log(error);
       tokenBalance = 0;
     }
-
   }
 
   return tokenBalance;
@@ -223,7 +227,10 @@ const setNetworkListener = (provider) => {
   provider.on("chainChanged", async (networkId) => {
     console.log(networkId.toString());
     if (networkId === "0x1") store.dispatch(setNetworkErrors({ error: null }));
-    else store.dispatch(setNetworkErrors({ error: "Please Connect to Ethereum Mainnet" }));
+    else
+      store.dispatch(
+        setNetworkErrors({ error: "Please Connect to Ethereum Mainnet" })
+      );
     store.dispatch(resetState());
     store.dispatch(resetErrors());
     store.dispatch(resetTxnState());
@@ -239,8 +246,6 @@ const setNetworkListener = (provider) => {
     store.dispatch(resetTxnState());
   }
 })();
-
-
 
 export function convertAmountToString(amount, decimals) {
   let amountString = amount.toString();
