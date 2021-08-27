@@ -9,10 +9,16 @@ import TokenSelector from "../../token-selector";
 import TransactionButton from "../../transaction-button";
 import { RemixDexes } from "../../dex-buttons";
 import { formatAmount } from "../../../utils/display";
+import TransactionSettings, {
+  MobileTransactionSettingsWrapper,
+  TransactionSettingsMobileButton,
+} from "../../transaction-settings";
 
 const SelectedLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
-
+  const { showTransactionSettings } = useSelector(
+    (state) => state.transactions
+  );
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -20,7 +26,10 @@ const SelectedLpToken = (props) => {
     window.addEventListener("resize", handleResize);
   });
 
-  if (width < constants.width.mobile) return <MobileWrapper {...props} />;
+  if (width < constants.width.mobile) {
+    if (showTransactionSettings) return <MobileTransactionSettingsWrapper />;
+    return <MobileWrapper {...props} />;
+  }
   return <DesktopWrapper {...props} />;
 };
 
@@ -36,6 +45,7 @@ const DesktopWrapper = () => {
       <div className="main-wrapper-header ">
         <span className="main-header-text">
           Remix {lpPairName.toUpperCase()} LP Tokens
+          <TransactionSettings />
         </span>
       </div>
       <div className="main-wrapper-interface">
@@ -90,6 +100,9 @@ const MobileWrapper = () => {
 
   return (
     <div className="main-wrapper-interface">
+      <div className="remix-txn-settings-mobile-btn">
+        <TransactionSettingsMobileButton />
+      </div>
       <Row className="remix-row">
         <Col className="remix-tokens">
           <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
@@ -105,7 +118,7 @@ const MobileWrapper = () => {
         <Col>
           <div className="remix-pair-text">{lpPairName}</div>
           <div className="remix-pair-amount">
-            ${formatAmount(liquidityTokenBalance*lpTokenPrice)}
+            ${formatAmount(liquidityTokenBalance * lpTokenPrice)}
           </div>
         </Col>
         <Col className="remix-pair-dex">
