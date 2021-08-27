@@ -10,6 +10,7 @@ import {
   LP_PAIR_DETAILS,
   LP_PAIRS_0,
   LP_PAIRS_1,
+  USER_LP_PAIR_DETAILS,
 } from "./queries";
 import store from "../store";
 import { gql } from "@apollo/client";
@@ -146,6 +147,24 @@ export const fetchPairs = async (client, address) => {
     console.log(e);
   }
 };
+
+export const queryUserLPTokenDetails = async(client, lpTokenAddress, userAddress) => {
+  try {
+    const { data } = await client.query({
+      query: gql(USER_LP_PAIR_DETAILS),
+      variables: {
+        address: lpTokenAddress.toLowerCase(),
+        user: userAddress.toLowerCase(),
+      },
+    });
+    console.log("data",data)
+    if (data.user?.liquidityPositions) return data.user.liquidityPositions[0];
+    return null;
+  } catch (e) {
+    store.dispatch(setQueryErrors({ errors: { uniswap: e.message } }));
+    return null;
+  }
+}
 
 const processResult = (result) => {
   const { prices } = store.getState();

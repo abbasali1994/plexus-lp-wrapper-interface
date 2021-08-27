@@ -12,7 +12,6 @@
 
 .txn-settings {
   float: right;
-  margin-right: 20px;
 }
 
 .txn-settings-menu {
@@ -146,6 +145,9 @@ input.txn-settings-input {
   .txn-settings-label {
     line-height: 36px;
   }
+  .txn-settings {
+    margin-right: 20px;
+  }  
 }
 
 @media screen and (max-width: 1024px) {

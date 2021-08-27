@@ -9,10 +9,15 @@ import { constants, tokenViewTypes } from "../../../utils";
 import TokenSelector from "../../token-selector";
 import TransactionButton from "../../transaction-button";
 import { formatAmount } from "../../../utils/display";
-
+import TransactionSettings, {
+  MobileTransactionSettingsWrapper,
+  TransactionSettingsMobileButton,
+} from "../../transaction-settings";
 const SelectedLpToken = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
-
+  const { showTransactionSettings } = useSelector(
+    (state) => state.transactions
+  );
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -20,7 +25,10 @@ const SelectedLpToken = (props) => {
     window.addEventListener("resize", handleResize);
   });
 
-  if (width < constants.width.mobile) return <MobileWrapper {...props} />;
+  if (width < constants.width.mobile) {
+    if (showTransactionSettings) return <MobileTransactionSettingsWrapper />;
+    return <MobileWrapper {...props} />;
+  }
   return <DesktopWrapper {...props} />;
 };
 
@@ -40,6 +48,7 @@ const DesktopWrapper = () => {
       <div className="main-wrapper-header ">
         <span className="main-header-text">
           Unwrap {lpPairName.toUpperCase()} LP Tokens
+          <TransactionSettings />
         </span>
       </div>
       <div className="main-wrapper-interface">
@@ -128,8 +137,9 @@ const DesktopWrapper = () => {
 };
 
 const MobileWrapper = () => {
-  const { selectedLpTokenPair, outputTokenValueUSD } =
-    useSelector((state) => state.tokens);
+  const { selectedLpTokenPair, outputTokenValueUSD } = useSelector(
+    (state) => state.tokens
+  );
   const { lpToken1, lpToken2, liquidityTokenBalance } = selectedLpTokenPair;
   const { dexes, selectedDex } = useSelector((state) => state.dexes);
   const dexName = dexes[selectedDex].name;
@@ -137,6 +147,9 @@ const MobileWrapper = () => {
 
   return (
     <div className="main-wrapper-interface">
+      <div className="unwrap-txn-settings-mobile-btn">
+        <TransactionSettingsMobileButton />
+      </div>
       <Row className="unwrap-row">
         <Col className="unwrap-tokens">
           <LpTokenIconView tokenIcon={lpToken1.tokenIcon} tokenIconSize={45} />
@@ -151,7 +164,9 @@ const MobileWrapper = () => {
         </Col>
         <Col>
           <div className="unwrap-pair-text">{lpPairName}</div>
-          <div className="unwrap-pair-amount">~${formatAmount(outputTokenValueUSD)}</div>
+          <div className="unwrap-pair-amount">
+            ~${formatAmount(outputTokenValueUSD)}
+          </div>
         </Col>
         <Col className="unwrap-pair-dex">
           {formatAmount(liquidityTokenBalance)} {dexName} LP Tokens
