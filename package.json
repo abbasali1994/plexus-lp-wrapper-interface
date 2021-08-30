@@ -18,7 +18,6 @@
     "big-number": "^2.0.0",
     "bootstrap": "^4.6.0",
     "cryptocurrency-icons": "^0.17.1",
-    "cypress": "^7.5.0",
     "ethereumjs-util": "^7.1.0",
     "ethers": "^5.4.4",
     "graph-results-pager": "^1.0.3",
@@ -47,16 +46,42 @@
     "setImages": "node setImages",
     "cypress:open": "cypress open",
     "cypress:ci": "cypress run",
-    "start": "node scripts/setImages && export PORT=3000 && react-scripts start",
+    "start": "node scripts/setImages && export PORT=3000 && react-scripts -r @cypress/instrument-cra start",
     "build": "node scripts/setImages && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "npm run cy:run && npm run unit:test",
+    "pretest": "rm -rf .nyc_output || true",
+    "eject": "react-scripts eject",
+    "e2e": "cypress open-ct",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "precy:run": "rm -rf .nyc_output || true",
+    "unit:test": "react-scripts test --env=jsdom --watchAll=false --coverage --coverageDirectory=coverage-unit -u",
+    "e2e:coverage": "npx nyc report",
+    "mkdir:reports": "mkdir reports || true",
+    "precopy:reports": "npm run mkdir:reports",
+    "copy:reports": "cp coverage-e2e/coverage-final.json reports/from-cypress.json && cp coverage-unit/coverage-final.json reports/from-jest.json",
+    "precombine:reports": "npm run copy:reports && mkdir .nyc_output || true",
+    "combine:reports": "npx nyc merge reports && mv coverage.json .nyc_output/out.json",
+    "precoverage": "npm run combine:reports",
+    "coverage": "npx nyc report --reporter lcov --reporter text --report-dir coverage"
+  },
+  "nyc": {
+    "report-dir": "coverage-e2e"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "devDependencies": {
+    "@cypress/code-coverage": "^3.9.10",
+    "@cypress/instrument-cra": "^1.4.0",
+    "@cypress/react": "^5.9.1",
+    "@cypress/webpack-dev-server": "^1.4.0",
+    "babel-plugin-istanbul": "^6.0.0",
+    "cypress": "^7.7.0",
+    "cypress-metamask": "^1.0.5-development"
   },
   "browserslist": {
     "production": [

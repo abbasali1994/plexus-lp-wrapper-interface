@@ -12,13 +12,7 @@ describe(
   },
   () => {
     it("visits the app", () => {
-      cy.visit("/unwrap");
-    });
-    it("clicks connect wallet button", () => {
-      cy.get(".connect-wallet-btn").first().click();
-    });
-    it("clicks metamask button", () => {
-      cy.get(".web3modal-provider-name").contains("MetaMask").click();
+      cy.visit("/unwrap", { timeout: 5000 });
     });
     describe("Select pair token", () => {
       it("Clicks select token button", () => {

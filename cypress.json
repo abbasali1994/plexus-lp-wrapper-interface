@@ -1,4 +1,6 @@
 {
   "baseUrl": "http://localhost:3000",
-  "projectId": "8z76x4"
+  "projectId": "8z76x4",
+  "video":false,
+  "screenshotOnRunFailure":false
 }
