@@ -32,7 +32,6 @@ export const fetchBestRoutes = async (
       const trade = await pairFactory.trade(inputTokenAmount);
       trade.quoteChanged$.subscribe((value) => {});
       const routes = processTradeRoutes(trade);
-      console.log(routes);
       return {
         routes,
         error:

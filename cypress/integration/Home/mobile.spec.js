@@ -12,13 +12,7 @@ describe(
   },
   () => {
     it("visits the app", () => {
-      cy.visit("/");
-    });
-    it("clicks connect wallet button", () => {
-      cy.get(".connect-wallet-btn").first().click();
-    });
-    it("clicks metamask button", () => {
-      cy.get(".web3modal-provider-name").contains("MetaMask").click();
+      cy.visit("/", { timeout: 5000 });
     });
     describe("Check Footer Menu works", () => {
       it("Clicks footer menu up icon", () => {

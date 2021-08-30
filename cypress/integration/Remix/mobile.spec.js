@@ -12,14 +12,9 @@ describe(
   },
   () => {
     it("visits the app", () => {
-      cy.visit("/remix");
+      cy.visit("/remix", { timeout: 5000 });
     });
-    it("clicks connect wallet button", () => {
-      cy.get(".connect-wallet-btn").first().click();
-    });
-    it("clicks metamask button", () => {
-      cy.get(".web3modal-provider-name").contains("MetaMask").click();
-    });
+    
     describe("Select pair token", () => {
       it("Clicks select token button", () => {
         cy.get(".remix-row").first().click();

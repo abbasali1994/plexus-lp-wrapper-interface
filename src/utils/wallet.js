@@ -129,14 +129,12 @@ export const fetchWalletTokenBalances = async (userAddress) => {
 };
 
 export const fetchLpTokenBalances = async (userAddress) => {
-  if (web3Modal.cachedProvider) {
     let { lpTokens, errors } = await fetchLpTokens(userAddress);
     if (!errors.uniswap && !errors.sushiswap) {
       store.dispatch(setLpTokens({ lpTokens }));
     } else {
       store.dispatch(setQueryErrors({ errors }));
     }
-  }
 };
 
 export const getStats = async () => {
@@ -162,13 +160,11 @@ export const getStats = async () => {
 };
 
 export const fetchTokenSwaps = async (userAddress) => {
-  if (web3Modal.cachedProvider) {
     let { userSwaps, errors } = await fetchUserTxns(userAddress);
     if (!errors.uniswap && !errors.sushiswap)
       store.dispatch(setUserSwaps({ userSwaps }));
 
     store.dispatch(setQueryErrors({ errors }));
-  }
 };
 
 const getUserETHBalance = async () => {
@@ -240,7 +236,8 @@ const setNetworkListener = (provider) => {
 //web3modal if provider preexist add listener
 (async () => {
   getStats();
-  if (web3Modal.cachedProvider) {
+  if (process.env.REACT_APP_CYPRESS === "true") await mockStore();
+  else if (web3Modal.cachedProvider) {
     await connectToWallet();
     // store.dispatch(resetState());
     store.dispatch(resetTxnState());
@@ -265,4 +262,27 @@ function pad(number, length) {
     str = str + "0";
   }
   return str;
+}
+
+async function mockStore() {
+  const userAddress = "0x0887e769D8B1C79DB1312Ed4535B0CDa1dd43991";
+  store.dispatch(setWalletAddress({ walletAddress: userAddress }));
+  store.dispatch(
+    setWalletBalance({
+      key: "eth",
+      balance: "100",
+      address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    })
+  );
+  store.dispatch(
+    setWalletBalance({
+      key: "usdt",
+      balance: "100",
+      address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    })
+  );
+
+  await fetchLpTokenBalances(userAddress);
+
+  await fetchTokenSwaps(userAddress);
 }
