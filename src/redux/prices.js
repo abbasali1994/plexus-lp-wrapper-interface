@@ -26,6 +26,12 @@ const pricesSlice = createSlice({
     pricesUSD: {},
     gasPrices: {},
   },
+  reducers: {
+    updateTokenPrice: (state, { payload }) => {
+      console.log(payload)
+      state.pricesUSD = { ...state.pricesUSD, ...payload };
+    },
+  },
   extraReducers: {
     [getTokenUSDPrices.pending]: (state, _action) => {
       state.coinGeckoApiStatus = "loading";
@@ -50,5 +56,7 @@ const pricesSlice = createSlice({
     },
   },
 });
+
+export const { updateTokenPrice } = pricesSlice.actions;
 
 export default pricesSlice.reducer;

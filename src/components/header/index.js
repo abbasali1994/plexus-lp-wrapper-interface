@@ -1,6 +1,6 @@
 import "./index.scss";
 import { Row, Col, Badge } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // get the images
 import logo from "../../assets/images/logo.png";
@@ -16,21 +16,15 @@ import { navigate } from "hookrouter";
 import { useSelector, useDispatch } from "react-redux";
 import { usePath } from "hookrouter";
 
-// token usd prices
-import { getTokenUSDPrices, getGasPrices } from "../../redux/prices";
-import { getCoinGeckoTokenIDS } from "../../utils/token";
 import { resetState } from "../../redux/tokens";
 import { resetErrors } from "../../redux/errors";
+import { refreshPriceDetails } from "../../utils/serviceWorker";
+
+refreshPriceDetails()
 
 const Header = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const tokenIds = getCoinGeckoTokenIDS();
-
-    dispatch(getTokenUSDPrices(tokenIds));
-    dispatch(getGasPrices());
-  }, [dispatch]);
 
   const { walletAddress, ensName } = useSelector((state) => state.wallet);
   const { queryErrors, tradeError, networkError } = useSelector((state) => state.errors);

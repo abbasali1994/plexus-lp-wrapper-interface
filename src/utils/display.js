@@ -1,3 +1,5 @@
+import BigNumber from "big-number";
+
 export function isInViewport(el, box) {
   const rect = el.getBoundingClientRect();
   const boxRect = box.getBoundingClientRect();
@@ -44,4 +46,24 @@ export function formatTimestamp(timestamp) {
   time = mm + "-" + dd + "-" + yyyy + " " + h + ":" + min + " " + ampm;
 
   return time;
+}
+
+export function convertAmountToString(amount, decimals) {
+  let amountString = amount.toString();
+  let amountDecimals = 0;
+  if (amountString.split(".")[1])
+    amountDecimals = amountString.split(".")[1].length;
+  amount = BigNumber(
+    parseInt(amount * 10 ** Math.min(amountDecimals, decimals))
+  );
+  amountString = pad(amount, Math.max(0, decimals - amountDecimals));
+  return amountString;
+}
+
+function pad(number, length) {
+  var str = "" + number;
+  for (let i = 1; i <= length; i++) {
+    str = str + "0";
+  }
+  return str;
 }
