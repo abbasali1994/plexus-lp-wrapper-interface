@@ -2,6 +2,7 @@ import { schedulerFrequency } from ".";
 import { getGasPrices, getTokenUSDPrices } from "../redux/prices";
 import store from "../store";
 import { getCoinGeckoTokenIDS } from "./token";
+import { fetchTokenPrices } from "./tokenPrices";
 import {
   fetchLpTokenBalances,
   fetchTokenSwaps,
@@ -20,12 +21,15 @@ const refreshUserDetails = async () => {
 };
 
 // updates token prices
-const refreshPriceDetails = async () => {
+export const refreshPriceDetails = async () => {
   const tokenIds = getCoinGeckoTokenIDS();
-
-  store.dispatch(getTokenUSDPrices(tokenIds));
   store.dispatch(getGasPrices());
+  await store.dispatch(getTokenUSDPrices(tokenIds));
+  const { prices } = store.getState();
+  if (prices.coinGeckoApiStatus !== "success") {
+    fetchTokenPrices();
+  }
 };
 
-setInterval(()=>refreshPriceDetails(),schedulerFrequency.tokenPrices)
-setInterval(()=>refreshUserDetails(),schedulerFrequency.userBalances)
+setInterval(() => refreshPriceDetails(), schedulerFrequency.tokenPrices);
+setInterval(() => refreshUserDetails(), schedulerFrequency.userBalances);
