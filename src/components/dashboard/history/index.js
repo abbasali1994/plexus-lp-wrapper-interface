@@ -3,11 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Row, Col, Pagination } from "react-bootstrap";
 import { constants, formatAddress } from "../../../utils";
-import {
-  formatAmount,
-  formatTimestamp,
-  isInViewport,
-} from "../../../utils/display";
+import { formatTimestamp, isInViewport } from "../../../utils/display";
 import NothingToSee from "../../nothing-to-see";
 import Loading from "../../loading";
 
@@ -60,18 +56,7 @@ const MobileDashboardHistory = ({ history }) => {
   return (
     <div className="main-wrapper-interface">
       {history.map((entry, id) => {
-        const {
-          amountIn,
-          amountOut,
-          tokenIn,
-          tokenOut,
-          action,
-          timestamp,
-          transaction,
-        } = entry;
-        const statement = `${formatAmount(amountIn, 2)} ${
-          tokenIn.symbol
-        } to ${formatAmount(amountOut, 2)} ${tokenOut.symbol}`;
+        const { action, statement, timestamp, transaction } = entry;
         return (
           <div
             key={id}
@@ -100,7 +85,9 @@ const DesktopDashboardHistory = ({ history }) => {
   const [cursor, setCursor] = useState(-1);
   const [activePage, setActivePage] = useState(1);
   function handleKeyDown(e) {
-    const box = document.getElementsByClassName("dashboard-table-body")[0];
+    const box = document.getElementsByClassName(
+      "dashboard-history-table-body"
+    )[0];
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
       const token = document.getElementById("dashoard-history-" + (cursor - 1));
@@ -135,62 +122,84 @@ const DesktopDashboardHistory = ({ history }) => {
           <Col lg="2">Txn Hash</Col>
         </Row>
         <div className="dashboard-history-table-body">
-          {history.slice((activePage-1)*50,activePage*50).map((entry, id) => {
-            const { action, statement, timestamp, transaction } = entry;
-            return (
-              <Row
-                id={`dashoard-history-${id}`}
-                className={`dashboard-table-row ${
-                  cursor === id ? "token-selected" : ""
-                }`}
-                key={id}
-                onClick={() =>
-                  window.open(
-                    constants.etherscanTxURL + transaction.id,
-                    "_blank"
-                  )
-                }
-              >
-                <Col lg="3">{formatTimestamp(timestamp)}</Col>
-                <Col>
-                  <span className="dashboard-table-action">
-                    {action} &nbsp;
-                  </span>
-                  {statement}
-                </Col>
-                <Col lg="2" className="dashboard-table-hash">
-                  {formatAddress(transaction.id)}
-                </Col>
-              </Row>
-            );
-          })}
+          {history
+            .slice((activePage - 1) * 50, activePage * 50)
+            .map((entry, id) => {
+              const { action, statement, timestamp, transaction } = entry;
+              return (
+                <Row
+                  id={`dashoard-history-${id}`}
+                  className={`dashboard-table-row ${
+                    cursor === id ? "token-selected" : ""
+                  }`}
+                  key={id}
+                  onClick={() =>
+                    window.open(
+                      constants.etherscanTxURL + transaction.id,
+                      "_blank"
+                    )
+                  }
+                >
+                  <Col lg="3">{formatTimestamp(timestamp)}</Col>
+                  <Col>
+                    <span className="dashboard-table-action">
+                      {action} &nbsp;
+                    </span>
+                    {statement}
+                  </Col>
+                  <Col lg="2" className="dashboard-table-hash">
+                    {formatAddress(transaction.id)}
+                  </Col>
+                </Row>
+              );
+            })}
         </div>
       </div>
-   <PaginationComponent activePage={activePage}  pageCount={Math.floor(history.length/50)+1} setActivePage={setActivePage}/>
+      <PaginationComponent
+        activePage={activePage}
+        pageCount={Math.floor(history.length / 50) + 1}
+        setActivePage={setActivePage}
+      />
     </div>
   );
 };
 
-const PaginationComponent = ({activePage, pageCount, setActivePage}) => {
-  const items = []
-  const start = Math.max(1,activePage-3)
-  const end = Math.min(5,pageCount)
+const PaginationComponent = ({ activePage, pageCount, setActivePage }) => {
+  const items = [];
+  const start = Math.max(1, activePage - 3);
+  const end = Math.min(5, pageCount);
   for (let number = start; number <= end; number++) {
     items.push(
-      <Pagination.Item key={number} active={number === activePage} onClick={()=>setActivePage(number)}>
+      <Pagination.Item
+        key={number}
+        active={number === activePage}
+        onClick={() => setActivePage(number)}
+      >
         {number}
-      </Pagination.Item>,
+      </Pagination.Item>
     );
   }
   return (
-    <Pagination >
-      <Pagination.First disabled={activePage===1} onClick={()=>setActivePage(1)}/>
-      <Pagination.Prev disabled={activePage===1} onClick={()=>setActivePage(activePage-1)}/>
-      {start!==1 && <Pagination.Ellipsis />}
+    <Pagination>
+      <Pagination.First
+        disabled={activePage === 1}
+        onClick={() => setActivePage(1)}
+      />
+      <Pagination.Prev
+        disabled={activePage === 1}
+        onClick={() => setActivePage(activePage - 1)}
+      />
+      {start !== 1 && <Pagination.Ellipsis />}
       {items}
-      {end!==pageCount && <Pagination.Ellipsis />}
-      <Pagination.Next disabled={activePage===pageCount} onClick={()=>setActivePage(activePage+1)}/>
-      <Pagination.Last disabled={activePage===pageCount} onClick={()=>setActivePage(pageCount)}/>
+      {end !== pageCount && <Pagination.Ellipsis />}
+      <Pagination.Next
+        disabled={activePage === pageCount}
+        onClick={() => setActivePage(activePage + 1)}
+      />
+      <Pagination.Last
+        disabled={activePage === pageCount}
+        onClick={() => setActivePage(pageCount)}
+      />
     </Pagination>
   );
 };

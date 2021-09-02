@@ -12,7 +12,7 @@ describe(
   },
   () => {
     it("visits the app", () => {
-      cy.visit("/", { timeout: 5000 });
+      cy.visit("/", { timeout: 10000 });
     });
     it("Clicks dashboard button", () => {
       cy.get(".header-btn").contains("dashboard").click();
@@ -120,7 +120,7 @@ describe(
       it("Checks dashboard history table visible", () => {
         cy.get(".dashboard-table").should("be.visible");
         cy.get(".dashboard-table-header").should("be.visible");
-        cy.get(".dashboard-table-body").should("be.visible");
+        cy.get(".dashboard-history-table-body").should("be.visible");
       });
 
       describe("Select dashboard history", () => {

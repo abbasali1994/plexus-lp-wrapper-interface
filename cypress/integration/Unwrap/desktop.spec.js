@@ -32,11 +32,6 @@ describe(
         cy.get(".input-btn").click();
       });
     });
-    describe("Confirm privacy policy", () => {
-      it("Clicks submit button", () => {
-        cy.get(".confirm-privacy-btn").click();
-      });
-    });
     describe("Confirm txn", () => {
       it("Clicks submit button", () => {
         cy.get(".confirm-tx").click();
