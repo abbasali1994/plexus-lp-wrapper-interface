@@ -7,6 +7,10 @@
 
 # testing
 /coverage
+/coverage-e2e
+coverage.json
+/.nyc_output
+/reports
 
 # production
 /build
